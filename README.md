@@ -1,4 +1,4 @@
-# Pol's Shop
+# P&J's Shop
 
 ## Instalación
 
