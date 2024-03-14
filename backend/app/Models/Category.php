@@ -10,12 +10,16 @@ class Category extends Model
     use HasFactory;
     protected $table = "categories";
     protected $fillable = [
-        'name',
         'type',
     ];
 
     public static function categories()
     {
         return self::all();
+    }
+
+    public function product()
+    {
+        return $this->belongsToMany(Product::class);
     }
 }
