@@ -13,12 +13,7 @@ class Category extends Model
         'type',
     ];
 
-    public static function categories()
-    {
-        return self::all();
-    }
-
-    public function product()
+    public function products()
     {
         return $this->belongsToMany(Product::class);
     }
