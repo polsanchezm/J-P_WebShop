@@ -11,13 +11,11 @@ class Order extends Model
     protected $table = "orders";
     protected $fillable = [
         "user_id",
-        "product_id",
-        "quantity",
         "order_date",
     ];
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsToMany(Product::class, 'order_details');
     }
 
     public function payment()
