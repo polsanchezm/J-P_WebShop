@@ -14,11 +14,7 @@ class Product extends Model
         'description',
         'category_id',
         'image',
-        'size',
-        'color',
-        'material',
         'price',
-        'stock',
     ];
 
     protected $casts = [
@@ -29,8 +25,8 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    public function order()
+    public function orders()
     {
-        return $this->belongsToMany(Order::class);
+        return $this->belongsToMany(Order::class, 'order_details');
     }
 }
