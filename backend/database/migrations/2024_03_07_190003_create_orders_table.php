@@ -10,10 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id(); // Clave primaria
-            $table->string('name', 45);
-            $table->string('type', 45);
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->date('order_date');
+            $table->timestamps();
         });
     }
 
@@ -22,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('orders');
     }
 };

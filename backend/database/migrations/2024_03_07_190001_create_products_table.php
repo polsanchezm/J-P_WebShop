@@ -14,14 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('name', 45);
             $table->string('description', 255);
-            $table->unsignedBigInteger('category_id'); // Cambiado a category_id para referenciar el ID
             $table->string('image', 255);
-            $table->string('size', 2);
-            $table->string('color', 45);
-            $table->string('material', 45);
             $table->decimal('price', 5, 2);
-            $table->integer('stock')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories'); // Corrección aquí
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

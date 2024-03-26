@@ -12,14 +12,15 @@ return new class extends Migration {
     {
         Schema::create('shipping_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->string('phone_number', 20)->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('phone', 20)->nullable();
             $table->string('street', 255);
             $table->string('unit', 50);
             $table->string('apartment_number', 20);
             $table->string('country', 100);
             $table->string('city', 100);
             $table->string('other_instructions', 300);
+            $table->timestamps();
         });
     }
 
