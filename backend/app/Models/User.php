@@ -43,7 +43,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'birthdate' => 'datetime',
     ];
 
     public function shippingDetails()
