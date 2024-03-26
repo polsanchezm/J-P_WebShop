@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\ApiController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,18 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-// Route::middleware('auth:sanctum')->get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-// Route::middleware('auth:sanctum')->get('/products', [App\Http\Controllers\Product::class, 'index'])->name('products');
-// Route::middleware('auth:sanctum')->post('/login', [App\Http\Controllers\Auth\LoginController::class])->name('login');
+Route::prefix('auth')->group(function () {
+    Route::post("register", [AuthController::class, "register"])->name("register");
+    Route::post("login", [AuthController::class, "login"])->name("login");
+    Route::middleware("auth:sanctum")->group(function () {
+        Route::get("profile", [AuthController::class, "profile"])->name("profile");
+        Route::post("update", [UserController::class, "update"])->name("updateProfile");
+        Route::delete("delete", [UserController::class, "destroy"])->name("deleteProfile");
+        Route::get("logout", [AuthController::class, "logout"])->name("logout");
+    });
+});
 
-Route::post("register", [ApiController::class, "register"])->name("register");
-Route::post("login", [ApiController::class, "login"])->name("login");
 
-Route::group(["middleware" => ["auth:sanctum"]], function () {
-    Route::get("profile", [ApiController::class, "profile"])->name("profile");
-    Route::get("logout", [ApiController::class, "logout"])->name("logout");
-    Route::get("products", [ProductController::class, "index"])->name("products");
+Route::prefix('app')->middleware("auth:sanctum")->group(function () {
+    Route::get("users", [UserController::class, "index"])->name("allUsers");
+    Route::get("userData/{id}", [UserController::class, "show"])->name("userData");
+    Route::get("products", [ProductController::class, "index"])->name("allProducts");
 });
