@@ -32,4 +32,9 @@ Route::prefix('app')->middleware("auth:sanctum")->group(function () {
     Route::get("users", [UserController::class, "index"])->name("allUsers");
     Route::get("userData/{id}", [UserController::class, "show"])->name("userData");
     Route::get("products", [ProductController::class, "index"])->name("allProducts");
+    
+    Route::post("productCreate", [ProductController::class, "store"])->name("productCreate");
+    Route::get("productData/{id}", [ProductController::class, "show"])->name("productData");
+    Route::post("productUpdate/{id}", [ProductController::class, "update"])->name("productUpdate");
+    Route::delete("productDelete/{id}", [ProductController::class, "destroy"])->name("productDelete");
 });
