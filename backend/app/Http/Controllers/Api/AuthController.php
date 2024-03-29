@@ -42,7 +42,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $loginUserData['email'])->first();
 
-        if (!empty ($user)) {
+        if (!empty($user)) {
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
 
@@ -69,17 +69,6 @@ class AuthController extends Controller
 
         return response()->json([
             "message" => "User logged out",
-        ], 200);
-    }
-
-    // Profile API (GET)
-    public function profile()
-    {
-        $data = auth()->user();
-
-        return response()->json([
-            "message" => "Profile data",
-            "user" => $data,
         ], 200);
     }
 }
