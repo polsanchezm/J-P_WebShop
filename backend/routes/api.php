@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ShippingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,7 +51,11 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
 
 
     Route::prefix('shipping')->name('shipping.')->group(function () {
-
+        Route::get("", [ShippingController::class, "index"])->name("index");
+        Route::post("create", [ShippingController::class, "store"])->name("create");
+        Route::get("detail/{id}", [ShippingController::class, "show"])->name("detail");
+        Route::post("update/{id}", [ShippingController::class, "update"])->name("update");
+        Route::delete("delete/{id}", [ShippingController::class, "destroy"])->name("delete");
     });
 
     Route::prefix('payment')->name('payment.')->group(function () {
