@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -32,7 +30,7 @@ class ProductController extends Controller
             "image" => "required|string|max:255",
             "price" => "required|string|max:5",
         ]);
-        
+
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->category_id = $request->input('category_id');
@@ -76,7 +74,7 @@ class ProductController extends Controller
             "image" => "required|string|max:255",
             "price" => "required|string|max:5",
         ]);
-        
+
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->category_id = $request->input('category_id');
@@ -104,9 +102,9 @@ class ProductController extends Controller
         }
 
         $product->delete();
-        
+
         return response()->json(['message' => 'Product deleted successfully'], 200);
     }
 
-    
+
 }
