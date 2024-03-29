@@ -16,25 +16,45 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->name('auth.')->group(function () {
     Route::post("register", [AuthController::class, "register"])->name("register");
     Route::post("login", [AuthController::class, "login"])->name("login");
-    Route::middleware("auth:sanctum")->group(function () {
-        Route::get("profile", [AuthController::class, "profile"])->name("profile");
-        Route::post("update", [UserController::class, "update"])->name("updateProfile");
-        Route::delete("delete", [UserController::class, "destroy"])->name("deleteProfile");
+
+    Route::prefix('users')->name('users.')->middleware("auth:sanctum")->group(function () {
+        Route::get("", [UserController::class, "index"])->name("index");
+        Route::get("detail", [UserController::class, "show"])->name("detail");
+        Route::post("update", [UserController::class, "update"])->name("update");
+        Route::delete("delete", [UserController::class, "destroy"])->name("delete");
         Route::get("logout", [AuthController::class, "logout"])->name("logout");
     });
 });
 
 
-Route::prefix('app')->middleware("auth:sanctum")->group(function () {
-    Route::get("users", [UserController::class, "index"])->name("allUsers");
-    Route::get("userData/{id}", [UserController::class, "show"])->name("userData");
-    Route::get("products", [ProductController::class, "index"])->name("allProducts");
-    
-    Route::post("productCreate", [ProductController::class, "store"])->name("productCreate");
-    Route::get("productData/{id}", [ProductController::class, "show"])->name("productData");
-    Route::post("productUpdate/{id}", [ProductController::class, "update"])->name("productUpdate");
-    Route::delete("productDelete/{id}", [ProductController::class, "destroy"])->name("productDelete");
+Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function () {
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get("", [ProductController::class, "index"])->name("index");
+        Route::post("create", [ProductController::class, "store"])->name("create");
+        Route::get("detail/{id}", [ProductController::class, "show"])->name("detail");
+        Route::post("update/{id}", [ProductController::class, "update"])->name("update");
+        Route::delete("delete/{id}", [ProductController::class, "destroy"])->name("delete");
+        Route::prefix('variants')->name('variants.')->group(function () {
+
+        });
+    });
+
+    Route::prefix('orders')->name('product.')->group(function () {
+        Route::prefix('details')->name('details.')->group(function () {
+
+        });
+    });
+
+
+    Route::prefix('shipping')->name('shipping.')->group(function () {
+
+    });
+
+    Route::prefix('payment')->name('payment.')->group(function () {
+
+    });
+
 });
