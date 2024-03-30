@@ -62,6 +62,9 @@ class ShippingController extends Controller
     public function show(string $id)
     {
         $shipping = ShippingDetail::find($id);
+        if (!$shipping) {
+            return response()->json(['message' => 'Shipping detail not found'], 404);
+        }
         return new ShippingResource($shipping);
     }
 
@@ -74,7 +77,7 @@ class ShippingController extends Controller
         $shipping = ShippingDetail::find($id);
 
         if (!$shipping) {
-            return response()->json(['error' => 'Shipping not found'], 404);
+            return response()->json(['message' => 'Shipping not found'], 404);
         }
 
         $request->validate([
@@ -105,7 +108,7 @@ class ShippingController extends Controller
         ], 200);
     }
 
-    
+
     /**
      * Remove the specified resource from storage.
      */
@@ -114,7 +117,7 @@ class ShippingController extends Controller
         $shipping = ShippingDetail::find($id);
 
         if (!$shipping) {
-            return response()->json(['error' => 'Shipping not found'], 404);
+            return response()->json(['message' => 'Shipping not found'], 404);
         }
 
         $shipping->delete();

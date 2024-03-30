@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product = new Product;
+
+        $category = new Category;
 
         $request->validate([
             "name" => "required|string|max:255",
@@ -52,6 +55,9 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
         return new ProductResource($product);
     }
 
@@ -64,7 +70,7 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
+            return response()->json(['message' => 'Product not found'], 404);
         }
 
         $request->validate([
@@ -98,7 +104,7 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         if (!$product) {
-            return response()->json(['error' => 'Product not found'], 404);
+            return response()->json(['message' => 'Product not found'], 404);
         }
 
         $product->delete();
