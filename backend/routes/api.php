@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\OrderDetailController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ShippingController;
@@ -43,12 +45,19 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
         });
     });
 
-    Route::prefix('orders')->name('product.')->group(function () {
-        Route::prefix('details')->name('details.')->group(function () {
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get("", [OrderController::class, "index"])->name("index");
+        Route::post("create", [OrderController::class, "store"])->name("create");
+        Route::get("detail/{id}", [OrderController::class, "show"])->name("detail");
+        Route::delete("delete/{id}", [OrderController::class, "destroy"])->name("delete");
 
+        Route::prefix('details')->name('details.')->group(function () {
+            Route::get("/{id}", [OrderDetailController::class, "index"])->name("index");
+            Route::post("create", [OrderDetailController::class, "store"])->name("create");
+            Route::get("detail/{id}", [OrderDetailController::class, "show"])->name("detail");
+            Route::delete("delete/{id}", [OrderDetailController::class, "destroy"])->name("delete");
         });
     });
-
 
     Route::prefix('shipping')->name('shipping.')->group(function () {
         Route::get("", [ShippingController::class, "index"])->name("index");
@@ -61,5 +70,4 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
     Route::prefix('payment')->name('payment.')->group(function () {
 
     });
-
 });
