@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderDetailController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ShippingController;
 use Illuminate\Support\Facades\Route;
@@ -40,8 +41,13 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
         Route::get("detail/{id}", [ProductController::class, "show"])->name("detail");
         Route::post("update/{id}", [ProductController::class, "update"])->name("update");
         Route::delete("delete/{id}", [ProductController::class, "destroy"])->name("delete");
-        Route::prefix('variants')->name('variants.')->group(function () {
 
+        Route::prefix('variants')->name('variants.')->group(function () {
+            Route::get("", [ProductVariantController::class, "index"])->name("index");
+            Route::post("create", [ProductVariantController::class, "store"])->name("create");
+            Route::get("detail/{id}", [ProductVariantController::class, "show"])->name("detail");
+            Route::post("update/{id}", [ProductVariantController::class, "update"])->name("update");
+            Route::delete("delete/{id}", [ProductVariantController::class, "destroy"])->name("delete");
         });
     });
 
