@@ -32,16 +32,16 @@ class ProductController extends Controller
             "price" => "required|string|max:5",
         ]);
 
-        
+
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->category_id = $request->input('category_id');
         $product->price = floatval($request->input('price'));
-        
+
         $imagePath = $request->file('image');
         $image = ManageImage::storeImage($imagePath);
         $product->image = $image;
-        
+
         $product->save();
 
         return response()->json([
@@ -108,6 +108,9 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
+
+        $imageName = $product->image;
+        ManageImage::deleteImage($imageName);
 
         $product->delete();
 

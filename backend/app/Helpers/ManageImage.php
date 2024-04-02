@@ -27,4 +27,9 @@ class ManageImage
         return new Response($image, 200);
     }
 
+    public static function deleteImage($imageName)
+    {
+        $filePath = 'images/' . $imageName;
+        Storage::delete($filePath);
+    }
 }
