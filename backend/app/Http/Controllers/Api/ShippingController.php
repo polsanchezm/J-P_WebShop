@@ -29,10 +29,10 @@ class ShippingController extends Controller
 
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'required|string|max:20',
             'street' => 'required|string|max:255',
-            'unit' => 'nullable|string|max:50',
-            'apartment_number' => 'nullable|string|max:20',
+            'unit' => 'required|string|max:50',
+            'apartment_number' => 'required|string|max:20',
             'country' => 'required|string|max:100',
             'city' => 'required|string|max:100',
             'other_instructions' => 'nullable|string|max:300',
@@ -82,10 +82,10 @@ class ShippingController extends Controller
 
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'required|string|max:20',
             'street' => 'required|string|max:255',
-            'unit' => 'nullable|string|max:50',
-            'apartment_number' => 'nullable|string|max:20',
+            'unit' => 'required|string|max:50',
+            'apartment_number' => 'required|string|max:20',
             'country' => 'required|string|max:100',
             'city' => 'required|string|max:100',
             'other_instructions' => 'nullable|string|max:300',
