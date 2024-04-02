@@ -16,6 +16,10 @@ class Payment extends Model
         "payment_date"
     ];
 
+    protected $casts = [
+        'total_price' => 'decimal:2',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class);
