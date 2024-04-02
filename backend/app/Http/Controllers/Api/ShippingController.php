@@ -25,8 +25,6 @@ class ShippingController extends Controller
      */
     public function store(Request $request)
     {
-        $shipping = new ShippingDetail;
-
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'phone' => 'required|string|max:20',
@@ -38,6 +36,7 @@ class ShippingController extends Controller
             'other_instructions' => 'nullable|string|max:300',
         ]);
 
+        $shipping = new ShippingDetail;
         $shipping->user_id = $request->input('user_id');
         $shipping->phone = $request->input('phone');
         $shipping->street = $request->input('street');
@@ -62,9 +61,11 @@ class ShippingController extends Controller
     public function show(string $id)
     {
         $shipping = ShippingDetail::find($id);
+
         if (!$shipping) {
             return response()->json(['message' => 'Shipping detail not found'], 404);
         }
+
         return new ShippingResource($shipping);
     }
 

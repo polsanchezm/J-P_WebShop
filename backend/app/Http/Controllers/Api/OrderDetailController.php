@@ -36,14 +36,24 @@ class OrderDetailController extends Controller
         ]);
 
 
-        $order = Order::findOrFail($request->order_id);
-        $productVariant = ProductVariant::findOrFail($request->variant_id);
+        $order = Order::find($request->order_id);
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        $productVariant = ProductVariant::find($request->variant_id);
+
+        if (!$productVariant) {
+            return response()->json(['message' => 'Product variant not found'], 404);
+        }
 
         $orderDetail = new OrderDetail;
         $orderDetail->order_id = $order->id;
         $orderDetail->variant_id = $productVariant->id;
         $orderDetail->quantity = $request->quantity;
         $orderDetail->purchase_price = $request->purchase_price;
+
         $orderDetail->save();
 
         return response()->json([
@@ -70,9 +80,11 @@ class OrderDetailController extends Controller
     public function destroy(string $id)
     {
         $orderDetail = OrderDetail::find($id);
+
         if (!$orderDetail) {
             return response()->json(['message' => 'Order detail not found'], 404);
         }
+
         $orderDetail->delete();
 
         return response()->json([

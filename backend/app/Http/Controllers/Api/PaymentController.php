@@ -63,9 +63,11 @@ class PaymentController extends Controller
     public function show(string $id)
     {
         $payment = Payment::find($id);
+
         if (!$payment) {
             return response()->json(['message' => 'Payment not found'], 404);
         }
+
         return new PaymentResource($payment);
     }
 

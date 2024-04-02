@@ -20,28 +20,18 @@ class ProductVariantController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $productVariant = new ProductVariant;
-
         $request->validate([
             'size' => 'required|string|max:2',
             'color' => 'required|string|max:45',
             'stock' => 'nullable|integer',
             'product_id' => 'required|exists:products,id'
         ]);
-        
 
+        $productVariant = new ProductVariant;
         $productVariant->size = $request->input('size');
         $productVariant->color = $request->input('color');
         $productVariant->stock = $request->input('stock');
@@ -61,18 +51,12 @@ class ProductVariantController extends Controller
     public function show(string $id)
     {
         $productVariant = ProductVariant::find($id);
+
         if (!$productVariant) {
             return response()->json(['message' => 'ProductVariant not found'], 404);
         }
-        return new ProductVariantResource($productVariant);
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return new ProductVariantResource($productVariant);
     }
 
     /**
@@ -92,7 +76,6 @@ class ProductVariantController extends Controller
             'stock' => 'nullable|integer',
             'product_id' => 'required|exists:products,id'
         ]);
-        
 
         $productVariant->size = $request->input('size');
         $productVariant->color = $request->input('color');

@@ -25,7 +25,7 @@ class ProductController extends Controller
         $product = new Product;
 
         $request->validate([
-            "name" => "required|string|max:255",
+            "name" => "required|string|max:45",
             "description" => "required|string|max:255",
             "category_id" => "required|exists:categories,id",
             "image" => "required|image",
@@ -57,9 +57,11 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::find($id);
+
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
+
         return new ProductResource($product);
     }
 
@@ -76,7 +78,7 @@ class ProductController extends Controller
         }
 
         $request->validate([
-            "name" => "required|string|max:255",
+            "name" => "required|string|max:45",
             "description" => "required|string|max:255",
             "category_id" => "required|exists:categories,id",
             "image" => "required|string|max:255",

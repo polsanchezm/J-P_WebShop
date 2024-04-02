@@ -26,9 +26,11 @@ class UserController extends Controller
     public function show()
     {
         $user = auth()->user();
+
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
+
         return new UserResource($user);
     }
 
