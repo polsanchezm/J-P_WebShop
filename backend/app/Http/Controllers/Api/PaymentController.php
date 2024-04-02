@@ -54,7 +54,6 @@ class PaymentController extends Controller
         return response()->json([
             "message" => "Payment stored successfully",
             'payment' => $payment,
-            "totalPrice" => $totalPrice,
         ], 200);
     }
 
