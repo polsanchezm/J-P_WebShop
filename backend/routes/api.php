@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ShippingController;
+use App\Http\Controllers\Api\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,7 +33,6 @@ Route::prefix('auth')->name('auth.')->group(function () {
         Route::get("logout", [AuthController::class, "logout"])->name("logout");
     });
 });
-
 
 Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function () {
     Route::prefix('products')->name('products.')->group(function () {
@@ -74,6 +74,10 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
     });
 
     Route::prefix('payment')->name('payment.')->group(function () {
-
+        Route::get("", [PaymentController::class, "index"])->name("index");
+        Route::post("create/{orderId}", [PaymentController::class, "store"])->name("create");
+        Route::get("detail/{id}", [PaymentController::class, "show"])->name("detail");
+        Route::post("update/{id}", [PaymentController::class, "update"])->name("update");
+        Route::delete("delete/{id}", [PaymentController::class, "destroy"])->name("delete");
     });
 });
