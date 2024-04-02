@@ -168,6 +168,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        // Aquest és el provider que gestiona les imatges
+        App\Providers\ManageImageServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -183,6 +186,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+
+        // Alias del helper per a poder-lo utilitzar
+        'ManageImage' => App\Helpers\ManageImage::class,
     ])->toArray(),
 
 ];
