@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderDetailController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\Api\UserController;
@@ -74,6 +75,10 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
     });
 
     Route::prefix('payment')->name('payment.')->group(function () {
-
+        Route::get("", [PaymentController::class, "index"])->name("index");
+        Route::post("create/{orderId}", [PaymentController::class, "store"])->name("create");
+        Route::get("detail/{id}", [PaymentController::class, "show"])->name("detail");
+        Route::post("update/{id}", [PaymentController::class, "update"])->name("update");
+        Route::delete("delete/{id}", [PaymentController::class, "destroy"])->name("delete");
     });
 });
