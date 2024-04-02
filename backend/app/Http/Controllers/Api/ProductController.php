@@ -81,15 +81,23 @@ class ProductController extends Controller
             "name" => "required|string|max:45",
             "description" => "required|string|max:255",
             "category_id" => "required|exists:categories,id",
-            "image" => "required|string|max:255",
+            "image" => "nullable|image",
             "price" => "required|string|max:5",
         ]);
 
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->category_id = $request->input('category_id');
-        $product->image = $request->input('image');
         $product->price = floatval($request->input('price'));
+
+        $imagePath = $request->file('image');
+        if ($imagePath){
+            $imageName = $product->image;
+            ManageImage::deleteImage($imageName);
+
+            $image = ManageImage::storeImage($imagePath);
+            $product->image = $image;
+        }
 
         $product->update();
 
