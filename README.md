@@ -8,9 +8,6 @@
 cd backend
 composer install
 cp .env.example .env    # Configurar entorno
-
-# Login temporal con Blade/bootstrap
-npm install
 ```
 
 ### Frontend
@@ -33,7 +30,7 @@ php artisan serve
 
 ```bash
 cd frontend
-ng serve
+npm run dev
 ```
 
 
@@ -42,5 +39,5 @@ ng serve
 - Se usará camelCase
 - Tabulación:
   - Laravel: 4 espacios
-  - Angular: 2 espacios
+  - Vue: 4 espacios
 
