@@ -30,7 +30,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
         Route::get("detail", [UserController::class, "show"])->name("detail");
         Route::post("update", [UserController::class, "update"])->name("update");
         Route::delete("delete", [UserController::class, "destroy"])->name("delete");
-        Route::get("logout", [AuthController::class, "logout"])->name("logout");
+        Route::post("logout", [AuthController::class, "logout"])->name("logout");
     });
 });
 
