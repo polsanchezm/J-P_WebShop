@@ -22,7 +22,19 @@ const router = createRouter({
             path: '/home',
             name: 'home',
             component: () => import('@/components/MainHome.vue')
-        }
+        },
+
+        // Detail & Edit added
+        {
+            path: '/detail', // Modificar después
+            name: 'detail',
+            component: () => import('@/views/client/profile/UserDetailView.vue')
+        },
+        {
+            path: '/edit', // Modificar después
+            name: 'edit',
+            component: () => import('@/views/client/profile/UserEditView.vue')
+        },
     ]
 });
 

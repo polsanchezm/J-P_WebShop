@@ -88,5 +88,62 @@ export const useUserStore = defineStore('user', () => {
         }
     };
 
-    return { userRegister, userLogin, userLogout, isLoggedIn, user };
+
+    // Detail & Edit added
+
+    const userDetail = async () => {
+        try {
+            const getToken = localStorage.getItem('token');
+            // fem una crida a la api
+            const response = await axios.get('/auth/users/detail', {
+                headers: {
+                    Authorization: `Bearer ${getToken}`
+                }
+            });
+
+            if (response.status == 200) {
+                const data = response.data.data
+                user.value.id = data.id
+                user.value.name = data.name
+                user.value.surnames = data.surnames
+                user.value.birthdate = data.birthdate
+                user.value.email = data.email
+                console.log('Datos obtenidos')
+            }
+        } catch (error) {
+            const errorMessage = error as ErrorResponse;
+            // mostrem els error en cas que no pugui retornar les dades
+            console.error('Error en obtenir el detail:', errorMessage.message);
+        }
+    }
+
+    const userEdit = async (userName: string, userSurnames: string, userEmail: string, userBirthdate: Date | null, userPassword1: string, userPassword2: string) => {
+        try {
+            const getToken = localStorage.getItem('token');
+            // fem una crida a la api
+            const response = await axios.post('/auth/users/update', {
+                name: userName,
+                surnames: userSurnames,
+                email: userEmail,
+                birthdate: userBirthdate,
+                password: userPassword1,
+                password_confirmation: userPassword2
+            }, {
+                headers: {
+                    Authorization: `Bearer ${getToken}`
+                }
+            });
+
+            if (response.status == 200) {
+                console.log('ok...')
+                router.push({ path: '/detail' });
+            }
+        } catch (error) {
+            const errorMessage = error as ErrorResponse;
+            // mostrem els error en cas que no pugui retornar les dades
+            console.error('Error al fer edit:', errorMessage.message);
+        }
+    };
+
+    return { userRegister, userLogin, userLogout, userDetail, userEdit, isLoggedIn, user };
 });
