@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -55,7 +56,7 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->surnames = $request->input('surnames');
         $user->email = $request->input('email');
-        $user->password = $request->input('password');
+        $user->password = Hash::make($request->input('password'));
         $user->birthdate = $request->input('birthdate');
 
         $user->update();
