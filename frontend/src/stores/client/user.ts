@@ -9,21 +9,25 @@ export const useUserStore = defineStore('user', () => {
         name: '',
         surnames: '',
         birthdate: null,
-        email: ''
+        email: '',
+        password: '',
+        password_confirmation: ''
     });
 
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
 
-    const userRegister = async (userName: string, userSurnames: string, userEmail: string, userPassword1: string, userPassword2: string) => {
+    const userRegister = async (user: any) => {
         try {
+            console.log(user);
+
             // fem una crida a la api
             const response = await axios.post<ApiResponse>('/auth/register', {
-                name: userName,
-                surnames: userSurnames,
-                email: userEmail,
-                password: userPassword1,
-                password_confirmation: userPassword2
+                name: user.name,
+                surnames: user.surnames,
+                email: user.email,
+                password: user.password,
+                password_confirmation: user.password_confirmation
             });
             // const user: User = response.data.user;
             // console.log('Data', response.data);
@@ -39,12 +43,13 @@ export const useUserStore = defineStore('user', () => {
         }
     };
 
-    const userLogin = async (userEmail: string, userPassword: string) => {
+    const userLogin = async (user: any) => {
+        console.log(user);
         try {
             // fem una crida a la api
             const response = await axios.post<ApiResponse>('/auth/login', {
-                email: userEmail,
-                password: userPassword
+                email: user.email,
+                password: user.password
             });
 
             if (response.status == 200 && response.data.token) {
@@ -52,7 +57,7 @@ export const useUserStore = defineStore('user', () => {
                 console.log(response.data.token);
 
                 isLoggedIn.value = true;
-                router.push({ path: '/home' });
+                router.push({ path: '/' });
             }
             console.log('login', isLoggedIn.value);
             //     const user: User = response.data.user;
@@ -88,9 +93,7 @@ export const useUserStore = defineStore('user', () => {
         }
     };
 
-
     // Detail & Edit added
-
     const userDetail = async () => {
         try {
             const getToken = localStorage.getItem('token');
@@ -102,41 +105,40 @@ export const useUserStore = defineStore('user', () => {
             });
 
             if (response.status == 200) {
-                const data = response.data.data
-                user.value.id = data.id
-                user.value.name = data.name
-                user.value.surnames = data.surnames
-                user.value.birthdate = data.birthdate
-                user.value.email = data.email
-                console.log('Datos obtenidos')
+                const data = response.data.data;
+                return data;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
             // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en obtenir el detail:', errorMessage.message);
         }
-    }
+    };
 
-    const userEdit = async (userName: string, userSurnames: string, userEmail: string, userBirthdate: Date | null, userPassword1: string, userPassword2: string) => {
+    const userEdit = async (user: any) => {
         try {
             const getToken = localStorage.getItem('token');
             // fem una crida a la api
-            const response = await axios.post('/auth/users/update', {
-                name: userName,
-                surnames: userSurnames,
-                email: userEmail,
-                birthdate: userBirthdate,
-                password: userPassword1,
-                password_confirmation: userPassword2
-            }, {
-                headers: {
-                    Authorization: `Bearer ${getToken}`
+            const response = await axios.post(
+                '/auth/users/update',
+                {
+                    name: user.name,
+                    surnames: user.surnames,
+                    email: user.email,
+                    birthdate: user.birthdate,
+                    password: user.password,
+                    password_confirmation: user.password_confirmation
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${getToken}`
+                    }
                 }
-            });
+            );
 
             if (response.status == 200) {
-                console.log('ok...')
-                router.push({ path: '/detail' });
+                console.log('ok...');
+                router.push({ path: '/user/detail' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
