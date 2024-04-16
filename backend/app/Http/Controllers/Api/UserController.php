@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -25,38 +25,61 @@ class UserController extends Controller
      */
     public function show()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        return new UserResource($user);
+        return response()->json(new UserResource($user));
     }
+
+    public function verifyCredentials(Request $request)
+    {
+        $user = Auth::user();
+        $id = $user->id;
+
+        if (!$user) {
+            return response()->json(['message' => 'User not logged in or not found'], 401);
+        }
+
+        $request->validate([
+            "email" => "required|string|max:255|email:rfc,dns|unique:users,email," . $id,
+            "password" => "required|string|min:8",
+        ]);
+
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        // Verifica si el correo electrónico y la contraseña proporcionados son correctos
+        if ($user->email === $email && Hash::check($password, $user->password)) {
+            return response()->json(['message' => 'Credentials verified successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+    }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request)
     {
-        $minimumBirthdate = Carbon::now()->subYears(14)->format('Y-m-d');
 
         $user = Auth::user();
         $id = $user->id;
 
         $request->validate([
-            "name" => "required|string|max:255",
-            "surnames" => "required|string|max:255",
-            "birthdate" => "required|date|before:" . $minimumBirthdate,
-            "email" => "required|string|max:255|email:rfc,dns|unique:users,email," . $id,
-            "password" => "required|string|min:8|confirmed",
+            "name" => "nullable|string|max:255",
+            "surnames" => "nullable|string|max:255",
+            "email" => "nullable|string|max:255|email:rfc,dns|unique:users,email," . $id,
+            "password" => "nullable|string|min:8|confirmed",
         ]);
 
         $user->name = $request->input('name');
         $user->surnames = $request->input('surnames');
         $user->email = $request->input('email');
-        $user->password = $request->input('password');
-        $user->birthdate = $request->input('birthdate');
+        $user->password = Hash::make($request->input('password'));
 
         $user->update();
 

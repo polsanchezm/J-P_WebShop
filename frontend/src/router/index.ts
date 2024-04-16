@@ -4,6 +4,11 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
+            path: '/',
+            name: 'home',
+            component: () => import('@/components/MainHome.vue')
+        },
+        {
             path: '/login',
             name: 'login',
             component: () => import('@/views/client/UserLoginView.vue')
@@ -19,9 +24,20 @@ const router = createRouter({
             component: () => import('@/components/client/UserLogout.vue')
         },
         {
-            path: '/home',
-            name: 'home',
-            component: () => import('@/components/MainHome.vue')
+            path: '/user',
+            name: 'user',
+            children: [
+                {
+                    path: '/user/detail', // Modificar después
+                    name: 'detail',
+                    component: () => import('@/views/client/profile/UserDetailView.vue')
+                },
+                {
+                    path: '/user/edit', // Modificar después
+                    name: 'edit',
+                    component: () => import('@/views/client/profile/UserEditView.vue')
+                }
+            ]
         }
     ]
 });
