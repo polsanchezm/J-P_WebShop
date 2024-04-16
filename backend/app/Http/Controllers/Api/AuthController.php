@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,9 +13,12 @@ class AuthController extends Controller
     // Register API (POST, formdata)
     public function register(Request $request)
     {
+        $minimumBirthdate = Carbon::now()->subYears(14)->format('Y-m-d');
+
         $registerUserData = $request->validate([
             "name" => "required|string|max:255",
             "surnames" => "required|string|max:255",
+            "birthdate" => "required|date|before:" . $minimumBirthdate,
             "email" => "required|string|max:255|email:rfc,dns|unique:users",
             "password" => "required|string|min:8|confirmed",
         ]);
@@ -22,6 +26,7 @@ class AuthController extends Controller
         User::create([
             "name" => $registerUserData['name'],
             "surnames" => $registerUserData['surnames'],
+            "birthdate" => $registerUserData['birthdate'],
             "role" => "user",
             "email" => $registerUserData['email'],
             "password" => Hash::make($registerUserData['password']),
