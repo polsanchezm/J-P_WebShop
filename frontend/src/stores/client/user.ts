@@ -10,8 +10,6 @@ export const useUserStore = defineStore('user', () => {
 
     const userRegister = async (user: any) => {
         try {
-            console.log(user);
-
             // fem una crida a la api
             const response = await axios.post<ApiResponse>('/auth/register', {
                 name: user.name,
@@ -33,16 +31,15 @@ export const useUserStore = defineStore('user', () => {
     };
 
     const userLogin = async (user: any) => {
-        // console.log(user);
+        console.log(user);
         try {
             // fem una crida a la api
             const response = await axios.post<ApiResponse>('/auth/login', {
                 email: user.email,
-                password: user.password
+                password: user.currentPassword
             });
 
             if (response.status == 200 && response.data.token) {
-                // localStorage.setItem('token', response.data.token);
                 setWithExpiry(response.data.token);
                 console.log(response.data.token);
 
@@ -64,7 +61,7 @@ export const useUserStore = defineStore('user', () => {
             console.log(getToken);
 
             // fem una crida a la api
-            const response = await axios.post('/auth/users/logout', null, {
+            const response = await axios.post<ApiResponse>('/auth/users/logout', null, {
                 headers: {
                     Authorization: `Bearer ${getToken}`
                 }
@@ -123,11 +120,11 @@ export const useUserStore = defineStore('user', () => {
             }
 
             const tokenObj = JSON.parse(tokenString);
-            const verificationResponse = await axios.post(
+            const verificationResponse = await axios.post<ApiResponse>(
                 '/auth/users/verify-credentials',
                 {
                     email: user.email,
-                    password: user.currentPassword,
+                    password: user.currentPassword
                 },
                 {
                     headers: {
@@ -138,7 +135,7 @@ export const useUserStore = defineStore('user', () => {
 
             if (verificationResponse.status === 200) {
                 // fem una crida a la api
-                const response = await axios.post(
+                const response = await axios.post<ApiResponse>(
                     '/auth/users/update',
                     {
                         name: user.name,
@@ -154,9 +151,6 @@ export const useUserStore = defineStore('user', () => {
                         }
                     }
                 );
-
-                console.log(response);
-                console.log(response.data);
 
                 if (response.status == 200) {
                     router.push({ path: '/user/detail' });
