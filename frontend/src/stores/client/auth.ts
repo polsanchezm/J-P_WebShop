@@ -3,7 +3,7 @@ import axios, { type ErrorResponse, type ApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
 import { type User } from '@/models/user';
-export const useAuthStore = defineStore('user', () => {
+export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
