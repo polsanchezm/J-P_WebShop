@@ -24,8 +24,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::post("register", [AuthController::class, "register"])->name("register");
     Route::post("login", [AuthController::class, "login"])->name("login");
-
+    
     Route::prefix('users')->name('users.')->middleware("auth:sanctum")->group(function () {
+        Route::post('/verify-credentials', [UserController::class, 'verifyCredentials']);
         Route::get("", [UserController::class, "index"])->name("index");
         Route::get("detail", [UserController::class, "show"])->name("detail");
         Route::post("update", [UserController::class, "update"])->name("update");
