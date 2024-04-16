@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { User } from '@/models/user';
-import { useUserStore } from '@/stores/client/user';
+import { useAuthStore } from '@/stores/client/auth';
 import { ref } from 'vue';
 // import { useForm } from 'vee-validate';
 // import { toTypedSchema } from '@vee-validate/yup';
 // import * as yup from 'yup';
-const userStore = useUserStore();
+const authStore = useAuthStore();
 
 const user = ref<User>({
     id: 0,
@@ -59,7 +59,7 @@ const user = ref<User>({
                     <h1
                         class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Create an account</h1>
-                    <form @submit.prevent="userStore.userRegister(user)" class="space-y-4 md:space-y-6">
+                    <form @submit.prevent="authStore.userRegister(user)" class="space-y-4 md:space-y-6">
                         <!-- <form @submit.prevent="onSubmit" class="space-y-4 md:space-y-6"> -->
                         <div>
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your

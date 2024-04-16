@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { User } from '@/models/user';
-import { useUserStore } from '@/stores/client/user';
+import { useAuthStore } from '@/stores/client/auth';
 import { ref } from 'vue';
 // import { useForm } from 'vee-validate';
 // import * as yup from 'yup';
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const user = ref<User>({
     id: 0,
     name: '',
@@ -27,7 +27,7 @@ const user = ref<User>({
                     <h1
                         class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Sign in to your account</h1>
-                    <form class="space-y-4 md:space-y-6" @submit.prevent="userStore.userLogin(user)">
+                    <form class="space-y-4 md:space-y-6" @submit.prevent="authStore.userLogin(user)">
                         <div>
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                 email</label>

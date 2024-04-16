@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { initFlowbite } from 'flowbite';
 import { onMounted } from 'vue';
-import { useUserStore } from '@/stores/client/user';
-const userStore = useUserStore();
+import { useAuthStore } from '@/stores/client/auth';
+const authStore = useAuthStore();
 
 onMounted(() => {
     initFlowbite();
@@ -18,7 +18,7 @@ onMounted(() => {
                 </div>
 
                 <div class="flex items-center lg:order-2">
-                    <div v-if="userStore.isLoggedIn">
+                    <div v-if="authStore.isLoggedIn">
                         <RouterLink class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" to="/logout">Log out</RouterLink>
                         <RouterLink class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" to="/user/detail">Profile</RouterLink>
                     </div>

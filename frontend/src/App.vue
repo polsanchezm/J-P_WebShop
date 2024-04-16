@@ -2,10 +2,10 @@
 import { RouterView } from 'vue-router';
 import MainNavbar from './components/MainNavbar.vue';
 import { onMounted } from 'vue';
-import { useUserStore } from '@/stores/client/user';
-const userStore = useUserStore();
+import { useAuthStore } from '@/stores/client/auth';
+const authStore = useAuthStore();
 onMounted(() => {
-    userStore.checkTokenExpiry();
+    authStore.checkTokenExpiry();
 })
 
 </script>

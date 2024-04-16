@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/client/user';
+import { useAuthStore } from '@/stores/client/auth';
 
-const userStore = useUserStore();
-userStore.userLogout();
+const authStore = useAuthStore();
+authStore.userLogout();
 </script>
 
 <template>
