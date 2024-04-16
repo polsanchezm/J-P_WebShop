@@ -100,7 +100,7 @@ export const useUserStore = defineStore('user', () => {
             });
 
             if (response.status == 200) {
-                user.value = response.data.data;
+                user.value = response.data;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;

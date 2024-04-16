@@ -31,7 +31,7 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        return new UserResource($user);
+        return response()->json(new UserResource($user));
     }
 
     public function verifyCredentials(Request $request)
