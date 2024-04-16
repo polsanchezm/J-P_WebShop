@@ -2,8 +2,10 @@ export interface User {
     id: number;
     name: string;
     surnames: string;
-    birthdate: Date | null;
+    birthdate: string | Date | null;
     email: string;
-    password: string;
-    password_confirmation: string;
+    currentPassword: string;
+    currentPasswordConfirmation: string;
+    newPassword: string;
+    newPasswordConfirmation: string;
 }
