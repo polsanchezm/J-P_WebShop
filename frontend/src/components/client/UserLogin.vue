@@ -2,6 +2,8 @@
 import type { User } from '@/models/user';
 import { useUserStore } from '@/stores/client/user';
 import { ref } from 'vue';
+// import { useForm } from 'vee-validate';
+// import * as yup from 'yup';
 const userStore = useUserStore();
 const user = ref<User>({
     id: 0,
@@ -9,8 +11,10 @@ const user = ref<User>({
     surnames: '',
     birthdate: null,
     email: '',
-    password: '',
-    password_confirmation: ''
+    currentPassword: '',
+    currentPasswordConfirmation: '',
+    newPassword: '',
+    newPasswordConfirmation: ''
 });
 </script>
 
@@ -30,14 +34,18 @@ const user = ref<User>({
                             <input type="email" name="email" v-model="user.email" id="email"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="name@company.com" required />
+                            <!-- <span class="text-red-500">{{ errors.email }}</span> -->
+
                         </div>
                         <div>
                             <label for="password"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input type="password" name="password" v-model="user.password" id="password"
+                            <input type="password" name="password" v-model="user.currentPassword" id="password"
                                 placeholder="••••••••"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
+                            <!-- <span class="text-red-500">{{ errors.password }}</span> -->
+
                         </div>
                         <button type="submit"
                             class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign
