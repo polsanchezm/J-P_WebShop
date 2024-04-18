@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios, { type ErrorResponse, type ApiResponse } from '@/lib/axios';
+import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
 import { type User } from '@/models/user';
@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
     const userRegister = async (user: any) => {
         try {
             // fem una crida a la api
-            const response = await axios.post<ApiResponse>('/auth/register', {
+            const response = await axios.post<UserApiResponse>('/auth/register', {
                 name: user.name,
                 surnames: user.surnames,
                 email: user.email,
@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
             });
 
             if (response.status == 201) {
-                router.push({ path: '/login' });
+                router.push({ name: 'login' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
         console.log(user);
         try {
             // fem una crida a la api
-            const response = await axios.post<ApiResponse>('/auth/login', {
+            const response = await axios.post<UserApiResponse>('/auth/login', {
                 email: user.email,
                 password: user.currentPassword
             });
@@ -44,7 +44,7 @@ export const useAuthStore = defineStore('auth', () => {
                 console.log(response.data.token);
 
                 isLoggedIn.value = true;
-                router.push({ path: '/' });
+                router.push({ name: 'home' });
             }
             console.log('login', isLoggedIn.value);
         } catch (error) {
@@ -61,7 +61,7 @@ export const useAuthStore = defineStore('auth', () => {
             console.log(getToken);
 
             // fem una crida a la api
-            const response = await axios.post<ApiResponse>('/auth/users/logout', null, {
+            const response = await axios.post<UserApiResponse>('/auth/users/logout', null, {
                 headers: {
                     Authorization: `Bearer ${getToken}`
                 }
@@ -70,7 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (response.status == 200) {
                 localStorage.removeItem('token');
-                router.push({ path: '/login' });
+                router.push({ name: 'home' });
             }
             console.log('logout', isLoggedIn.value);
         } catch (error) {
@@ -120,7 +120,7 @@ export const useAuthStore = defineStore('auth', () => {
             }
 
             const tokenObj = JSON.parse(tokenString);
-            const verificationResponse = await axios.post<ApiResponse>(
+            const verificationResponse = await axios.post<UserApiResponse>(
                 '/auth/users/verify-credentials',
                 {
                     email: user.email,
@@ -135,7 +135,7 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (verificationResponse.status === 200) {
                 // fem una crida a la api
-                const response = await axios.post<ApiResponse>(
+                const response = await axios.post<UserApiResponse>(
                     '/auth/users/update',
                     {
                         name: user.name,
@@ -153,7 +153,7 @@ export const useAuthStore = defineStore('auth', () => {
                 );
 
                 if (response.status == 200) {
-                    router.push({ path: '/user/detail' });
+                    router.push({ name: 'user.detail' });
                 }
             }
         } catch (error) {
@@ -163,7 +163,7 @@ export const useAuthStore = defineStore('auth', () => {
         }
     };
 
-    function setWithExpiry(value: any) {
+    const setWithExpiry = (value: any) => {
         const now = new Date();
         const ttl = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
         const item = {
@@ -171,9 +171,9 @@ export const useAuthStore = defineStore('auth', () => {
             expiry: now.getTime() + ttl
         };
         localStorage.setItem('token', JSON.stringify(item));
-    }
+    };
 
-    function retrieveTokenValue() {
+    const retrieveTokenValue = () => {
         const tokenString = localStorage.getItem('token');
         if (!tokenString) {
             return null;
@@ -188,21 +188,7 @@ export const useAuthStore = defineStore('auth', () => {
         }
 
         return tokenObj.value;
-    }
+    };
 
-    function checkTokenExpiry() {
-        let count = 0;
-        const interval = setInterval(() => {
-            count++;
-            // console.log('segundo', count);
-
-            if (retrieveTokenValue() === null) {
-                // console.log('Token expirado, cerrando sesión');
-                isLoggedIn.value = false;
-            }
-        }, 1000);
-        return () => clearInterval(interval);
-    }
-
-    return { userRegister, userLogin, userLogout, userDetail, userEdit, isLoggedIn, user, setWithExpiry, retrieveTokenValue, checkTokenExpiry };
+    return { userRegister, userLogin, userLogout, userDetail, userEdit, isLoggedIn, user, setWithExpiry, retrieveTokenValue };
 });

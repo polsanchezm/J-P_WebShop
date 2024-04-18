@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ShippingDetail;
 use App\Http\Resources\ShippingResource;
+use Illuminate\Support\Facades\Auth;
 
 
 class ShippingController extends Controller
@@ -16,7 +17,7 @@ class ShippingController extends Controller
     public function index()
     {
         $shipping = ShippingDetail::all();
-        return ShippingResource::collection($shipping);
+        return response()->json(ShippingResource::collection($shipping));
     }
 
 
@@ -26,18 +27,17 @@ class ShippingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'phone' => 'required|string|max:20',
             'street' => 'required|string|max:255',
             'unit' => 'required|string|max:50',
-            'apartment_number' => 'required|string|max:20',
+            'apartment_number' => 'required|integer|digits_between:1,3',
             'country' => 'required|string|max:100',
             'city' => 'required|string|max:100',
             'other_instructions' => 'nullable|string|max:300',
         ]);
 
         $shipping = new ShippingDetail;
-        $shipping->user_id = $request->input('user_id');
+        $shipping->user_id = Auth::user()->id;
         $shipping->phone = $request->input('phone');
         $shipping->street = $request->input('street');
         $shipping->unit = $request->input('unit');
@@ -82,17 +82,16 @@ class ShippingController extends Controller
         }
 
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'phone' => 'required|string|max:20',
             'street' => 'required|string|max:255',
             'unit' => 'required|string|max:50',
-            'apartment_number' => 'required|string|max:20',
+            'apartment_number' => 'required|integer|digits_between:1,3',
             'country' => 'required|string|max:100',
             'city' => 'required|string|max:100',
             'other_instructions' => 'nullable|string|max:300',
         ]);
 
-        $shipping->user_id = $request->input('user_id');
+        $shipping->user_id = Auth::user()->id;
         $shipping->phone = $request->input('phone');
         $shipping->street = $request->input('street');
         $shipping->unit = $request->input('unit');
