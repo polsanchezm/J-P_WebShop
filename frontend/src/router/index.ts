@@ -28,17 +28,32 @@ const router = createRouter({
             name: 'user',
             children: [
                 {
-                    path: '/user/detail', // Modificar después
+                    path: 'detail',
                     name: 'detail',
                     component: () => import('@/views/client/profile/UserDetailView.vue')
                 },
                 {
-                    path: '/user/edit', // Modificar después
+                    path: 'edit',
                     name: 'edit',
                     component: () => import('@/views/client/profile/UserEditView.vue')
-                }
+                },
+                {
+                    path: 'orders',
+                    children: [
+                        {
+                            path: '',
+                            name: 'orders',
+                            component: () => import('@/views/client/profile/UserOrdersView.vue'),
+                        },
+                        {
+                            path: 'detail/:id',
+                            name: 'orderDetail',
+                            component: () => import('@/views/client/profile/UserOrderDetailView.vue')
+                        }
+                    ]
+                },
             ]
-        }
+        },
     ]
 });
 
