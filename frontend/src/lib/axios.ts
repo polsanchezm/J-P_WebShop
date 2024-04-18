@@ -3,9 +3,10 @@ import { type User } from '@/models/user';
 
 export interface ErrorResponse {
     message: string;
+    response: string;
 }
 
-export interface ApiResponse {
+export interface UserApiResponse {
     token: string;
     message: string;
     user: User;
