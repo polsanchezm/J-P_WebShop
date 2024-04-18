@@ -32,9 +32,11 @@ onBeforeMount(async () => {
                     <RouterLink
                         class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         :to="{ name: 'shipping.edit', params: { id: shipping.id } }">Edit</RouterLink>
-                    <RouterLink
+                    <button
                         class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                        :to="{ name: 'shipping.delete', params: { id: shipping.id } }">Delete</RouterLink>
+                        @click="shippingStore.shippingDelete(shipping.id)">
+                        Delete
+                    </button>
                 </div>
             </li>
         </ul>

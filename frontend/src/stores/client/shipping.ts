@@ -63,7 +63,7 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const shippingEdit = async (shipping: Shipping, id: number | null) => {
         console.log(shipping);
-        
+
         try {
             if (id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
@@ -207,7 +207,7 @@ export const useShippingStore = defineStore('shipping', () => {
             console.log('data detail', response.data);
 
             if (response.status == 200) {
-                router.push({ name: 'shipping.all' });
+                shipping.value = shipping.value.filter((ship) => ship.id !== id);
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
