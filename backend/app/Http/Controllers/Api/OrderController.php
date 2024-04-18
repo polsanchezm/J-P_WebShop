@@ -17,7 +17,8 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::all();
-        return OrderResource::collection($orders);
+        return response()->json(OrderResource::collection($orders));
+        // return OrderResource::collection($orders);
     }
 
     /**
