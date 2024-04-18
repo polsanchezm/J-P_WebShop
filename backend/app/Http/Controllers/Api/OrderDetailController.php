@@ -20,7 +20,8 @@ class OrderDetailController extends Controller
         if (!$orderDetail) {
             return response()->json(['message' => 'Order details not found'], 404);
         }
-        return OrderDetailResource::collection($orderDetail);
+        return response()->json(OrderDetailResource::collection($orderDetail));
+        // return OrderDetailResource::collection($orderDetail);
     }
 
     /**
