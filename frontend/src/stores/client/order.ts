@@ -7,7 +7,7 @@ import { type OrderDetail } from '@/models/orderDetail';
 
 export const useOrderStore = defineStore('order', () => {
     const orders = ref<Order[]>([]);
-    const orderDetail = ref<OrderDetail>();
+    const orderDetail = ref<OrderDetail[]>([]);
 
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
@@ -41,7 +41,7 @@ export const useOrderStore = defineStore('order', () => {
         }
     };
 
-    const userOrderDetail = async (orderId: string | string []) => {
+    const userOrderDetail = async (orderId: number | null) => {
         try {
             const tokenString = localStorage.getItem('token');
 
@@ -54,7 +54,7 @@ export const useOrderStore = defineStore('order', () => {
             const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
-            const response = await axios.get<OrderDetail>(`/app/orders/details/detail/${orderId}`, {
+            const response = await axios.get<OrderDetail[]>(`/app/orders/details/${orderId}`, {
                 headers: {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
@@ -70,7 +70,7 @@ export const useOrderStore = defineStore('order', () => {
         }
     };
 
-    const deleteUserOrder = async (orderId: number) => {
+    const deleteUserOrder = async (orderId: number | null, redirect: boolean = false) => {
         try {
             const tokenString = localStorage.getItem('token');
 
@@ -90,8 +90,11 @@ export const useOrderStore = defineStore('order', () => {
             });
     
             if (response.status === 200) {
-                console.log('deleted')
-                router.push({ path: '/user/orders' });
+                if (redirect){
+                    router.push({ path: '/user/orders' });
+                } else{
+                    orders.value = orders.value.filter((order) => order.id !== orderId);
+                }
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
