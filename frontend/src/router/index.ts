@@ -8,91 +8,91 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: () => import('@/components/MainHome.vue')
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import('@/views/client/UserLoginView.vue')
-        },
-        {
-            path: '/register',
-            name: 'register',
-            component: () => import('@/views/client/UserRegisterView.vue')
-        },
-        {
-            path: '/logout',
-            name: 'logout',
-            component: () => import('@/components/client/UserLogout.vue')
-        },
-        {
-            path: '/user',
-            name: 'user',
-            // redirect: '/user/detail',
+            component: () => import('@/components/LayoutComponent.vue'),
             children: [
                 {
-                    path: '',
-                    name: 'user.detail',
-                    component: () => import('@/views/client/profile/UserDetailView.vue'),
-                    meta: { requiresAuth: true }
+                    path: '/login',
+                    name: 'login',
+                    component: () => import('@/views/client/UserLoginView.vue')
                 },
                 {
-                    path: 'edit',
-                    name: 'user.edit',
-                    component: () => import('@/views/client/profile/UserEditView.vue'),
-                    meta: { requiresAuth: true }
+                    path: '/login',
+                    name: 'login',
+                    component: () => import('@/views/client/UserLoginView.vue')
                 },
                 {
-                    path: 'orders',
+                    path: '/register',
+                    name: 'register',
+                    component: () => import('@/views/client/UserRegisterView.vue')
+                },
+                {
+                    path: '/logout',
+                    name: 'logout',
+                    component: () => import('@/components/client/UserLogout.vue')
+                },
+                {
+                    path: '/user',
+                    name: 'user',
                     children: [
                         {
                             path: '',
-                            name: 'orders',
-                            component: () => import('@/views/client/profile/UserOrdersView.vue'),
+                            name: 'user.detail',
+                            component: () => import('@/views/client/profile/UserDetailView.vue'),
+                            meta: { requiresAuth: true }
                         },
                         {
-                            path: 'detail/:id',
-                            name: 'orderDetail',
-                            component: () => import('@/views/client/profile/UserOrderDetailView.vue')
+                            path: 'edit',
+                            name: 'user.edit',
+                            component: () => import('@/views/client/profile/UserEditView.vue'),
+                            meta: { requiresAuth: true }
+                        },
+                        {
+                            path: 'orders',
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'orders',
+                                    component: () => import('@/views/client/profile/UserOrdersView.vue')
+                                },
+                                {
+                                    path: 'detail/:id',
+                                    name: 'orderDetail',
+                                    component: () => import('@/views/client/profile/UserOrderDetailView.vue')
+                                }
+                            ]
+                        },
+                        {
+                            path: 'shipping',
+                            name: 'shipping',
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'shipping.all',
+                                    component: () => import('@/views/client/profile/shipping/AllShippingsView.vue'),
+                                    meta: { requiresAuth: true }
+                                },
+                                {
+                                    path: 'create',
+                                    name: 'shipping.create',
+                                    component: () => import('@/views/client/profile/shipping/ShippingCreateView.vue'),
+                                    meta: { requiresAuth: true }
+                                },
+                                {
+                                    path: 'edit/:id',
+                                    name: 'shipping.edit',
+                                    component: () => import('@/views/client/profile/shipping/ShippingEditView.vue'),
+                                    meta: { requiresAuth: true }
+                                }
+                            ]
                         }
                     ]
                 },
                 {
-                    path: 'shipping',
-                    name: 'shipping',
-                    children: [
-                        {
-                            path: '',
-                            name: 'shipping.all',
-                            component: () => import('@/views/client/profile/shipping/AllShippingsView.vue'),
-                            meta: { requiresAuth: true }
-                        },
-                        {
-                            path: 'create',
-                            name: 'shipping.create',
-                            component: () => import('@/views/client/profile/shipping/ShippingCreateView.vue'),
-                            meta: { requiresAuth: true }
-                        },
-                        {
-                            path: 'edit/:id',
-                            name: 'shipping.edit',
-                            component: () => import('@/views/client/profile/shipping/ShippingEditView.vue'),
-                            meta: { requiresAuth: true }
-                        },
-                        {
-                            path: 'delete/:id',
-                            name: 'shipping.delete',
-                            component: () => import('@/components/client/profile/shipping/ShippingDelete.vue'),
-                            meta: { requiresAuth: true }
-                        }
-                    ]
+                    path: '/:pathMatch(.*)*',
+                    name: 'error404',
+                    component: () => import('@/views/Error404View.vue')
                 }
             ]
-        },
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'error404',
-            component: () => import('@/views/Error404View.vue')
         }
     ]
 });
