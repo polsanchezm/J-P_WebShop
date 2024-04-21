@@ -21,13 +21,13 @@ onMounted(() => {
             <div class="flex items-center lg:order-2">
                 <div v-if="authStore.isLoggedIn">
                     <RouterLink
-                        class="gradient-button text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:-800"
+                        class="login-button text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:-800"
                         :to="{ name: 'logout' }">Log out</RouterLink>
                     <RouterLink
                         class="gradient-button text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:-800"
                         :to="{ name: 'user.detail' }">Profile</RouterLink>
                 </div>
-                <div>
+                <div v-else>
                     <RouterLink
                         class="login-button text-gray-800 dark:text-white hover:bg-gray-50 font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:bg-gray-800"
                         :to="{ name: 'login' }">Log in</RouterLink>
