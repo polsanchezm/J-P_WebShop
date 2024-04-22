@@ -9,7 +9,7 @@ const route = useRoute();
 <template>
     <div class="flex flex-col h-screen justify-between">
         <header>
-            <NavbarComponent />
+            <NavbarComponent v-if="route.name != 'home'" />
         </header>
         <main class="mb-auto">
             <HeaderComponent v-if="route.name === 'home'" />
