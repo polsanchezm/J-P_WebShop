@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -23,7 +24,7 @@ class AuthController extends Controller
             "password" => "required|string|min:8|confirmed",
         ]);
 
-        User::create([
+        $user = User::create([
             "name" => $registerUserData['name'],
             "surnames" => $registerUserData['surnames'],
             "birthdate" => $registerUserData['birthdate'],
@@ -32,9 +33,17 @@ class AuthController extends Controller
             "password" => Hash::make($registerUserData['password']),
         ]);
 
+        Auth::login($user);
+
+        // Generar token para la sesión del usuario
+        $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
+
         return response()->json([
-            "message" => "User registered successfully",
+            "message" => "User registered and logged in successfully",
+            "user" => $user,
+            "token" => $token,
         ], 201);
+
     }
 
     // Login API (POST, formdata)
