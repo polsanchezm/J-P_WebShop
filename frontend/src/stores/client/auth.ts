@@ -20,8 +20,12 @@ export const useAuthStore = defineStore('auth', () => {
                 password_confirmation: user.currentPasswordConfirmation
             });
 
-            if (response.status == 201) {
-                router.push({ name: 'login' });
+            if (response.status == 201 && response.data.token) {
+                setWithExpiry(response.data.token);
+                console.log(response.data.token);
+
+                isLoggedIn.value = true;
+                router.push({ name: 'home' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
