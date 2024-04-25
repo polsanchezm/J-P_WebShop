@@ -3,7 +3,7 @@ import UserRegister from '@/components/client/UserRegister.vue';
 </script>
 
 <template>
-    <main>
+    <div>
         <UserRegister />
-    </main>
+    </div>
 </template>

@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+body {
+    background-image: linear-gradient(to right bottom, #d9c9eb, #ceb5eb, #c4a0eb, #b88be9, #ad76e8, #9c64d6, #8a53c5, #7941b4, #5f3190, #46216e, #2e134e, #1a0230);
+    background-attachment: fixed;
+}
+
+button,
+.gradient-button {
+    background-image: linear-gradient(to right bottom, #b18dda, #ad84dd, #aa7adf, #a670e1, #a266e3, #9d5de3, #9953e2, #9449e2, #8d3de0, #8631de, #7f22dc, #770bda);
+}

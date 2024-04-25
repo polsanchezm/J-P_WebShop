@@ -3,7 +3,7 @@ import UserLogin from '@/components/client/UserLogin.vue';
 </script>
 
 <template>
-    <main>
+    <div>
         <UserLogin />
-    </main>
+    </div>
 </template>
