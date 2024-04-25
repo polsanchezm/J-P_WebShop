@@ -13,10 +13,14 @@ class ProductVariantController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id)
     {
-        $productVariant = ProductVariant::all();
-        return ProductVariantResource::collection($productVariant);
+        $productVariant = ProductVariant::where('product_id', $id)->get();
+        if (!$productVariant) {
+            return response()->json(['message' => 'Product variants not found'], 404);
+        }
+        // $productVariant = ProductVariant::all();
+        return response()->json(ProductVariantResource::collection($productVariant));
     }
 
     /**
