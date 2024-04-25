@@ -6,7 +6,7 @@ const orderStore = useOrderStore();
 
 onBeforeMount(async () => {
     await orderStore.userOrders();
-    console.log('order', orderStore.orders);
+    console.log('orders', orderStore.orders);
 });
 </script>
 

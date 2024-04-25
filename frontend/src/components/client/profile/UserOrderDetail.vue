@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { ref } from 'vue';
 import { useRoute } from 'vue-router'
 import { useOrderStore } from '@/stores/client/order';
 import { onBeforeMount } from 'vue';
