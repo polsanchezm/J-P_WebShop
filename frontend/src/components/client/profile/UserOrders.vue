@@ -11,7 +11,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div v-if="orderStore.orders" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+    <div v-if="orderStore.orders" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6 mt-24">
         <p class="text-lg font-semibold mb-2 text-gray-700">Orders</p>
         <ul>
             <li v-for="(order, index) in orderStore.orders" :key="index">

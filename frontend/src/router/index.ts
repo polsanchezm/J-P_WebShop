@@ -82,7 +82,7 @@ const router = createRouter({
                                     name: 'shipping.edit',
                                     component: () => import('@/views/client/profile/shipping/ShippingEditView.vue'),
                                     meta: { requiresAuth: true }
-                                },
+                                }
                             ]
                         },
                         {

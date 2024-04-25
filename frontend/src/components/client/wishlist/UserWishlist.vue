@@ -10,11 +10,10 @@ onBeforeMount(async () => {
     console.log('wishlist', wishlistStore.wishlist);
 });
 const cartStore = useCartStore();
-
 </script>
 
 <template>
-    <div v-if="wishlistStore.wishlist" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+    <div v-if="wishlistStore.wishlist" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6 mt-24">
         <p class="text-lg font-semibold mb-2 text-gray-700">Items</p>
         <!-- <button v-if="wishlistStore.wishlist.length > 0" @click="wishlistStore.removeAllFromCart()"
             class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
@@ -28,10 +27,7 @@ const cartStore = useCartStore();
                 <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ item!.productStock }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Product Prize:</span> {{ item!.productPrice }}</p>
 
-                <button @click="cartStore.addToCart(item!)"
-                    class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
-                    Comprar
-                </button>
+                <button @click="cartStore.addToCart(item!)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Comprar</button>
 
                 <!-- <RouterLink
                 class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"

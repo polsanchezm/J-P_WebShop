@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router';
 import { useOrderStore } from '@/stores/client/order';
 import { onBeforeMount } from 'vue';
 
@@ -17,7 +17,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div v-if="orderStore.orderDetail" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+    <div v-if="orderStore.orderDetail" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6 mt-24">
         <p class="text-lg font-semibold mb-2 text-gray-700">Order Detail</p>
         <ul>
             <li v-for="(orderDetail, index) in orderStore.orderDetail" :key="index">
