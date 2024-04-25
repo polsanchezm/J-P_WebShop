@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\WishlistItem;
 use App\Models\Wishlist;
@@ -19,21 +20,50 @@ class WishlistItemController extends Controller
     {
         $userId = Auth::user()->id;
         $wishlist = Wishlist::where('user_id', $userId)->first();
-        
-        $wishlistItems = WishlistItem::where('wishlist_id', $wishlist->id)->get();
-        if (!$wishlistItems) {
-            return response()->json(['message' => 'Wishlist details not found'], 404);
+
+        if (!$wishlist) {
+            return response()->json(['message' => 'Wishlist not found'], 404);
         }
-        return response()->json(WishlistItemResource::collection($wishlistItems));
+
+        $wishlistItems = WishlistItem::where('wishlist_id', $wishlist->id)->get();
+
+        if ($wishlistItems->isEmpty()) {
+            return response()->json(['message' => 'Wishlist items not found'], 404);
+        }
+
+        $wishlistDetails = [];
+
+        foreach ($wishlistItems as $wishlistItem) {
+            $productVariant = ProductVariant::find($wishlistItem->variant_id);
+
+            if (!$productVariant) {
+                return response()->json(['message' => 'Product variant not found'], 404);
+            }
+
+            $product = Product::find($productVariant->product_id);
+
+            if (!$product) {
+                return response()->json(['message' => 'Product not found'], 404);
+            }
+
+            $wishlistItemDetails = [
+                'id' => $wishlistItem->id,
+                'wishlistId' => $wishlistItem->wishlist_id,
+                'variantId' => $wishlistItem->variant_id,
+                'quantity' => $wishlistItem->quantity,
+                'productId' => $product->id,
+                'productName' => $product->name,
+                'productImage' => $product->image,
+                'productPrice' => $product->price,
+                'productStock' => $productVariant->stock,
+            ];
+
+            $wishlistDetails[] = $wishlistItemDetails;
+        }
+
+        return response()->json($wishlistDetails);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -62,8 +92,8 @@ class WishlistItemController extends Controller
         }
 
         $existingItem = WishlistItem::where('wishlist_id', $wishlist->id)
-                                 ->where('variant_id', $productVariant->id)
-                                 ->first();
+            ->where('variant_id', $productVariant->id)
+            ->first();
 
         if ($existingItem) {
             return response()->json(['message' => 'El producte ja existeix en la wishlist, no es pot afegir una altra vegada'], 409); // Código de estado HTTP 409 Conflict
@@ -91,7 +121,33 @@ class WishlistItemController extends Controller
         if (!$wishlistItem) {
             return response()->json(['message' => 'Wishlist item not found'], 404);
         }
-        return response()->json(new WishlistItemResource($wishlistItem));
+
+        $productVariant = ProductVariant::find($wishlistItem->variant_id);
+        if (!$productVariant) {
+            return response()->json(['message' => 'Product variant not found'], 404);
+        }
+
+        $product = Product::find($productVariant->product_id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        $wishlistItemDetails = [
+            'id' => $wishlistItem->id,
+            'wishlistId' => $wishlistItem->wishlist_id,
+            'variantId' => $wishlistItem->variant_id,
+            'quantity' => $wishlistItem->quantity,
+            'productId' => $product->id,
+            'productName' => $product->name,
+            'productImage' => $product->image,
+            'productPrice' => $product->price,
+            'productSize' => $productVariant->size,
+            'productColor' => $productVariant->color,
+        ];
+
+        return response()->json($wishlistItemDetails);
+
+        // return response()->json(new WishlistItemResource($wishlistItem));
     }
 
     /**
