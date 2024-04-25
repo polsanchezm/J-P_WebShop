@@ -1,12 +1,11 @@
-import { defineStore } from "pinia";
-import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
-import router from '@/router';
+import { defineStore } from 'pinia';
+import axios, { type ErrorResponse } from '@/lib/axios';
 import { ref } from 'vue';
-import { type WishlistItem } from "@/models/wishlistItem";
-import { type ProductVariant } from "@/models/productVariant";
+import { type ProductItem } from '@/models/productItem';
+import { type ProductVariant } from '@/models/productVariant';
 
 export const useWishlistStore = defineStore('wishlist', () => {
-    const wishlist = ref<WishlistItem[]>([]);
+    const wishlist = ref<ProductItem[]>([]);
 
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
@@ -24,26 +23,25 @@ export const useWishlistStore = defineStore('wishlist', () => {
             const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
-            const response = await axios.get<WishlistItem[]>('/app/wishlist/items', {
+            const response = await axios.get<ProductItem[]>('/app/wishlist/items', {
                 headers: {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            
+
             if (response.status == 200) {
-                wishlist.value = response.data;
+                const wishlistData = response.data;
+                console.log('datas', wishlistData);
+                wishlist.value = wishlistData;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
             // mostrem els error en cas que no pugui retornar les dades
-            console.error("Error en obtenir el wishlist items", errorMessage.message);
+            console.error('Error en obtenir el wishlist items', errorMessage.message);
         }
     };
 
-
     const addToWishlist = async (productVariant: ProductVariant) => {
-        
-
         try {
             const tokenString = localStorage.getItem('token');
 
@@ -56,10 +54,10 @@ export const useWishlistStore = defineStore('wishlist', () => {
             const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
-            const response = await axios.post<WishlistItem>('/app/wishlist/items/create',
+            const response = await axios.post<ProductItem>(
+                '/app/wishlist/items/create',
                 {
-                    variant_id: productVariant.id,
-                    // quantity: 1
+                    variant_id: productVariant.id
                 },
                 {
                     headers: {
@@ -69,7 +67,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
             );
 
             if (response.status == 200) {
-                console.log('Added successfull')
+                console.log('Added correctly');
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -78,5 +76,5 @@ export const useWishlistStore = defineStore('wishlist', () => {
         }
     };
 
-    return {wishlistItems, addToWishlist, wishlist}
-})
+    return { wishlistItems, addToWishlist, wishlist };
+});
