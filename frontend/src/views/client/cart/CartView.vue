@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import Cart from '@/components/client/cart/Cart.vue';
+import UserCart from '@/components/client/cart/UserCart.vue';
 </script>
 
 <template>
     <div>
-        <Cart />
+        <UserCart />
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

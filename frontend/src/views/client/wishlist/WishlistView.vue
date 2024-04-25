@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import Wishlist from '@/components/client/wishlist/Wishlist.vue';
+import UserWishlist from '@/components/client/wishlist/UserWishlist.vue';
 </script>
 
 <template>
     <div>
-        <Wishlist />
+        <UserWishlist />
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
