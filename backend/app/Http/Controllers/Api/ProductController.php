@@ -13,7 +13,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return ProductResource::collection($products);
+        return response()->json(ProductResource::collection($products));
+        // return ProductResource::collection($products);
     }
 
 
@@ -61,8 +62,8 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
-
-        return new ProductResource($product);
+        return response()->json(new ProductResource($product));
+        // return new ProductResource($product);
     }
 
 
