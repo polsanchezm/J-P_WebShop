@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router'
 import { useOrderStore } from '@/stores/client/order';
 import { onBeforeMount } from 'vue';
 

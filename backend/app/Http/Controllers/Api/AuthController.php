@@ -7,6 +7,9 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Api\WishlistController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Wishlist;
 
 class AuthController extends Controller
 {
@@ -23,7 +26,7 @@ class AuthController extends Controller
             "password" => "required|string|min:8|confirmed",
         ]);
 
-        User::create([
+        $user = User::create([
             "name" => $registerUserData['name'],
             "surnames" => $registerUserData['surnames'],
             "birthdate" => $registerUserData['birthdate'],
@@ -31,6 +34,11 @@ class AuthController extends Controller
             "email" => $registerUserData['email'],
             "password" => Hash::make($registerUserData['password']),
         ]);
+
+        Auth::login($user);
+        $whislist = new Wishlist;
+        $whislist->user_id = Auth::user()->id;
+        $whislist->save();
 
         return response()->json([
             "message" => "User registered successfully",
