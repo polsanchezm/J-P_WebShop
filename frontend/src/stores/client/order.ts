@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios, { type ErrorResponse, type ApiResponse } from '@/lib/axios';
+import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
 import { type Order } from "@/models/order";
