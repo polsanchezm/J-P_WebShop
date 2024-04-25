@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return ProductResource::collection($products);
+        return response()->json(ProductResource::collection($products));
     }
 
 
@@ -29,7 +29,7 @@ class ProductController extends Controller
             "description" => "required|string|max:255",
             "category_id" => "required|exists:categories,id",
             "image" => "required|image",
-            "price" => "required|string|max:5",
+            "price" => "required|numeric|between:0,9999.99",
         ]);
 
 
@@ -61,8 +61,7 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
-
-        return new ProductResource($product);
+        return response()->json(new ProductResource($product));
     }
 
 
@@ -82,7 +81,7 @@ class ProductController extends Controller
             "description" => "required|string|max:255",
             "category_id" => "required|exists:categories,id",
             "image" => "nullable|image",
-            "price" => "required|string|max:5",
+            "price" => "required|numeric|between:0,9999.99",
         ]);
 
         $product->name = $request->input('name');
@@ -91,7 +90,7 @@ class ProductController extends Controller
         $product->price = floatval($request->input('price'));
 
         $imagePath = $request->file('image');
-        if ($imagePath){
+        if ($imagePath) {
             $imageName = $product->image;
             ManageImage::deleteImage($imageName);
 

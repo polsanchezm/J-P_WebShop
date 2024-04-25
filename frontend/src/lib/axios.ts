@@ -3,7 +3,7 @@ import { type User } from '@/models/user';
 
 export interface ErrorResponse {
     message: string;
-    response: string;
+    response: any;
 }
 
 export interface UserApiResponse {
