@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Support\Facades\Auth;
@@ -36,13 +37,19 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
+
+        // Generar token para la sesión del usuario
+        $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
         $whislist = new Wishlist;
         $whislist->user_id = Auth::user()->id;
         $whislist->save();
 
         return response()->json([
-            "message" => "User registered successfully",
+            "message" => "User registered and logged in successfully",
+            "user" => $user,
+            "token" => $token,
         ], 201);
+
     }
 
     // Login API (POST, formdata)
