@@ -8,8 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Api\WishlistController;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
 
 class AuthController extends Controller
