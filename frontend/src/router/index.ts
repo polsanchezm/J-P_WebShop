@@ -149,6 +149,11 @@ const router = createRouter({
                         }
                     ]
                 },
+                {
+                    path: 'orders',
+                    name: 'orders.manager',
+                    component: () => import('@/views/manager/OrdersView.vue'),
+                },
             ]
         }
     ]
