@@ -25,7 +25,7 @@ export const useOrderStore = defineStore('order', () => {
             const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
-            const response = await axios.get<Order[]>('/app/orders/', {
+            const response = await axios.get<Order[]>('/app/orders/detail', {
                 headers: {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
