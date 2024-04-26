@@ -1,0 +1,14 @@
+
+<script setup lang="ts">
+import EditProduct from '@/components/manager/management/products/EditProduct.vue';
+</script>
+
+<template>
+    <div>
+        <EditProduct />
+    </div>
+</template>
+
+<style scoped>
+
+</style>

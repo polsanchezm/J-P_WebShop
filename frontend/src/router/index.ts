@@ -118,6 +118,38 @@ const router = createRouter({
             path: '/:pathMatch(.*)*',
             name: 'error404',
             component: () => import('@/views/Error404View.vue')
+        },
+        {
+            path: '/management',
+            name: 'management',
+            // redirect: '/user/detail',
+            children: [
+                {
+                    path: 'products',
+                    children: [
+                        {
+                            path: '',
+                            name: 'products.manager',
+                            component: () => import('@/views/manager/ProductsView.vue'),
+                        },
+                        {
+                            path: 'add',
+                            name: 'product.add',
+                            component: () => import('@/views/manager/AddProductView.vue')
+                        },
+                        {
+                            path: 'detail/:id',
+                            name: 'product.detail.manager',
+                            component: () => import('@/views/manager/ProductDetailView.vue')
+                        },
+                        {
+                            path: 'edit/:id',
+                            name: 'product.edit',
+                            component: () => import('@/views/manager/EditProductView.vue')
+                        }
+                    ]
+                },
+            ]
         }
     ]
 });
