@@ -16,12 +16,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $userId = Auth::user()->id;
-        $orders = Order::where('user_id', $userId)->get();
-        if (!$orders) {
-            return response()->json(['message' => 'User orders not found'], 404);
-        }
-        // $orders = Order::all();
+        
+        $orders = Order::all();
         return response()->json(OrderResource::collection($orders));
         // return OrderResource::collection($orders);
     }
@@ -47,13 +43,16 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        $order = Order::find($id);
-        if (!$order) {
-            return response()->json(['message' => 'Order not found'], 404);
+        $userId = Auth::user()->id;
+        $orders = Order::where('user_id', $userId)->get();
+        if (!$orders) {
+            return response()->json(['message' => 'User orders not found'], 404);
         }
-        return new OrderResource($order);
+        // $orders = Order::all();
+        return response()->json(OrderResource::collection($orders));
+        // return OrderResource::collection($orders);
     }
 
     /**

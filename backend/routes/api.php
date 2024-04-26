@@ -58,7 +58,7 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get("", [OrderController::class, "index"])->name("index");
         Route::post("create", [OrderController::class, "store"])->name("create");
-        Route::get("detail/{id}", [OrderController::class, "show"])->name("detail");
+        Route::get("detail", [OrderController::class, "show"])->name("detail");
         Route::delete("delete/{id}", [OrderController::class, "destroy"])->name("delete");
 
         Route::prefix('details')->name('details.')->group(function () {
