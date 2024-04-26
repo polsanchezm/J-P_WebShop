@@ -29,4 +29,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class, 'order_details');
     }
+
+    public function productVariant()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 }

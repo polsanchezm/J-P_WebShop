@@ -18,6 +18,11 @@ class Order extends Model
         return $this->belongsToMany(Product::class, 'order_details');
     }
 
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
     public function payment()
     {
         return $this->belongsTo(Payment::class);

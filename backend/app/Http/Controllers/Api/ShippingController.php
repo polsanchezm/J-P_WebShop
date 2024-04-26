@@ -66,7 +66,7 @@ class ShippingController extends Controller
             return response()->json(['message' => 'Shipping detail not found'], 404);
         }
 
-        return new ShippingResource($shipping);
+        return response()->json(new ShippingResource($shipping));
     }
 
 

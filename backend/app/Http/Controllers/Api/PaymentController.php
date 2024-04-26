@@ -18,7 +18,7 @@ class PaymentController extends Controller
     public function index()
     {
         $payment = Payment::all();
-        return PaymentResource::collection($payment);
+        return response()->json(PaymentResource::collection($payment));
     }
 
     /**
@@ -68,7 +68,7 @@ class PaymentController extends Controller
             return response()->json(['message' => 'Payment not found'], 404);
         }
 
-        return new PaymentResource($payment);
+        return response()->json(new PaymentResource($payment));
     }
 
     /**

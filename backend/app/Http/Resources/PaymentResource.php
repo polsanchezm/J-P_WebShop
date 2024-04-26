@@ -14,6 +14,12 @@ class PaymentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return $this->resource->toArray();
+        // return $this->resource->toArray();
+        return [
+            'id' => $this->id,
+            'totalPrice' => $this->total_price,
+            'paymentDate' => $this->payment_date,
+            'order' => new OrderResource($this->order),
+        ];
     }
 }
