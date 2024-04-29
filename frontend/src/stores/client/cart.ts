@@ -1,19 +1,21 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { type ProductItem } from '@/models/productItem';
+import type { Product } from '@/models/product';
+import type { ProductVariant } from '@/models/productVariant';
 
 export const useCartStore = defineStore('cart', () => {
-    const cart = ref<ProductItem[]>([]);
+    const cart = ref<ProductVariant[]>([]);
 
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
 
-    const addToCart = (productVariant: ProductItem) => {
+    const addToCart = (productVariant: ProductVariant) => {
         console.log('variant', productVariant);
 
         const identifiedItem = cart.value.find((item) => item.id === productVariant.id);
         if (!identifiedItem) {
-            const item: ProductItem = {
+            const item: ProductVariant = {
                 ...productVariant
             };
             cart.value.push(item);
@@ -23,12 +25,12 @@ export const useCartStore = defineStore('cart', () => {
         saveCartToCookie(cart.value);
     };
 
-    const decrementQuantity = (item: ProductItem, index: number) => {
+    const decrementQuantity = (item: ProductVariant, index: number) => {
         item.quantity === 1 ? removeFromCart(index) : item.quantity--;
         saveCartToCookie(cart.value);
     };
 
-    const incrementQuantity = (item: ProductItem) => {
+    const incrementQuantity = (item: ProductVariant) => {
         item.quantity++;
         saveCartToCookie(cart.value);
     };
@@ -43,7 +45,7 @@ export const useCartStore = defineStore('cart', () => {
         saveCartToCookie(cart.value);
     };
 
-    const saveCartToCookie = (cart: ProductItem[], daysToExpire: number = 30) => {
+    const saveCartToCookie = (cart: ProductVariant[], daysToExpire: number = 30) => {
         const d = new Date();
         d.setTime(d.getTime() + daysToExpire * 24 * 60 * 60 * 1000); // Días a milisegundos
         const expires = 'expires=' + d.toUTCString();
@@ -51,7 +53,7 @@ export const useCartStore = defineStore('cart', () => {
         document.cookie = 'cart=' + encodeURIComponent(cartString) + ';' + expires + ';path=/';
     };
 
-    const getCartFromCookie = (): ProductItem[] | null => {
+    const getCartFromCookie = (): Product[] | null => {
         const cartJson = getCookie('cart');
         if (cartJson) {
             try {

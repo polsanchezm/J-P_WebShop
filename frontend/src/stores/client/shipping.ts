@@ -13,10 +13,10 @@ export const useShippingStore = defineStore('shipping', () => {
             phone: shipping.phone,
             street: shipping.street,
             unit: shipping.unit,
-            apartment_number: shipping.apartment_number,
+            apartmentNumber: shipping.apartmentNumber,
             country: shipping.country,
             city: shipping.city,
-            other_instructions: shipping.other_instructions
+            otherInstructions: shipping.otherInstructions
         });
 
         try {
@@ -37,10 +37,10 @@ export const useShippingStore = defineStore('shipping', () => {
                     phone: shipping.phone,
                     street: shipping.street,
                     unit: shipping.unit,
-                    apartment_number: shipping.apartment_number,
+                    apartmentNumber: shipping.apartmentNumber,
                     country: shipping.country,
                     city: shipping.city,
-                    other_instructions: shipping.other_instructions
+                    otherInstructions: shipping.otherInstructions
                 },
                 {
                     headers: {
@@ -87,10 +87,10 @@ export const useShippingStore = defineStore('shipping', () => {
                     phone: shipping.phone,
                     street: shipping.street,
                     unit: shipping.unit,
-                    apartment_number: shipping.apartment_number,
+                    apartment_number: shipping.apartmentNumber,
                     country: shipping.country,
                     city: shipping.city,
-                    other_instructions: shipping.other_instructions
+                    other_instructions: shipping.otherInstructions
                 },
                 {
                     headers: {
@@ -167,11 +167,8 @@ export const useShippingStore = defineStore('shipping', () => {
                 }
             });
 
-            // console.log('response detail', response);
-            // console.log('data detail', response.data.data);
-
             if (response.status == 200) {
-                oneShipping.value = response.data.data;
+                oneShipping.value = response.data;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
