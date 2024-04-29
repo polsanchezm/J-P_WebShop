@@ -7,14 +7,14 @@ const shippingStore = useShippingStore();
 
 const shipping = ref<Shipping>({
     id: 0,
-    user_id: 0,
+    userId: 0,
     phone: '',
     street: '',
     unit: '',
-    apartment_number: '',
+    apartmentNumber: '',
     country: '',
     city: '',
-    other_instructions: ''
+    otherInstructions: ''
 });
 </script>
 
@@ -53,7 +53,7 @@ const shipping = ref<Shipping>({
                         </div>
                         <div>
                             <label for="other_instructions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Other Instructions</label>
-                            <textarea type="text" name="other_instructions" id="other_instructions" v-model="shipping.other_instructions" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
+                            <textarea type="text" name="other_instructions" id="other_instructions" v-model="shipping.otherInstructions" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
                         </div>
 
                         <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700">Create details</button>
