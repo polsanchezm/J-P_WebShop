@@ -7,5 +7,3 @@ import UserOrderDetail from '@/components/client/profile/UserOrderDetail.vue';
         <UserOrderDetail />
     </div>
 </template>
-
-<style scoped></style>

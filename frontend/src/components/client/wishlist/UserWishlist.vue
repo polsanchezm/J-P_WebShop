@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWishlistStore } from '@/stores/client/wishlist';
-import { onBeforeMount, computed } from 'vue';
+import { onBeforeMount } from 'vue';
 import { useCartStore } from '@/stores/client/cart';
 
 const wishlistStore = useWishlistStore();
@@ -9,27 +9,23 @@ onBeforeMount(async () => {
     await wishlistStore.wishlistItems();
     console.log('wishlist', wishlistStore.wishlist);
 });
-
 const cartStore = useCartStore();
-
-// onBeforeMount(async () => {
-//     await productStore.Products();
-//     console.log('wishlist', productStore.wishlist);
-// });
 </script>
 
 <template>
-    <div v-if="wishlistStore.wishlist" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+    <div v-if="wishlistStore.wishlist" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6 mt-24">
         <p class="text-lg font-semibold mb-2 text-gray-700">Items</p>
         <!-- <button v-if="wishlistStore.wishlist.length > 0" @click="wishlistStore.removeAllFromCart()"
             class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
             Remove All</button> -->
         <ul>
             <li v-for="(item, index) in wishlistStore.wishlist" :key="index">
-                <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ item!.id }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Wishlist ID:</span> {{ item!.wishlist_id }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Variant ID:</span> {{ item!.variant_id }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Quantity:</span> {{ item!.quantity }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product ID:</span> {{ item!.productId }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Variant ID:</span> {{ item!.variantId }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product Name:</span> {{ item!.productName }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product Image:</span> {{ item!.productImage }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ item!.productStock }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product Prize:</span> {{ item!.productPrice }}</p>
 
                 <button @click="cartStore.addToCart(item!)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Comprar</button>
 

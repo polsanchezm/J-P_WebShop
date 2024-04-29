@@ -77,12 +77,6 @@ const router = createRouter({
                             name: 'shipping.edit',
                             component: () => import('@/views/client/profile/shipping/ShippingEditView.vue'),
                             meta: { requiresAuth: true }
-                        },
-                        {
-                            path: 'delete/:id',
-                            name: 'shipping.delete',
-                            component: () => import('@/components/client/profile/shipping/ShippingDelete.vue'),
-                            meta: { requiresAuth: true }
                         }
                     ]
                 },
