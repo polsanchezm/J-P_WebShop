@@ -28,7 +28,6 @@ const router = createRouter({
         {
             path: '/user',
             name: 'user',
-            // redirect: '/user/detail',
             children: [
                 {
                     path: '',
@@ -90,12 +89,14 @@ const router = createRouter({
                 {
                     path: 'cart',
                     name: 'cart',
-                    component: () => import('@/views/client/cart/CartView.vue')
+                    component: () => import('@/views/client/cart/CartView.vue'),
+                    meta: { requiresAuth: true }
                 },
                 {
                     path: 'wishlist',
                     name: 'wishlist',
-                    component: () => import('@/views/client/wishlist/WishlistView.vue')
+                    component: () => import('@/views/client/wishlist/WishlistView.vue'),
+                    meta: { requiresAuth: true }
                 }
             ]
         },
@@ -117,7 +118,6 @@ const router = createRouter({
         {
             path: '/management',
             name: 'management',
-            // redirect: '/user/detail',
             children: [
                 {
                     path: 'products',
@@ -125,29 +125,34 @@ const router = createRouter({
                         {
                             path: '',
                             name: 'products.manager',
-                            component: () => import('@/views/manager/ProductsView.vue')
+                            component: () => import('@/views/manager/ProductsView.vue'),
+                            meta: { requiresAuth: true }
                         },
                         {
                             path: 'add',
                             name: 'product.add',
-                            component: () => import('@/views/manager/AddProductView.vue')
+                            component: () => import('@/views/manager/AddProductView.vue'),
+                            meta: { requiresAuth: true }
                         },
                         {
                             path: 'detail/:id',
                             name: 'product.detail.manager',
-                            component: () => import('@/views/manager/ProductDetailView.vue')
+                            component: () => import('@/views/manager/ProductDetailView.vue'),
+                            meta: { requiresAuth: true }
                         },
                         {
                             path: 'edit/:id',
                             name: 'product.edit',
-                            component: () => import('@/views/manager/EditProductView.vue')
+                            component: () => import('@/views/manager/EditProductView.vue'),
+                            meta: { requiresAuth: true }
                         }
                     ]
                 },
                 {
                     path: 'orders',
                     name: 'orders.manager',
-                    component: () => import('@/views/manager/OrdersView.vue')
+                    component: () => import('@/views/manager/OrdersView.vue'),
+                    meta: { requiresAuth: true }
                 }
             ]
         },
