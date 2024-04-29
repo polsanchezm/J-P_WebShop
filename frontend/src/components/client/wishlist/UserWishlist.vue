@@ -20,12 +20,12 @@ const cartStore = useCartStore();
             Remove All</button> -->
         <ul>
             <li v-for="(item, index) in wishlistStore.wishlist" :key="index">
-                <p class="text-gray-700"><span class="font-semibold">Product ID:</span> {{ item!.productId }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Variant ID:</span> {{ item!.variantId }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Product Name:</span> {{ item!.productName }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Product Image:</span> {{ item!.productImage }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ item!.productStock }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Product Prize:</span> {{ item!.productPrice }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product ID:</span> {{ item!.product.id }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Variant ID:</span> {{ item!.productVariant.id }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product Name:</span> {{ item!.product.name }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product Image:</span> {{ item!.product.image }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ item!.productVariant.stock }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Product Prize:</span> {{ item!.product.price}}</p>
 
                 <button @click="cartStore.addToCart(item!)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Comprar</button>
 

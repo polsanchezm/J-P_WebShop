@@ -16,7 +16,11 @@ class ShippingController extends Controller
      */
     public function index()
     {
-        $shipping = ShippingDetail::all();
+        $userId = Auth::user()->id;
+        $shipping = ShippingDetail::where('user_id', $userId)->get();
+        if (!$shipping) {
+            return response()->json(['message' => 'User shippings not found'], 404);
+        }
         return response()->json(ShippingResource::collection($shipping));
     }
 
@@ -66,7 +70,7 @@ class ShippingController extends Controller
             return response()->json(['message' => 'Shipping detail not found'], 404);
         }
 
-        return new ShippingResource($shipping);
+        return response()->json(new ShippingResource($shipping));
     }
 
 

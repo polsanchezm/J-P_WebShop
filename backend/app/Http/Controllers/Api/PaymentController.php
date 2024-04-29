@@ -9,6 +9,7 @@ use App\Models\OrderDetail;
 use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -17,8 +18,13 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payment = Payment::all();
-        return PaymentResource::collection($payment);
+        $userId = Auth::user()->id;
+        $payment = Payment::where('user_id', $userId)->get();
+        if (!$payment) {
+            return response()->json(['message' => 'User payments not found'], 404);
+        }
+
+        return response()->json(PaymentResource::collection($payment));
     }
 
     /**
@@ -27,6 +33,7 @@ class PaymentController extends Controller
     public function store(Request $request, string $orderId)
     {
         $order = Order::find($orderId);
+        $userId = Auth::user()->id;
 
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -46,6 +53,7 @@ class PaymentController extends Controller
 
         $payment = new Payment;
         $payment->order_id = $order->id;
+        $payment->user_id = $userId;
         $payment->payment_date = Carbon::now();
         $payment->total_price = $totalPrice;
 
@@ -63,12 +71,10 @@ class PaymentController extends Controller
     public function show(string $id)
     {
         $payment = Payment::find($id);
-
         if (!$payment) {
             return response()->json(['message' => 'Payment not found'], 404);
         }
-
-        return new PaymentResource($payment);
+        return response()->json(new PaymentResource($payment));
     }
 
     /**

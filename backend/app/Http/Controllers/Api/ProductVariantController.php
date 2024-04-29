@@ -20,7 +20,7 @@ class ProductVariantController extends Controller
             return response()->json(['message' => 'Product variants not found'], 404);
         }
         // $productVariant = ProductVariant::all();
-        return response()->json(ProductVariantResource::collection($productVariant));
+        return response()->json(ProductVariantResource::collection($productVariant->load('product')));
     }
 
     /**
@@ -60,7 +60,7 @@ class ProductVariantController extends Controller
             return response()->json(['message' => 'ProductVariant not found'], 404);
         }
 
-        return new ProductVariantResource($productVariant);
+        return response()->json(new ProductVariantResource($productVariant));
     }
 
     /**

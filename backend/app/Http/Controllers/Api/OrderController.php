@@ -21,9 +21,7 @@ class OrderController extends Controller
         if (!$orders) {
             return response()->json(['message' => 'User orders not found'], 404);
         }
-        // $orders = Order::all();
         return response()->json(OrderResource::collection($orders));
-        // return OrderResource::collection($orders);
     }
 
     /**

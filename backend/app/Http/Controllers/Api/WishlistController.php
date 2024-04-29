@@ -20,16 +20,7 @@ class WishlistController extends Controller
         if (!$wishlists) {
             return response()->json(['message' => 'User wishlists not found'], 404);
         }
-        // $wishlists = Wishlist::all();
         return response()->json(WishlistResource::collection($wishlists));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -50,14 +41,6 @@ class WishlistController extends Controller
         //     return response()->json(['message' => 'Wishlist not found'], 404);
         // }
         // return new WishlistResource($wishlist);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**

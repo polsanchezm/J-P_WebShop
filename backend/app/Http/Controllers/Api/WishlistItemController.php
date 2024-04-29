@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\WishlistItemCollection;
+use App\Http\Resources\WishlistItemResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\WishlistItem;
 use App\Models\Wishlist;
 use App\Models\ProductVariant;
-use App\Http\Resources\WishlistItemResource;
 use Illuminate\Support\Facades\Auth;
 
 class WishlistItemController extends Controller
@@ -27,41 +28,11 @@ class WishlistItemController extends Controller
 
         $wishlistItems = WishlistItem::where('wishlist_id', $wishlist->id)->get();
 
-        if ($wishlistItems->isEmpty()) {
+        if (!$wishlistItems) {
             return response()->json(['message' => 'Wishlist items not found'], 404);
         }
 
-        $wishlistDetails = [];
-
-        foreach ($wishlistItems as $wishlistItem) {
-            $productVariant = ProductVariant::find($wishlistItem->variant_id);
-
-            if (!$productVariant) {
-                return response()->json(['message' => 'Product variant not found'], 404);
-            }
-
-            $product = Product::find($productVariant->product_id);
-
-            if (!$product) {
-                return response()->json(['message' => 'Product not found'], 404);
-            }
-
-            $wishlistItemDetails = [
-                'id' => $wishlistItem->id,
-                'wishlistId' => $wishlistItem->wishlist_id,
-                'variantId' => $wishlistItem->variant_id,
-                'quantity' => $wishlistItem->quantity,
-                'productId' => $product->id,
-                'productName' => $product->name,
-                'productImage' => $product->image,
-                'productPrice' => $product->price,
-                'productStock' => $productVariant->stock,
-            ];
-
-            $wishlistDetails[] = $wishlistItemDetails;
-        }
-
-        return response()->json($wishlistDetails);
+        return response()->json(new WishlistItemCollection($wishlistItems));
     }
 
 
@@ -145,9 +116,7 @@ class WishlistItemController extends Controller
             'productColor' => $productVariant->color,
         ];
 
-        return response()->json($wishlistItemDetails);
-
-        // return response()->json(new WishlistItemResource($wishlistItem));
+        return response()->json(new WishlistItemResource($wishlistItem));
     }
 
     /**

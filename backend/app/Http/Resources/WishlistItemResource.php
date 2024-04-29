@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +16,13 @@ class WishlistItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return $this->resource->toArray();
+        return [
+            'id' => $this->id,
+            'wishlistId' => $this->wishlist_id,
+            'quantity' => $this->quantity,
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
+            'product' => new ProductResource(ProductVariant::find($this->variant_id)->product),
+        ];
     }
 }
