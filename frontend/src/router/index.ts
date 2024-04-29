@@ -48,7 +48,7 @@ const router = createRouter({
                         {
                             path: '',
                             name: 'orders',
-                            component: () => import('@/views/client/profile/UserOrdersView.vue'),
+                            component: () => import('@/views/client/profile/UserOrdersView.vue')
                         },
                         {
                             path: 'detail/:id',
@@ -90,13 +90,13 @@ const router = createRouter({
                 {
                     path: 'cart',
                     name: 'cart',
-                    component: () => import('@/views/client/cart/CartView.vue'),
+                    component: () => import('@/views/client/cart/CartView.vue')
                 },
                 {
                     path: 'wishlist',
                     name: 'wishlist',
-                    component: () => import('@/views/client/wishlist/WishlistView.vue'),
-                },
+                    component: () => import('@/views/client/wishlist/WishlistView.vue')
+                }
             ]
         },
         {
@@ -105,7 +105,7 @@ const router = createRouter({
                 {
                     path: '',
                     name: 'products',
-                    component: () => import('@/views/product/ProductsView.vue'),
+                    component: () => import('@/views/product/ProductsView.vue')
                 },
                 {
                     path: 'detail/:id',
@@ -113,11 +113,6 @@ const router = createRouter({
                     component: () => import('@/views/product/ProductDetailView.vue')
                 }
             ]
-        },
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'error404',
-            component: () => import('@/views/Error404View.vue')
         },
         {
             path: '/management',
@@ -130,7 +125,7 @@ const router = createRouter({
                         {
                             path: '',
                             name: 'products.manager',
-                            component: () => import('@/views/manager/ProductsView.vue'),
+                            component: () => import('@/views/manager/ProductsView.vue')
                         },
                         {
                             path: 'add',
@@ -152,9 +147,14 @@ const router = createRouter({
                 {
                     path: 'orders',
                     name: 'orders.manager',
-                    component: () => import('@/views/manager/OrdersView.vue'),
-                },
+                    component: () => import('@/views/manager/OrdersView.vue')
+                }
             ]
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'error404',
+            component: () => import('@/views/Error404View.vue')
         }
     ]
 });
