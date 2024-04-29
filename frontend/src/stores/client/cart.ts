@@ -5,19 +5,17 @@ import type { Product } from '@/models/product';
 import type { ProductVariant } from '@/models/productVariant';
 
 export const useCartStore = defineStore('cart', () => {
-    const cart = ref<ProductVariant[]>([]);
+    const cart = ref<ProductItem[]>([]);
 
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
 
-    const addToCart = (productVariant: ProductVariant) => {
-        console.log('variant', productVariant);
+    const addToCart = (productItem: ProductItem) => {
+        console.log('variant', productItem);
 
-        const identifiedItem = cart.value.find((item) => item.id === productVariant.id);
+        const identifiedItem = cart.value.find((item) => item.id === productItem.id);
         if (!identifiedItem) {
-            const item: ProductVariant = {
-                ...productVariant
-            };
+            const item: ProductItem = productItem;
             cart.value.push(item);
         } else {
             identifiedItem.quantity++;
@@ -25,12 +23,12 @@ export const useCartStore = defineStore('cart', () => {
         saveCartToCookie(cart.value);
     };
 
-    const decrementQuantity = (item: ProductVariant, index: number) => {
+    const decrementQuantity = (item: ProductItem, index: number) => {
         item.quantity === 1 ? removeFromCart(index) : item.quantity--;
         saveCartToCookie(cart.value);
     };
 
-    const incrementQuantity = (item: ProductVariant) => {
+    const incrementQuantity = (item: ProductItem) => {
         item.quantity++;
         saveCartToCookie(cart.value);
     };
@@ -45,7 +43,7 @@ export const useCartStore = defineStore('cart', () => {
         saveCartToCookie(cart.value);
     };
 
-    const saveCartToCookie = (cart: ProductVariant[], daysToExpire: number = 30) => {
+    const saveCartToCookie = (cart: ProductItem[], daysToExpire: number = 30) => {
         const d = new Date();
         d.setTime(d.getTime() + daysToExpire * 24 * 60 * 60 * 1000); // Días a milisegundos
         const expires = 'expires=' + d.toUTCString();

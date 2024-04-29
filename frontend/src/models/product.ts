@@ -7,7 +7,7 @@ export interface Product {
     image: string;
     name: string;
     price: string;
-    productVariants: ProductVariant;
+    productVariants: ProductVariant[];
     quantity: number;
     wishlistId: number;
 }

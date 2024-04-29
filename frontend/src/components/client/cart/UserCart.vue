@@ -11,7 +11,7 @@ onBeforeMount(() => {
 
 const totalPrice = computed(() => {
     const total = cartStore.cart.reduce((total, item: any) => {
-        return total + item.productPrice * item.quantity;
+        return total + item.product.price * item.quantity;
     }, 0);
     return total.toFixed(2);
 });
@@ -24,10 +24,11 @@ const totalPrice = computed(() => {
         <ul>
             <li v-for="(item, index) in cartStore.cart" :key="index">
                 <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ item!.id }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Color:</span> {{ item!.color }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Product ID:</span> {{ item!.productId }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Size:</span> {{ item!.size }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ item!.stock }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Price:</span> {{ item!.product.price }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Image:</span> {{ item!.product.image }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Color:</span> {{ item!.productVariant.color }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Size:</span> {{ item!.productVariant.size }}</p>
+                <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ item!.productVariant.stock }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Quantity:</span> {{ item!.quantity }}</p>
 
                 <!-- <RouterLink

@@ -26,7 +26,13 @@ export const useProductManageStore = defineStore('productManagement', () => {
             const response = await axios.post<Product>(
                 '/app/products/create',
                 {
-                    ...product
+                    category_id: product.categoryId,
+                    id: product.id,
+                    description: product.description,
+                    image: product.image,
+                    name: product.name,
+                    price: product.price,
+                    quantity: product.quantity
                 },
                 {
                     headers: {
@@ -37,7 +43,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
             );
 
             if (response.status == 200) {
-                router.push({ name: 'products.manager' });
+                router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -70,7 +76,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
             });
 
             if (response.status == 200) {
-                router.push({ name: 'products.manager' });
+                router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -105,7 +111,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
                     name: product.name,
                     description: product.description,
                     image: product.image,
-                    category_id: product.category_id,
+                    category_id: product.categoryId,
                     price: product.price
                 },
                 {
@@ -117,12 +123,12 @@ export const useProductManageStore = defineStore('productManagement', () => {
             );
 
             if (response.status == 200) {
-                router.push({ name: 'products.manager' });
+                router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
             // mostrem els error en cas que no pugui retornar les dades
-            console.error('Error al editar el producte:', errorMessage.response);
+            console.error('Error al editar el producte:', errorMessage);
         }
     };
 
@@ -143,7 +149,12 @@ export const useProductManageStore = defineStore('productManagement', () => {
             const response = await axios.post<ProductVariant>(
                 '/app/products/variants/create',
                 {
-                    ...productVariant
+                    id: productVariant.id,
+                    size: productVariant.size,
+                    color: productVariant.color,
+                    stock: productVariant.stock,
+                    product_id: productVariant.productId,
+                    quantity: productVariant.quantity
                 },
                 {
                     headers: {
@@ -154,7 +165,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
             );
 
             if (response.status == 200) {
-                router.push({ name: 'products.manager' });
+                router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -186,7 +197,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
             const response = await axios.post<ProductVariant>(
                 `/app/products/variants/update/${productVariant.id}`,
                 {
-                    product_id: productVariant.product_id,
+                    product_id: productVariant.productId,
                     size: productVariant.size,
                     color: productVariant.color,
                     stock: productVariant.stock
@@ -200,7 +211,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
             );
 
             if (response.status == 200) {
-                router.push({ name: 'products.manager' });
+                router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -233,7 +244,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
             });
 
             if (response.status == 200) {
-                router.push({ name: 'products.manager' });
+                router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;

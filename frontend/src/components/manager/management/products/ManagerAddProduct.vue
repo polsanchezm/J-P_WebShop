@@ -11,7 +11,10 @@ let product = ref<Product>({
     description: '',
     image: '',
     price: '',
-    category_id: 0
+    categoryId: 0,
+    productVariants: [],
+    quantity: 1,
+    wishlistId: 0,
 });
 
 let imageUrl: any = ref(null);
@@ -23,7 +26,7 @@ const insertedFile = (e: any) => {
 </script>
 
 <template>
-    <div>
+    <div class="mt-28">
         <form @submit.prevent="productStore.addProduct(product)" enctype="multipart/form-data" class="max-w-md mx-auto">
             <div class="relative z-0 w-full mb-5 group">
                 <input type="text" name="name" id="name" v-model="product.name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
@@ -51,11 +54,11 @@ const insertedFile = (e: any) => {
 
             <div class="relative z-0 w-full mb-5 group">
                 <label for="categories" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category product</label>
-                <select id="categories" v-model="product.category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="1" selected>Top</option>
-                    <option value="2">Bottom</option>
-                    <option value="3">Underwear</option>
-                    <option value="4">Footwear</option>
+                <select id="categories" v-model="product.categoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option :value="1" selected>Top</option>
+                    <option :value="2">Bottom</option>
+                    <option :value="3">Underwear</option>
+                    <option :value="4">Footwear</option>
                 </select>
             </div>
 

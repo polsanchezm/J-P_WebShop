@@ -121,7 +121,7 @@ const router = createRouter({
                             children: [
                                 {
                                     path: '',
-                                    name: 'manager.products.manager',
+                                    name: 'manager.products.all',
                                     component: () => import('@/views/manager/ProductsView.vue'),
                                     meta: { requiresAuth: true }
                                 },
