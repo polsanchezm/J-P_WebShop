@@ -1,8 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     darkMode: 'media',
-    content: ['./node_modules/flowbite/**/*.js'],
+    content: ['./node_modules/flowbite/**/*.js', './index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     theme: {
         extend: {
             colors: {
