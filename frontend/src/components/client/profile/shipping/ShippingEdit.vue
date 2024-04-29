@@ -16,11 +16,13 @@ onBeforeMount(async () => {
     await authStore.userDetail();
     console.log('user', authStore.user);
     await shippingStore.shippingDetail(shippingId);
+    await shippingStore.shippingIndex();
+    console.log('shipping', shippingStore.oneShipping);
 });
 </script>
 
 <template>
-    <section v-if="shippingStore.oneShipping && shippingStore.oneShipping!.user_id == authStore.user!.id">
+    <section v-if="shippingStore.oneShipping && shippingStore.oneShipping!.userId == authStore.user!.id">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 mt-24">
             <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -41,7 +43,7 @@ onBeforeMount(async () => {
                         <div class="flex flex-wrap -mx-3">
                             <div class="w-full px-3">
                                 <label for="apartment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apartment number</label>
-                                <input type="number" name="apartment" id="apartment" v-model="shippingStore.oneShipping!.apartment_number" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
+                                <input type="number" name="apartment" id="apartment" v-model="shippingStore.oneShipping!.apartmentNumber" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
                             </div>
                             <div class="w-1/2 px-3 mt-6">
                                 <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
@@ -54,7 +56,7 @@ onBeforeMount(async () => {
                         </div>
                         <div>
                             <label for="other_instructions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Other Instructions</label>
-                            <textarea type="text" name="other_instructions" id="other_instructions" v-model="shippingStore.oneShipping!.other_instructions" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
+                            <textarea type="text" name="other_instructions" id="other_instructions" v-model="shippingStore.oneShipping!.otherInstructions" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
                         </div>
 
                         <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700">Edit details</button>
