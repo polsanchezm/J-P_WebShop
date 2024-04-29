@@ -11,7 +11,7 @@ onBeforeMount(() => {
 
 const totalPrice = computed(() => {
     const total = cartStore.cart.reduce((total, item: any) => {
-        return total + (item.productPrice * item.quantity);
+        return total + item.productPrice * item.quantity;
     }, 0);
     return total.toFixed(2);
 });
