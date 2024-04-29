@@ -113,6 +113,47 @@ const router = createRouter({
                     ]
                 },
                 {
+                    path: '/management',
+                    name: 'management',
+                    children: [
+                        {
+                            path: 'products',
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'products.manager',
+                                    component: () => import('@/views/manager/ProductsView.vue'),
+                                    meta: { requiresAuth: true }
+                                },
+                                {
+                                    path: 'add',
+                                    name: 'product.add',
+                                    component: () => import('@/views/manager/AddProductView.vue'),
+                                    meta: { requiresAuth: true }
+                                },
+                                {
+                                    path: 'detail/:id',
+                                    name: 'product.detail.manager',
+                                    component: () => import('@/views/manager/ProductDetailView.vue'),
+                                    meta: { requiresAuth: true }
+                                },
+                                {
+                                    path: 'edit/:id',
+                                    name: 'product.edit',
+                                    component: () => import('@/views/manager/EditProductView.vue'),
+                                    meta: { requiresAuth: true }
+                                }
+                            ]
+                        },
+                        {
+                            path: 'orders',
+                            name: 'orders.manager',
+                            component: () => import('@/views/manager/OrdersView.vue'),
+                            meta: { requiresAuth: true }
+                        }
+                    ]
+                },
+                {
                     path: '/:pathMatch(.*)*',
                     name: 'error404',
                     component: () => import('@/views/Error404View.vue')
