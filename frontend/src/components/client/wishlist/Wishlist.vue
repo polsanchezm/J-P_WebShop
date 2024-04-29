@@ -31,10 +31,7 @@ const cartStore = useCartStore();
                 <p class="text-gray-700"><span class="font-semibold">Variant ID:</span> {{ item!.variant_id }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Quantity:</span> {{ item!.quantity }}</p>
 
-                <button @click="cartStore.addToCart(item!)"
-                    class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
-                    Comprar
-                </button>
+                <button @click="cartStore.addToCart(item!)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Comprar</button>
 
                 <!-- <RouterLink
                 class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"
@@ -54,6 +51,4 @@ const cartStore = useCartStore();
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

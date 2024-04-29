@@ -8,6 +8,4 @@ import ProductDetail from '@/components/manager/management/products/ManagerProdu
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

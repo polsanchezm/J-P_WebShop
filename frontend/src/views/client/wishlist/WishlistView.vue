@@ -8,6 +8,4 @@ import Wishlist from '@/components/client/wishlist/Wishlist.vue';
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

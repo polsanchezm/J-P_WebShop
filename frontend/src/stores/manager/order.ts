@@ -1,8 +1,8 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
-import { type Order } from "@/models/order";
+import { type Order } from '@/models/order';
 import { type OrderDetail } from '@/models/orderDetail';
 
 export const useOrderManageStore = defineStore('orderManagement', () => {
@@ -29,7 +29,7 @@ export const useOrderManageStore = defineStore('orderManagement', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            
+
             if (response.status == 200) {
                 allOrders.value = response.data;
             }
@@ -39,8 +39,6 @@ export const useOrderManageStore = defineStore('orderManagement', () => {
             console.error('Error en obtenir les ordres', errorMessage.message);
         }
     };
-
-    
 
     const deleteOrder = async (orderId: number | null) => {
         try {
@@ -60,7 +58,7 @@ export const useOrderManageStore = defineStore('orderManagement', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-    
+
             if (response.status === 200) {
                 allOrders.value = allOrders.value.filter((order) => order.id !== orderId);
             }
@@ -71,5 +69,5 @@ export const useOrderManageStore = defineStore('orderManagement', () => {
         }
     };
 
-    return {Orders, deleteOrder, allOrders}
-})
+    return { Orders, deleteOrder, allOrders };
+});

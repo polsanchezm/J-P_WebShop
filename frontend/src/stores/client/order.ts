@@ -1,8 +1,8 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
-import { type Order } from "@/models/order";
+import { type Order } from '@/models/order';
 import { type OrderDetail } from '@/models/orderDetail';
 
 export const useOrderStore = defineStore('order', () => {
@@ -30,7 +30,7 @@ export const useOrderStore = defineStore('order', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            
+
             if (response.status == 200) {
                 orders.value = response.data;
             }
@@ -59,7 +59,7 @@ export const useOrderStore = defineStore('order', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            
+
             if (response.status == 200) {
                 orderDetail.value = response.data;
             }
@@ -88,11 +88,11 @@ export const useOrderStore = defineStore('order', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-    
+
             if (response.status === 200) {
-                if (redirect){
+                if (redirect) {
                     router.push({ path: '/user/orders' });
-                } else{
+                } else {
                     orders.value = orders.value.filter((order) => order.id !== orderId);
                 }
             }
@@ -103,5 +103,5 @@ export const useOrderStore = defineStore('order', () => {
         }
     };
 
-    return {userOrders, userOrderDetail, deleteUserOrder, orders, orderDetail}
-})
+    return { userOrders, userOrderDetail, deleteUserOrder, orders, orderDetail };
+});

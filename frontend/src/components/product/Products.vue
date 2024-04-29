@@ -27,18 +27,12 @@ onBeforeMount(async () => {
                 <!-- <RouterLink
                 class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"
                 :to="'/user/orders/detail/' + product.id">View details</RouterLink> -->
-                <RouterLink
-                class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                :to="'/products/detail/' + product.id">View details</RouterLink>
-                <button @click="cartStore.addToCart(product)"
-                    class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
-                    Add to cart</button>
+                <RouterLink class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="'/products/detail/' + product.id">View details</RouterLink>
+                <button @click="cartStore.addToCart(product)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Add to cart</button>
             </li>
         </ul>
         <p v-if="productStore.allProductsArray.length === 0">No products available</p>
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,17 +1,16 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
-import { type Product } from "@/models/product";
-import { type ProductVariant } from "@/models/productVariant";
+import { type Product } from '@/models/product';
+import { type ProductVariant } from '@/models/productVariant';
 
 export const useProductManageStore = defineStore('productManagement', () => {
-
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
 
     const addProduct = async (product: Product) => {
-        console.log(product)
+        console.log(product);
         try {
             const tokenString = localStorage.getItem('token');
 
@@ -24,7 +23,8 @@ export const useProductManageStore = defineStore('productManagement', () => {
             const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
-            const response = await axios.post<Product>('/app/products/create',
+            const response = await axios.post<Product>(
+                '/app/products/create',
                 {
                     ...product
                 },
@@ -127,7 +127,7 @@ export const useProductManageStore = defineStore('productManagement', () => {
     };
 
     const addVariant = async (productVariant: ProductVariant) => {
-        console.log(productVariant)
+        console.log(productVariant);
         try {
             const tokenString = localStorage.getItem('token');
 
@@ -140,7 +140,8 @@ export const useProductManageStore = defineStore('productManagement', () => {
             const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
-            const response = await axios.post<ProductVariant>('/app/products/variants/create',
+            const response = await axios.post<ProductVariant>(
+                '/app/products/variants/create',
                 {
                     ...productVariant
                 },
@@ -241,5 +242,5 @@ export const useProductManageStore = defineStore('productManagement', () => {
         }
     };
 
-    return {addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant}
-})
+    return { addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant };
+});

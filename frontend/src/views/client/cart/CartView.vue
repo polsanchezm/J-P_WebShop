@@ -8,6 +8,4 @@ import Cart from '@/components/client/cart/Cart.vue';
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -19,15 +19,11 @@ onBeforeMount(async () => {
                 <p class="text-gray-700"><span class="font-semibold">User ID:</span> {{ order!.user_id }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Date:</span> {{ order!.order_date }}</p>
 
-                <button @click="orderStoreManager.deleteOrder(order!.id)"
-                    class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
-                    Delete Order</button>
+                <button @click="orderStoreManager.deleteOrder(order!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Delete Order</button>
             </li>
         </ul>
         <p v-if="orderStoreManager.allOrders.length === 0">No orders available</p>
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

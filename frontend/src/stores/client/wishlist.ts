@@ -1,9 +1,9 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
-import { type WishlistItem } from "@/models/wishlistItem";
-import { type ProductVariant } from "@/models/productVariant";
+import { type WishlistItem } from '@/models/wishlistItem';
+import { type ProductVariant } from '@/models/productVariant';
 
 export const useWishlistStore = defineStore('wishlist', () => {
     const wishlist = ref<WishlistItem[]>([]);
@@ -29,21 +29,18 @@ export const useWishlistStore = defineStore('wishlist', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            
+
             if (response.status == 200) {
                 wishlist.value = response.data;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
             // mostrem els error en cas que no pugui retornar les dades
-            console.error("Error en obtenir el wishlist items", errorMessage.message);
+            console.error('Error en obtenir el wishlist items', errorMessage.message);
         }
     };
 
-
     const addToWishlist = async (productVariant: ProductVariant) => {
-        
-
         try {
             const tokenString = localStorage.getItem('token');
 
@@ -56,9 +53,10 @@ export const useWishlistStore = defineStore('wishlist', () => {
             const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
-            const response = await axios.post<WishlistItem>('/app/wishlist/items/create',
+            const response = await axios.post<WishlistItem>(
+                '/app/wishlist/items/create',
                 {
-                    variant_id: productVariant.id,
+                    variant_id: productVariant.id
                     // quantity: 1
                 },
                 {
@@ -69,7 +67,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
             );
 
             if (response.status == 200) {
-                console.log('Added successfull')
+                console.log('Added successfull');
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -78,5 +76,5 @@ export const useWishlistStore = defineStore('wishlist', () => {
         }
     };
 
-    return {wishlistItems, addToWishlist, wishlist}
-})
+    return { wishlistItems, addToWishlist, wishlist };
+});

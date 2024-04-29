@@ -8,6 +8,4 @@ import UserOrderDetail from '@/components/client/profile/UserOrderDetail.vue';
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

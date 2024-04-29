@@ -8,6 +8,4 @@ import Products from '@/components/product/Products.vue';
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

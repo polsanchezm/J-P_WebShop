@@ -8,6 +8,4 @@ import UserOrders from '@/components/client/profile/UserOrders.vue';
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -8,6 +8,4 @@ import EditProduct from '@/components/manager/management/products/ManagerEditPro
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

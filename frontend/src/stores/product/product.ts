@@ -1,9 +1,9 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
-import { type Product } from "@/models/product";
-import { type ProductVariant } from "@/models/productVariant";
+import { type Product } from '@/models/product';
+import { type ProductVariant } from '@/models/productVariant';
 
 export const useProductStore = defineStore('product', () => {
     const allProductsArray = ref<Product[]>([]);
@@ -31,7 +31,7 @@ export const useProductStore = defineStore('product', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            
+
             if (response.status == 200) {
                 allProductsArray.value = response.data;
             }
@@ -60,7 +60,7 @@ export const useProductStore = defineStore('product', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            
+
             if (response.status == 200) {
                 oneProductDetail.value = response.data;
                 const variantResponse = await axios.get<ProductVariant[]>('/app/products/variants/' + productId, {
@@ -79,5 +79,5 @@ export const useProductStore = defineStore('product', () => {
         }
     };
 
-    return {allProducts, oneProduct, allProductsArray, oneProductDetail, productVariants}
-})
+    return { allProducts, oneProduct, allProductsArray, oneProductDetail, productVariants };
+});
