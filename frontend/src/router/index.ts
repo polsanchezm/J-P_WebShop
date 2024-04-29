@@ -51,12 +51,12 @@ const router = createRouter({
                             children: [
                                 {
                                     path: '',
-                                    name: 'orders',
+                                    name: 'orders.all',
                                     component: () => import('@/views/client/profile/UserOrdersView.vue')
                                 },
                                 {
                                     path: 'detail/:id',
-                                    name: 'orderDetail',
+                                    name: 'orders.detail',
                                     component: () => import('@/views/client/profile/UserOrderDetailView.vue')
                                 }
                             ]
@@ -107,7 +107,7 @@ const router = createRouter({
                         },
                         {
                             path: 'detail/:id',
-                            name: 'productDetail',
+                            name: 'products.detail',
                             component: () => import('@/views/product/ProductDetailView.vue')
                         }
                     ]
@@ -121,25 +121,25 @@ const router = createRouter({
                             children: [
                                 {
                                     path: '',
-                                    name: 'products.manager',
+                                    name: 'manager.products.manager',
                                     component: () => import('@/views/manager/ProductsView.vue'),
                                     meta: { requiresAuth: true }
                                 },
                                 {
                                     path: 'add',
-                                    name: 'product.add',
+                                    name: 'manager.products.add',
                                     component: () => import('@/views/manager/AddProductView.vue'),
                                     meta: { requiresAuth: true }
                                 },
                                 {
                                     path: 'detail/:id',
-                                    name: 'product.detail.manager',
+                                    name: 'manager.products.detail',
                                     component: () => import('@/views/manager/ProductDetailView.vue'),
                                     meta: { requiresAuth: true }
                                 },
                                 {
                                     path: 'edit/:id',
-                                    name: 'product.edit',
+                                    name: 'manager.products.edit',
                                     component: () => import('@/views/manager/EditProductView.vue'),
                                     meta: { requiresAuth: true }
                                 }
@@ -147,7 +147,7 @@ const router = createRouter({
                         },
                         {
                             path: 'orders',
-                            name: 'orders.manager',
+                            name: 'manager.orders',
                             component: () => import('@/views/manager/OrdersView.vue'),
                             meta: { requiresAuth: true }
                         }
