@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProductDetail from '@/components/manager/management/products/ProductDetail.vue';
+import ProductDetail from '@/components/manager/management/products/ManagerProductDetail.vue';
 </script>
 
 <template>

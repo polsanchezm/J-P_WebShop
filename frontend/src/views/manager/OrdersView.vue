@@ -1,6 +1,5 @@
-
 <script setup lang="ts">
-import Orders from '@/components/manager/management/orders/Orders.vue';
+import Orders from '@/components/manager/management/orders/ManagerOrders.vue';
 </script>
 
 <template>

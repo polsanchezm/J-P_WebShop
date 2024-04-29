@@ -1,6 +1,5 @@
-
 <script setup lang="ts">
-import EditProduct from '@/components/manager/management/products/EditProduct.vue';
+import EditProduct from '@/components/manager/management/products/ManagerEditProduct.vue';
 </script>
 
 <template>
