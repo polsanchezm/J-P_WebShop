@@ -19,7 +19,7 @@ onBeforeMount(async () => {
                 <p class="text-gray-700"><span class="font-semibold">User ID:</span> {{ order!.user_id }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Date:</span> {{ order!.order_date }}</p>
 
-                <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="'/user/orders/detail/' + order.id">View details</RouterLink>
+                <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'orders.detail', params: { id: order.id } }">View details </RouterLink>
                 <button @click="orderStore.deleteUserOrder(order!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Cancel order</button>
             </li>
         </ul>
