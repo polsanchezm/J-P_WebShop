@@ -46,9 +46,12 @@ export const useAuthStore = defineStore('auth', () => {
             if (response.status == 200 && response.data.token) {
                 setWithExpiry(response.data.token);
                 console.log(response.data.token);
+                console.log(response.data.user);
 
                 isLoggedIn.value = true;
-                router.push({ name: 'home' });
+                const role = response.data.user.role;
+                role === 'user' ? router.push({ name: 'home' }) : router.push({ name: 'manager.dashboard' });
+                // router.push({ name: 'home' });
             }
             console.log('login', isLoggedIn.value);
         } catch (error) {

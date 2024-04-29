@@ -114,8 +114,23 @@ const router = createRouter({
                 },
                 {
                     path: '/management',
-                    name: 'management',
                     children: [
+                        {
+                            path: '',
+                            name: 'manager.dashboard',
+                            component: () => import('@/views/manager/ManagerDashboardView.vue'),
+                            meta: { requiresAuth: true }
+                        },
+                        {
+                            path: 'login',
+                            name: 'login.manager',
+                            component: () => import('@/views/manager/ManagerLoginView.vue')
+                        },
+                        {
+                            path: 'logout',
+                            name: 'logout.manager',
+                            component: () => import('@/components/client/UserLogout.vue')
+                        },
                         {
                             path: 'products',
                             children: [
