@@ -1,8 +1,13 @@
+import type { ProductVariant } from './productVariant';
+
 export interface Product {
+    categoryId: number;
     id: number;
-    name: string;
     description: string;
     image: string;
+    name: string;
     price: string;
-    category_id: number;
+    productVariants: ProductVariant;
+    quantity: number;
+    wishlistId: number;
 }

@@ -1,11 +1,11 @@
 export interface Shipping {
     id: number;
-    user_id: number;
+    userId: number;
     phone: string;
     street: string;
     unit: string;
-    apartment_number: string;
+    apartmentNumber: string;
     country: string;
     city: string;
-    other_instructions: string;
+    otherInstructions: string;
 }
