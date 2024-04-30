@@ -9,6 +9,7 @@ const user = ref<User>({
     id: 0,
     name: '',
     surnames: '',
+    role: '',
     birthdate: null,
     email: '',
     currentPassword: '',

@@ -14,7 +14,7 @@ let product = ref<Product>({
     categoryId: 0,
     productVariants: [],
     quantity: 1,
-    wishlistId: 0,
+    wishlistId: 0
 });
 
 let imageUrl: any = ref(null);

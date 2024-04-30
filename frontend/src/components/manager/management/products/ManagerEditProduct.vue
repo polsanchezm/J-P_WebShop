@@ -48,12 +48,13 @@ const insertedFile = (e: any) => {
                     </select>
                 </div>
 
-                <div id="preview">
-                    <img v-if="imageUrl" :src="imageUrl" style="max-width: 200px" />
-                </div>
+                <!-- Saved image: -->
+                <img v-if="productStore.oneProductDetail!.image && !imageUrl" :src="'http://127.0.0.1:8000/image/' + productStore.oneProductDetail!.image" />
+                <!-- Preview new image: -->
+                <img v-if="imageUrl" :src="imageUrl" style="max-width: 200px" />
 
                 <div class="sm:col-span-2">
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Image</label>
                     <input type="file" accept="image/*" v-on:change="insertedFile" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required />
                 </div>
                 <div class="sm:col-span-2">
