@@ -114,21 +114,22 @@ const router = createRouter({
                 },
                 {
                     path: '/management',
+                    meta: { role: 'manager' },
                     children: [
                         {
                             path: '',
                             name: 'manager.dashboard',
                             component: () => import('@/views/manager/ManagerDashboardView.vue'),
-                            meta: { requiresAuth: true }
+                            meta: { requiresAuth: true, role: 'manager' }
                         },
                         {
                             path: 'login',
-                            name: 'login.manager',
+                            name: 'manager.login',
                             component: () => import('@/views/manager/ManagerLoginView.vue')
                         },
                         {
                             path: 'logout',
-                            name: 'logout.manager',
+                            name: 'manager.logout',
                             component: () => import('@/components/client/UserLogout.vue')
                         },
                         {
@@ -138,25 +139,25 @@ const router = createRouter({
                                     path: '',
                                     name: 'manager.products.all',
                                     component: () => import('@/views/manager/ProductsView.vue'),
-                                    meta: { requiresAuth: true }
+                                    meta: { requiresAuth: true, role: 'manager' }
                                 },
                                 {
                                     path: 'add',
                                     name: 'manager.products.add',
                                     component: () => import('@/views/manager/AddProductView.vue'),
-                                    meta: { requiresAuth: true }
+                                    meta: { requiresAuth: true, role: 'manager' }
                                 },
                                 {
                                     path: 'detail/:id',
                                     name: 'manager.products.detail',
                                     component: () => import('@/views/manager/ProductDetailView.vue'),
-                                    meta: { requiresAuth: true }
+                                    meta: { requiresAuth: true, role: 'manager' }
                                 },
                                 {
                                     path: 'edit/:id',
                                     name: 'manager.products.edit',
                                     component: () => import('@/views/manager/EditProductView.vue'),
-                                    meta: { requiresAuth: true }
+                                    meta: { requiresAuth: true, role: 'manager' }
                                 }
                             ]
                         },
@@ -164,7 +165,7 @@ const router = createRouter({
                             path: 'orders',
                             name: 'manager.orders',
                             component: () => import('@/views/manager/OrdersView.vue'),
-                            meta: { requiresAuth: true }
+                            meta: { requiresAuth: true, role: 'manager' }
                         }
                     ]
                 },
