@@ -6,14 +6,14 @@ export const isAuthenticatedGuard = async (to: any, from: any, next: any) => {
     if (!to.meta.requiresAuth) {
         return next();
     } else {
-        if (to.meta.role === 'manager') {
-            return next({ name: 'manager.login' });
-        } else {
-            if (!authStore.isLoggedIn) {
-                return next({ name: 'login' });
+        if (!authStore.isLoggedIn) {
+            if (to.meta.role === 'manager') {
+                return next({ name: 'manager.login' });
             } else {
-                return next();
+                return next({ name: 'login' });
             }
+        } else {
+            return next();
         }
     }
 };
