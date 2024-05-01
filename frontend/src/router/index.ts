@@ -102,7 +102,7 @@ const router = createRouter({
                                 {
                                     path: 'success',
                                     name: 'payment.success',
-                                    component: () => import('@/views/PaymentSuccessView.vue'),
+                                    component: () => import('@/components/client/cart/payment/PaymentSuccessComponent.vue'),
                                     meta: { requiresAuth: true }
                                 },
                                 {

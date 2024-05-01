@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { type ProductItem } from '@/models/productItem';
 import type { Product } from '@/models/product';
 import axios, { type ErrorResponse } from '@/lib/axios';
-
+import router from '@/router';
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<ProductItem[]>([]);
 
@@ -25,12 +25,18 @@ export const useCartStore = defineStore('cart', () => {
 
             console.log(tokenObj.value);
 
+            const successUrl = window.location.origin + router.resolve({ name: 'payment.success' }).href;
+            const cancelUrl = window.location.origin + router.resolve({ name: 'payment.cancel' }).href;
+
+
+            console.log(successUrl, cancelUrl);
+
             const response = await axios.post(
                 '/app/payment/initiate ',
                 {
                     cartItems: cartItems,
-                    success_url: window.location.origin + '/user/payment/success',
-                    cancel_url: window.location.origin + '/user/payment/cancel'
+                    success_url: successUrl,
+                    cancel_url: cancelUrl
                 },
                 {
                     headers: {
@@ -42,6 +48,38 @@ export const useCartStore = defineStore('cart', () => {
 
             if (response.status === 200) {
                 window.location.href = response.data.url; // URL para completar el pago en Stripe
+            }
+        } catch (error) {
+            const errorMessage = error as ErrorResponse;
+            // mostrem els error en cas que no pugui retornar les dades
+            console.error('Error al fer el pagament', errorMessage);
+        }
+    };
+
+    const paymentInfo = async (sessionId: any) => {
+        try {
+            const tokenString = localStorage.getItem('token');
+
+            if (tokenString === null) {
+                // No hay token disponible, maneja esta situación adecuadamente
+                console.error('No token found in localStorage.');
+                return null; // Salimos de la función si no hay token
+            }
+
+            const tokenObj = JSON.parse(tokenString);
+
+            const response = await axios.get(
+                `/app/payment/success/${sessionId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${tokenObj.value}`
+                    }
+                }
+            );
+            // console.log(response.data.data);
+
+            if (response.status === 200) {
+                console.log(response.data.session);
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -116,5 +154,5 @@ export const useCartStore = defineStore('cart', () => {
         return null;
     };
 
-    return { addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart, initiateStripePayment };
+    return { addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart, initiateStripePayment, paymentInfo };
 });
