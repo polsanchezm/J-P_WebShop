@@ -39,7 +39,7 @@ const insertedFile = (e: any) => {
             </div>
 
             <div id="preview">
-                <img v-if="imageUrl" :src="imageUrl" style="max-width: 200px" />
+                <img v-if="imageUrl" :src="imageUrl" />
             </div>
 
             <div class="relative z-0 w-full mb-5 group">

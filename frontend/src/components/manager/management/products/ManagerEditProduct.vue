@@ -49,9 +49,9 @@ const insertedFile = (e: any) => {
                 </div>
 
                 <!-- Saved image: -->
-                <img v-if="productStore.oneProductDetail!.image && !imageUrl" :src="'http://127.0.0.1:8000/image/' + productStore.oneProductDetail!.image" />
+                <img v-if="productStore.oneProductDetail!.image && !imageUrl" :src="productStore.oneProductDetail!.image" />
                 <!-- Preview new image: -->
-                <img v-if="imageUrl" :src="imageUrl" style="max-width: 200px" />
+                <img v-if="imageUrl" :src="imageUrl" />
 
                 <div class="sm:col-span-2">
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Image</label>
