@@ -2,13 +2,53 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { type ProductItem } from '@/models/productItem';
 import type { Product } from '@/models/product';
-import type { ProductVariant } from '@/models/productVariant';
+import axios, { type ErrorResponse } from '@/lib/axios';
 
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<ProductItem[]>([]);
 
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
+
+    const initiateStripePayment = async (cartItems: any) => {
+        console.log(cartItems);
+        try {
+            const tokenString = localStorage.getItem('token');
+
+            if (tokenString === null) {
+                // No hay token disponible, maneja esta situación adecuadamente
+                console.error('No token found in localStorage.');
+                return null; // Salimos de la función si no hay token
+            }
+
+            const tokenObj = JSON.parse(tokenString);
+
+            console.log(tokenObj.value);
+
+            const response = await axios.post(
+                '/app/payment/initiate ',
+                {
+                    cartItems: cartItems,
+                    success_url: window.location.origin + '/user/payment/success',
+                    cancel_url: window.location.origin + '/user/payment/cancel'
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${tokenObj.value}`
+                    }
+                }
+            );
+            console.log(response);
+
+            if (response.status === 200) {
+                window.location.href = response.data.url; // URL para completar el pago en Stripe
+            }
+        } catch (error) {
+            const errorMessage = error as ErrorResponse;
+            // mostrem els error en cas que no pugui retornar les dades
+            console.error('Error al fer el pagament', errorMessage);
+        }
+    };
 
     const addToCart = (productItem: ProductItem) => {
         console.log('variant', productItem);
@@ -76,5 +116,5 @@ export const useCartStore = defineStore('cart', () => {
         return null;
     };
 
-    return { addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart };
+    return { addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart, initiateStripePayment };
 });

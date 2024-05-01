@@ -9,11 +9,26 @@ onBeforeMount(() => {
     console.log('cart', cartStore.cart);
 });
 
+const cartItems = computed(() => {
+    const items = cartStore.cart.map((item) => ({
+        price: item.product.price,
+        quantity: item.quantity
+    }));
+    return items;
+});
+
 const totalPrice = computed(() => {
-    const total = cartStore.cart.reduce((total, item: any) => {
-        return total + item.product.price * item.quantity;
-    }, 0);
-    return total.toFixed(2);
+    return cartStore.cart
+        .reduce((total, item: any) => {
+            const price = parseFloat(item.product.price);
+            const quantity = parseInt(item.quantity);
+            if (!isNaN(price) && !isNaN(quantity)) {
+                return total + price * quantity;
+            } else {
+                return total;
+            }
+        }, 0)
+        .toFixed(2);
 });
 </script>
 
@@ -39,6 +54,7 @@ const totalPrice = computed(() => {
                 <button @click="cartStore.removeFromCart(index)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Remove</button>
             </li>
             <p class="text-gray-700"><span class="font-semibold">Total price:</span> {{ totalPrice }}</p>
+            <button v-if="cartStore.cart.length > 0" @click="cartStore.initiateStripePayment(cartItems)" class="inline-block mt-4 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none">Pay with Stripe</button>
         </ul>
         <p v-if="cartStore.cart.length === 0">No items</p>
     </div>

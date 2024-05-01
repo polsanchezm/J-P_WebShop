@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ShippingController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\WishlistItemController;
+use App\Http\Controllers\Api\StripeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::post("register", [AuthController::class, "register"])->name("register");
     Route::post("login", [AuthController::class, "login"])->name("login");
-    
+
     Route::prefix('users')->name('users.')->middleware("auth:sanctum")->group(function () {
         Route::post('/verify-credentials', [UserController::class, 'verifyCredentials']);
         Route::get("", [UserController::class, "index"])->name("index");
@@ -78,6 +79,10 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
     });
 
     Route::prefix('payment')->name('payment.')->group(function () {
+        Route::post('initiate', [StripeController::class, 'initiatePayment'])->name('initiate');
+        // Route::post('complete', [StripeController::class, 'completePayment']);
+        // Route::post('failure', [StripeController::class, 'failPayment']);
+
         Route::get("", [PaymentController::class, "index"])->name("index");
         Route::post("create/{orderId}", [PaymentController::class, "store"])->name("create");
         Route::get("detail/{id}", [PaymentController::class, "show"])->name("detail");
@@ -86,7 +91,7 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
     });
 
 
-    
+
     Route::prefix('wishlist')->name('wishlist.')->group(function () {
         Route::get("", [WishlistController::class, "index"])->name("index");
 
