@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderDetailRequest;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductVariant;
@@ -27,14 +28,9 @@ class OrderDetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OrderDetailRequest $request)
     {
-        $request->validate([
-            'order_id' => 'required|exists:orders,id',
-            'variant_id' => 'required|exists:product_variants,id',
-            'quantity' => 'required|numeric|min:1',
-            'purchase_price' => 'required|numeric'
-        ]);
+        $request->validated();
 
 
         $order = Order::find($request->order_id);
@@ -79,18 +75,18 @@ class OrderDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        $orderDetail = OrderDetail::find($id);
+    // public function destroy(string $id)
+    // {
+    //     $orderDetail = OrderDetail::find($id);
 
-        if (!$orderDetail) {
-            return response()->json(['message' => 'Order detail not found'], 404);
-        }
+    //     if (!$orderDetail) {
+    //         return response()->json(['message' => 'Order detail not found'], 404);
+    //     }
 
-        $orderDetail->delete();
+    //     $orderDetail->delete();
 
-        return response()->json([
-            "message" => "Order detail removed from order successfully",
-        ], 200);
-    }
+    //     return response()->json([
+    //         "message" => "Order detail removed from order successfully",
+    //     ], 200);
+    // }
 }

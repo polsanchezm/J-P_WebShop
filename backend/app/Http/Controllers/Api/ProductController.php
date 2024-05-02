@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -20,17 +21,11 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $product = new Product;
 
-        $request->validate([
-            "name" => "required|string|max:45",
-            "description" => "required|string|max:255",
-            "category_id" => "required|exists:categories,id",
-            "image" => "required|image",
-            "price" => "required|numeric|between:0,9999.99",
-        ]);
+        $request->validated();
 
 
         $product->name = $request->input('name');
@@ -68,7 +63,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
         $product = Product::find($id);
 
@@ -76,13 +71,7 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        $request->validate([
-            "name" => "required|string|max:45",
-            "description" => "required|string|max:255",
-            "category_id" => "required|exists:categories,id",
-            "image" => "nullable|image",
-            "price" => "required|numeric|between:0,9999.99",
-        ]);
+        $request->validated();
 
         $product->name = $request->input('name');
         $product->description = $request->input('description');

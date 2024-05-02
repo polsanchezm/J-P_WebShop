@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductVariantRequest;
 use Illuminate\Http\Request;
 
 use App\Models\ProductVariant;
@@ -26,14 +27,9 @@ class ProductVariantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductVariantRequest $request)
     {
-        $request->validate([
-            'size' => 'required|string|max:2',
-            'color' => 'required|string|max:45',
-            'stock' => 'nullable|integer',
-            'product_id' => 'required|exists:products,id'
-        ]);
+        $request->validated();
 
         $productVariant = new ProductVariant;
         $productVariant->size = $request->input('size');
@@ -66,7 +62,7 @@ class ProductVariantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductVariantRequest $request, string $id)
     {
         $productVariant = ProductVariant::find($id);
 
@@ -74,12 +70,7 @@ class ProductVariantController extends Controller
             return response()->json(['message' => 'ProductVariant not found'], 404);
         }
 
-        $request->validate([
-            'size' => 'required|string|max:2',
-            'color' => 'required|string|max:45',
-            'stock' => 'nullable|integer',
-            'product_id' => 'required|exists:products,id'
-        ]);
+        $request->validated();
 
         $productVariant->size = $request->input('size');
         $productVariant->color = $request->input('color');

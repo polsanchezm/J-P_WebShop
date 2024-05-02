@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,18 +65,12 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(UserRequest $request)
     {
 
         $user = Auth::user();
-        $id = $user->id;
 
-        $request->validate([
-            "name" => "nullable|string|max:255",
-            "surnames" => "nullable|string|max:255",
-            "email" => "nullable|string|max:255|email:rfc,dns|unique:users,email," . $id,
-            "password" => "nullable|string|min:8|confirmed",
-        ]);
+        $request->validated();
 
         $user->name = $request->input('name');
         $user->surnames = $request->input('surnames');

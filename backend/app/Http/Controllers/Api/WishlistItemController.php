@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\WishlistItemRequest;
 use App\Http\Resources\WishlistItemCollection;
 use App\Http\Resources\WishlistItemResource;
 use App\Models\Product;
@@ -39,18 +40,12 @@ class WishlistItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(WishlistItemRequest $request)
     {
-        $request->validate([
-            // 'wishlist_id' => 'required|exists:wishlists,id',
-            'variant_id' => 'required|exists:product_variants,id',
-            // 'quantity' => 'required|numeric|min:1'
-        ]);
+        $request->validated();
 
         $userId = Auth::user()->id;
         $wishlist = Wishlist::where('user_id', $userId)->first();
-
-        // $wishlist = Wishlist::find($request->wishlist_id);
 
         if (!$wishlist) {
             return response()->json(['message' => 'Wishlist not found'], 404);
@@ -73,7 +68,6 @@ class WishlistItemController extends Controller
         $wishlistItem = new WishlistItem;
         $wishlistItem->wishlist_id = $wishlist->id;
         $wishlistItem->variant_id = $productVariant->id;
-        // $wishlistItem->quantity = $request->quantity;
 
         $wishlistItem->save();
 
@@ -103,36 +97,7 @@ class WishlistItemController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        $wishlistItemDetails = [
-            'id' => $wishlistItem->id,
-            'wishlistId' => $wishlistItem->wishlist_id,
-            'variantId' => $wishlistItem->variant_id,
-            'quantity' => $wishlistItem->quantity,
-            'productId' => $product->id,
-            'productName' => $product->name,
-            'productImage' => $product->image,
-            'productPrice' => $product->price,
-            'productSize' => $productVariant->size,
-            'productColor' => $productVariant->color,
-        ];
-
         return response()->json(new WishlistItemResource($wishlistItem));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**

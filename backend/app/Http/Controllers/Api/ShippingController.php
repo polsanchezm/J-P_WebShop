@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShippingRequest;
 use Illuminate\Http\Request;
 use App\Models\ShippingDetail;
 use App\Http\Resources\ShippingResource;
@@ -28,17 +29,9 @@ class ShippingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ShippingRequest $request)
     {
-        $request->validate([
-            'phone' => 'required|string|max:20',
-            'street' => 'required|string|max:255',
-            'unit' => 'required|string|max:50',
-            'apartment_number' => 'required|integer|digits_between:1,3',
-            'country' => 'required|string|max:100',
-            'city' => 'required|string|max:100',
-            'other_instructions' => 'nullable|string|max:300',
-        ]);
+        $request->validated();
 
         $shipping = new ShippingDetail;
         $shipping->user_id = Auth::user()->id;
@@ -77,7 +70,7 @@ class ShippingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ShippingRequest $request, string $id)
     {
         $shipping = ShippingDetail::find($id);
 
@@ -85,15 +78,7 @@ class ShippingController extends Controller
             return response()->json(['message' => 'Shipping not found'], 404);
         }
 
-        $request->validate([
-            'phone' => 'required|string|max:20',
-            'street' => 'required|string|max:255',
-            'unit' => 'required|string|max:50',
-            'apartment_number' => 'required|integer|digits_between:1,3',
-            'country' => 'required|string|max:100',
-            'city' => 'required|string|max:100',
-            'other_instructions' => 'nullable|string|max:300',
-        ]);
+        $request->validated();
 
         $shipping->user_id = Auth::user()->id;
         $shipping->phone = $request->input('phone');
