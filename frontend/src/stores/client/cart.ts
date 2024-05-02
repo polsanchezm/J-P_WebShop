@@ -6,6 +6,7 @@ import axios, { type ErrorResponse } from '@/lib/axios';
 import router from '@/router';
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<ProductItem[]>([]);
+    const payment = ref<[]>([]);
 
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
@@ -23,13 +24,8 @@ export const useCartStore = defineStore('cart', () => {
 
             const tokenObj = JSON.parse(tokenString);
 
-            console.log(tokenObj.value);
-
             const successUrl = window.location.origin + router.resolve({ name: 'payment.success' }).href;
             const cancelUrl = window.location.origin + router.resolve({ name: 'payment.cancel' }).href;
-
-
-            console.log(successUrl, cancelUrl);
 
             const response = await axios.post(
                 '/app/payment/initiate ',
@@ -68,18 +64,15 @@ export const useCartStore = defineStore('cart', () => {
 
             const tokenObj = JSON.parse(tokenString);
 
-            const response = await axios.get(
-                `/app/payment/success/${sessionId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${tokenObj.value}`
-                    }
+            const response = await axios.get(`/app/payment/success/${sessionId}`, {
+                headers: {
+                    Authorization: `Bearer ${tokenObj.value}`
                 }
-            );
+            });
             // console.log(response.data.data);
 
             if (response.status === 200) {
-                console.log(response.data.session);
+                payment.value = response.data;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -154,5 +147,5 @@ export const useCartStore = defineStore('cart', () => {
         return null;
     };
 
-    return { addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart, initiateStripePayment, paymentInfo };
+    return { payment, addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart, initiateStripePayment, paymentInfo };
 });

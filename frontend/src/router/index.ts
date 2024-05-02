@@ -108,7 +108,7 @@ const router = createRouter({
                                 {
                                     path: 'cancel',
                                     name: 'payment.cancel',
-                                    component: () => import('@/views/PaymentCancelView.vue'),
+                                    component: () => import('@/components/client/cart/payment/PaymentCancelComponent.vue'),
                                     meta: { requiresAuth: true }
                                 }
                             ]

@@ -80,9 +80,7 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
 
     Route::prefix('payment')->name('payment.')->group(function () {
         Route::post('initiate', [StripeController::class, 'initiatePayment'])->name('initiate');
-        Route::get('success/{sessionId}', [StripeController::class, 'paymentSuccess'])->name('success');
-        Route::get('cancel', [StripeController::class, 'paymentCancel'])->name('cancel');
-
+        Route::get('success/{sessionId}', [StripeController::class, 'paymentStatus'])->name('success');
 
         Route::get("", [PaymentController::class, "index"])->name("index");
         Route::post("create/{orderId}", [PaymentController::class, "store"])->name("create");
