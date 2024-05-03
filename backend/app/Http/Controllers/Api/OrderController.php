@@ -16,6 +16,8 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Order::class);
+
         $userId = Auth::user()->id;
         $orders = Order::where('user_id', $userId)->get();
         if (!$orders) {
@@ -29,6 +31,8 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Order::class);
+
         $order = new Order;
 
         $order->user_id = Auth::user()->id;
@@ -47,6 +51,8 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('view', Order::class);
+
         $order = Order::find($id);
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -59,6 +65,8 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('delete', Order::class);
+
         $order = Order::find($id);
 
         if (!$order) {

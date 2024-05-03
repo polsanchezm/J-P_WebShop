@@ -15,6 +15,8 @@ class WishlistController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Wishlist::class);
+
         $userId = Auth::user()->id;
         $wishlists = Wishlist::where('user_id', $userId)->get();
         if (!$wishlists) {

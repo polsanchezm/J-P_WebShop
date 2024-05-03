@@ -19,6 +19,8 @@ class WishlistItemController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', WishlistItem::class);
+        
         $userId = Auth::user()->id;
         $wishlist = Wishlist::where('user_id', $userId)->first();
 
@@ -41,6 +43,8 @@ class WishlistItemController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', WishlistItem::class);
+
         $request->validate([
             // 'wishlist_id' => 'required|exists:wishlists,id',
             'variant_id' => 'required|exists:product_variants,id',
@@ -88,6 +92,8 @@ class WishlistItemController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('view', WishlistItem::class);
+
         $wishlistItem = WishlistItem::find($id);
         if (!$wishlistItem) {
             return response()->json(['message' => 'Wishlist item not found'], 404);
@@ -140,6 +146,8 @@ class WishlistItemController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('delete', WishlistItem::class);
+
         $wishlistItem = WishlistItem::find($id);
 
         if (!$wishlistItem) {
