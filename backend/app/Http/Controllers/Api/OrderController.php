@@ -51,9 +51,10 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        $this->authorize('view', Order::class);
-
         $order = Order::find($id);
+
+        $this->authorize('view', $order);
+
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
@@ -65,9 +66,9 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->authorize('delete', Order::class);
-
         $order = Order::find($id);
+
+        $this->authorize('delete', $order);
 
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);

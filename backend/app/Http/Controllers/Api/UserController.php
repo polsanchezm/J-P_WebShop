@@ -27,9 +27,9 @@ class UserController extends Controller
      */
     public function show()
     {
-        $this->authorize('view', User::class);
-
         $user = Auth::user();
+
+        $this->authorize('view', $user);
 
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
@@ -40,9 +40,10 @@ class UserController extends Controller
 
     public function verifyCredentials(Request $request)
     {
-        $this->authorize('verify', User::class);
-
         $user = Auth::user();
+
+        $this->authorize('verify', $user);
+
         $id = $user->id;
 
         if (!$user) {
@@ -71,9 +72,10 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $this->authorize('update', User::class);
-
         $user = Auth::user();
+
+        $this->authorize('update', $user);
+
         $id = $user->id;
 
         $request->validate([
@@ -101,9 +103,9 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->authorize('delete', User::class);
-
         $user = Auth::user();
+
+        $this->authorize('delete', $user);
 
         if (!$user) {
             return response()->json(['message' => 'User not logged or not found'], 401);

@@ -72,9 +72,10 @@ class OrderDetailController extends Controller
      */
     public function show(string $id)
     {
-        $this->authorize('view', OrderDetail::class);
-
         $orderDetail = OrderDetail::find($id);
+
+        $this->authorize('view', $orderDetail);
+
         if (!$orderDetail) {
             return response()->json(['message' => 'Order detail not found'], 404);
         }
