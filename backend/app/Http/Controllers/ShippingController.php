@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShippingRequest;
@@ -17,9 +17,8 @@ class ShippingController extends Controller
     public function index()
     {
         $this->authorize('viewAny', ShippingDetail::class);
-
-        $userId = Auth::user()->id;
-        $shipping = ShippingDetail::where('user_id', $userId)->get();
+        $user = Auth::user();
+        $shipping = $user->role === 'manager' ? ShippingDetail::all() : ShippingDetail::where('user_id', $user->id)->get();
         if (!$shipping) {
             return response()->json(['message' => 'User shippings not found'], 404);
         }
@@ -33,35 +32,20 @@ class ShippingController extends Controller
     public function store(ShippingRequest $request)
     {
         $this->authorize('create', ShippingDetail::class);
-        $request->validated();
-
-        $shipping = new ShippingDetail;
-        $shipping->user_id = Auth::user()->id;
-        $shipping->phone = $request->input('phone');
-        $shipping->street = $request->input('street');
-        $shipping->unit = $request->input('unit');
-        $shipping->apartment_number = $request->input('apartment_number');
-        $shipping->country = $request->input('country');
-        $shipping->city = $request->input('city');
-        $shipping->other_instructions = $request->input('other_instructions');
-        $shipping->save();
-
-        // TODO: implementar esto y eliminar lo de arriba
-        // $input = $request->all();
-        // $userId = Auth::user()->id;
-        // $shipping = ShippingDetail::create([
-        //     'user_id' => $userId,
-        //     'phone' => $input['phone'],
-        //     'street' => $input['street'],
-        //     'unit' => $input['unit'],
-        //     'apartment_number' => $input['apartment_number'],
-        //     'country' => $input['country'],
-        //     'city' => $input['city'],
-        //     'other_instructions' => $input['other_instructions']
-        // ]);
-
+        $input = $request->all();
+        $userId = Auth::user()->id;
+        $shipping = ShippingDetail::create([
+            'user_id' => $userId,
+            'phone' => $input['phone'],
+            'street' => $input['street'],
+            'unit' => $input['unit'],
+            'apartment_number' => $input['apartment_number'],
+            'country' => $input['country'],
+            'city' => $input['city'],
+            'other_instructions' => $input['other_instructions']
+        ]);
         return response()->json([
-            "message" => "Shipping stored successfully",
+            'message' => 'Shipping stored successfully',
             'shipping' => $shipping
         ], 200);
     }
@@ -73,13 +57,10 @@ class ShippingController extends Controller
     public function show(string $id)
     {
         $shipping = ShippingDetail::find($id);
-        
         $this->authorize('view', $shipping);
-
         if (!$shipping) {
             return response()->json(['message' => 'Shipping detail not found'], 404);
         }
-
         return response()->json(new ShippingResource($shipping));
     }
 
@@ -90,31 +71,14 @@ class ShippingController extends Controller
     public function update(ShippingRequest $request, string $id)
     {
         $shipping = ShippingDetail::find($id);
-
         $this->authorize('update', $shipping);
-
         if (!$shipping) {
             return response()->json(['message' => 'Shipping not found'], 404);
         }
-
-        $request->validated();
-
-        $shipping->user_id = Auth::user()->id;
-        $shipping->phone = $request->input('phone');
-        $shipping->street = $request->input('street');
-        $shipping->unit = $request->input('unit');
-        $shipping->apartment_number = $request->input('apartment_number');
-        $shipping->country = $request->input('country');
-        $shipping->city = $request->input('city');
-        $shipping->other_instructions = $request->input('other_instructions');
-        $shipping->update();
-
-        // TODO: implementar esto y eliminar lo de arriba
-        // $validData = $request->validated();
-        // $shipping->update($validData);
-
+        $validData = $request->validated();
+        $shipping->update($validData);
         return response()->json([
-            "message" => "Shipping updated successfully",
+            'message' => 'Shipping updated successfully',
             'shipping' => $shipping
         ], 200);
     }
@@ -126,15 +90,11 @@ class ShippingController extends Controller
     public function destroy(string $id)
     {
         $shipping = ShippingDetail::find($id);
-
         $this->authorize('delete', $shipping);
-
         if (!$shipping) {
             return response()->json(['message' => 'Shipping not found'], 404);
         }
-
         $shipping->delete();
-
         return response()->json(['message' => 'Shipping deleted successfully'], 200);
     }
 }
