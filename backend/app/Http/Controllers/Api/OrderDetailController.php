@@ -23,7 +23,6 @@ class OrderDetailController extends Controller
             return response()->json(['message' => 'Order details not found'], 404);
         }
         return response()->json(OrderDetailResource::collection($orderDetail));
-        // return OrderDetailResource::collection($orderDetail);
     }
 
     /**
@@ -80,7 +79,6 @@ class OrderDetailController extends Controller
             return response()->json(['message' => 'Order detail not found'], 404);
         }
         return response()->json(new OrderDetailResource($orderDetail));
-        // return new OrderDetailResource($orderDetail);
     }
 
     /**
@@ -88,6 +86,7 @@ class OrderDetailController extends Controller
      */
     public function destroy(string $id)
     {
+        // TODO: ELIMINAR
         $orderDetail = OrderDetail::find($id);
 
         if (!$orderDetail) {
