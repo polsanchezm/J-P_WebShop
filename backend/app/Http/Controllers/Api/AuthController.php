@@ -33,6 +33,10 @@ class AuthController extends Controller
         $whislist = new Wishlist;
         $whislist->user_id = Auth::user()->id;
         $whislist->save();
+        
+        // TODO: implementar esto y eliminar lo de arriba
+        // $userId = Auth::user()->id;
+        // $whislist = Wishlist::create(['user_id' => $userId]);
 
         return response()->json([
             "message" => "User registered and logged in successfully",

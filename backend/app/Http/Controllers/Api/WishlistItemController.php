@@ -62,7 +62,7 @@ class WishlistItemController extends Controller
             ->first();
 
         if ($existingItem) {
-            return response()->json(['message' => 'El producte ja existeix en la wishlist, no es pot afegir una altra vegada'], 409); // Código de estado HTTP 409 Conflict
+            return response()->json(['message' => 'El producte ja existeix en la wishlist, no es pot afegir una altra vegada'], 409);
         }
 
         $wishlistItem = new WishlistItem;
@@ -70,6 +70,10 @@ class WishlistItemController extends Controller
         $wishlistItem->variant_id = $productVariant->id;
 
         $wishlistItem->save();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $wishlistItem = WishlistItem::create(['wishlist_id' => $wishlist->id, 'variant_id' => $productVariant->id]);
+
 
         return response()->json([
             "message" => "Wishlist item stored successfully",
@@ -106,13 +110,10 @@ class WishlistItemController extends Controller
     public function destroy(string $id)
     {
         $wishlistItem = WishlistItem::find($id);
-
         if (!$wishlistItem) {
             return response()->json(['message' => 'Wishlist item not found'], 404);
         }
-
         $wishlistItem->delete();
-
         return response()->json([
             "message" => "Wishlist item removed from order successfully",
         ], 200);

@@ -22,32 +22,4 @@ class WishlistController extends Controller
         }
         return response()->json(WishlistResource::collection($wishlists));
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        // $wishlist = Wishlist::find($id);
-        // if (!$wishlist) {
-        //     return response()->json(['message' => 'Wishlist not found'], 404);
-        // }
-        // return new WishlistResource($wishlist);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        // $wishlist = Wishlist::find($id);
-
-        // if (!$wishlist) {
-        //     return response()->json(['message' => 'Wishlist not found'], 404);
-        // }
-
-        // $wishlist->delete();
-
-        // return response()->json(['message' => 'Wishlist deleted successfully'], 200);
-    }
 }

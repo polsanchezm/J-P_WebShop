@@ -102,13 +102,13 @@ const router = createRouter({
                                 {
                                     path: 'success',
                                     name: 'payment.success',
-                                    component: () => import('@/components/client/cart/payment/PaymentSuccessComponent.vue'),
+                                    component: () => import('@/views/client/cart/payment/PaymentSuccessView.vue'),
                                     meta: { requiresAuth: true }
                                 },
                                 {
                                     path: 'cancel',
                                     name: 'payment.cancel',
-                                    component: () => import('@/components/client/cart/payment/PaymentCancelComponent.vue'),
+                                    component: () => import('@/views/client/cart/payment/PaymentCancelView.vue'),
                                     meta: { requiresAuth: true }
                                 }
                             ]

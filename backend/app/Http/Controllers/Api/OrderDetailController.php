@@ -7,7 +7,6 @@ use App\Http\Requests\OrderDetailRequest;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductVariant;
-use Illuminate\Http\Request;
 use App\Http\Resources\OrderDetailResource;
 
 class OrderDetailController extends Controller
@@ -22,7 +21,6 @@ class OrderDetailController extends Controller
             return response()->json(['message' => 'Order details not found'], 404);
         }
         return response()->json(OrderDetailResource::collection($orderDetail));
-        // return OrderDetailResource::collection($orderDetail);
     }
 
     /**
@@ -31,7 +29,6 @@ class OrderDetailController extends Controller
     public function store(OrderDetailRequest $request)
     {
         $request->validated();
-
 
         $order = Order::find($request->order_id);
 
@@ -50,8 +47,16 @@ class OrderDetailController extends Controller
         $orderDetail->variant_id = $productVariant->id;
         $orderDetail->quantity = $request->quantity;
         $orderDetail->purchase_price = $request->purchase_price;
-
         $orderDetail->save();
+
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $orderDetail = OrderDetail::create([
+        //     'order_id' => $order->id,
+        //     'variant_id' => $productVariant->id,
+        //     'quantity' => $request->quantity,
+        //     'purchase_price' => $request->purchase_price
+        // ]);
 
         return response()->json([
             "message" => "Order detail stored successfully",
@@ -69,24 +74,5 @@ class OrderDetailController extends Controller
             return response()->json(['message' => 'Order detail not found'], 404);
         }
         return response()->json(new OrderDetailResource($orderDetail));
-        // return new OrderDetailResource($orderDetail);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    // public function destroy(string $id)
-    // {
-    //     $orderDetail = OrderDetail::find($id);
-
-    //     if (!$orderDetail) {
-    //         return response()->json(['message' => 'Order detail not found'], 404);
-    //     }
-
-    //     $orderDetail->delete();
-
-    //     return response()->json([
-    //         "message" => "Order detail removed from order successfully",
-    //     ], 200);
-    // }
 }

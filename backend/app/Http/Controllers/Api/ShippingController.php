@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShippingRequest;
-use Illuminate\Http\Request;
 use App\Models\ShippingDetail;
 use App\Http\Resources\ShippingResource;
 use Illuminate\Support\Facades\Auth;
@@ -42,8 +41,21 @@ class ShippingController extends Controller
         $shipping->country = $request->input('country');
         $shipping->city = $request->input('city');
         $shipping->other_instructions = $request->input('other_instructions');
-
         $shipping->save();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $input = $request->all();
+        // $userId = Auth::user()->id;
+        // $shipping = ShippingDetail::create([
+        //     'user_id' => $userId,
+        //     'phone' => $input['phone'],
+        //     'street' => $input['street'],
+        //     'unit' => $input['unit'],
+        //     'apartment_number' => $input['apartment_number'],
+        //     'country' => $input['country'],
+        //     'city' => $input['city'],
+        //     'other_instructions' => $input['other_instructions']
+        // ]);
 
         return response()->json([
             "message" => "Shipping stored successfully",
@@ -88,8 +100,11 @@ class ShippingController extends Controller
         $shipping->country = $request->input('country');
         $shipping->city = $request->input('city');
         $shipping->other_instructions = $request->input('other_instructions');
-
         $shipping->update();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $validData = $request->validated();
+        // $shipping->update($validData);
 
         return response()->json([
             "message" => "Shipping updated successfully",

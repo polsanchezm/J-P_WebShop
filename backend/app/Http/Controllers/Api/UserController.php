@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\VerifyCredentialsRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,27 +28,21 @@ class UserController extends Controller
     public function show()
     {
         $user = Auth::user();
-
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
-
         return response()->json(new UserResource($user));
     }
 
-    public function verifyCredentials(Request $request)
+    public function verifyCredentials(VerifyCredentialsRequest $request)
     {
         $user = Auth::user();
-        $id = $user->id;
 
         if (!$user) {
             return response()->json(['message' => 'User not logged in or not found'], 401);
         }
 
-        $request->validate([
-            "email" => "required|string|max:255|email:rfc,dns|unique:users,email," . $id,
-            "password" => "required|string|min:8",
-        ]);
+        $request->validated();
 
         $email = $request->input('email');
         $password = $request->input('password');
@@ -79,6 +73,12 @@ class UserController extends Controller
 
         $user->update();
 
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $user = Auth::user();
+        // $validData = $request->validated();
+        // $user->update($validData);
+
         return response()->json([
             "message" => "User updated successfully",
             'user' => $user
@@ -91,13 +91,10 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         $user = Auth::user();
-
         if (!$user) {
             return response()->json(['message' => 'User not logged or not found'], 401);
         }
-
         $user->delete();
-
         return response()->json(['message' => 'User deleted successfully']);
     }
 }

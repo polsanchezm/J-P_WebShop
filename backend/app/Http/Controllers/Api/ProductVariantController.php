@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductVariantRequest;
-use Illuminate\Http\Request;
-
 use App\Models\ProductVariant;
 use App\Http\Resources\ProductVariantResource;
 
@@ -30,14 +28,16 @@ class ProductVariantController extends Controller
     public function store(ProductVariantRequest $request)
     {
         $request->validated();
-
         $productVariant = new ProductVariant;
         $productVariant->size = $request->input('size');
         $productVariant->color = $request->input('color');
         $productVariant->stock = $request->input('stock');
         $productVariant->product_id = $request->input('product_id');
-
         $productVariant->save();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $validData = $request->validated();
+        // $productVariant = ProductVariant::create($validData);
 
         return response()->json([
             "message" => "ProductVariant stored successfully",
@@ -78,6 +78,10 @@ class ProductVariantController extends Controller
         $productVariant->product_id = $request->input('product_id');
 
         $productVariant->update();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $validData = $request->validated();
+        // $productVariant->update($validData);
 
         return response()->json([
             "message" => "ProductVariant updated successfully",
