@@ -16,12 +16,13 @@ class OrderDetailController extends Controller
      */
     public function index(string $id)
     {
+        $this->authorize('viewAny', OrderDetail::class);
+
         $orderDetail = OrderDetail::where('order_id', $id)->get();
         if (!$orderDetail) {
             return response()->json(['message' => 'Order details not found'], 404);
         }
         return response()->json(OrderDetailResource::collection($orderDetail));
-        // return OrderDetailResource::collection($orderDetail);
     }
 
     /**
@@ -29,6 +30,8 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', OrderDetail::class);
+
         $request->validate([
             'order_id' => 'required|exists:orders,id',
             'variant_id' => 'required|exists:product_variants,id',
@@ -69,11 +72,13 @@ class OrderDetailController extends Controller
     public function show(string $id)
     {
         $orderDetail = OrderDetail::find($id);
+
+        $this->authorize('view', $orderDetail);
+
         if (!$orderDetail) {
             return response()->json(['message' => 'Order detail not found'], 404);
         }
         return response()->json(new OrderDetailResource($orderDetail));
-        // return new OrderDetailResource($orderDetail);
     }
 
     /**
@@ -81,6 +86,7 @@ class OrderDetailController extends Controller
      */
     public function destroy(string $id)
     {
+        // TODO: ELIMINAR
         $orderDetail = OrderDetail::find($id);
 
         if (!$orderDetail) {

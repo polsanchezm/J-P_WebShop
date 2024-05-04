@@ -15,6 +15,8 @@ class ProductVariantController extends Controller
      */
     public function index(string $id)
     {
+        $this->authorize('viewAny', Productvariant::class);
+
         $productVariant = ProductVariant::where('product_id', $id)->get();
         if (!$productVariant) {
             return response()->json(['message' => 'Product variants not found'], 404);
@@ -28,6 +30,8 @@ class ProductVariantController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Productvariant::class);
+
         $request->validate([
             'size' => 'required|string|max:2',
             'color' => 'required|string|max:45',
@@ -54,6 +58,8 @@ class ProductVariantController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('view', Productvariant::class);
+
         $productVariant = ProductVariant::find($id);
 
         if (!$productVariant) {
@@ -68,6 +74,8 @@ class ProductVariantController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $this->authorize('update', Productvariant::class);
+
         $productVariant = ProductVariant::find($id);
 
         if (!$productVariant) {
@@ -99,6 +107,8 @@ class ProductVariantController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('delete', Productvariant::class);
+
         $productVariant = ProductVariant::find($id);
 
         if (!$productVariant) {
