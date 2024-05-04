@@ -11,9 +11,9 @@ class OrderPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user, Order $order): bool
+    public function viewAny(User $user): bool
     {
-        return $user->id === $order->user_id || $user->role === 'manager';
+        return $user->role === 'user' || 'manager';
     }
 
     /**

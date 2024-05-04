@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -12,17 +11,17 @@ class OrderDetailPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user, Order $order): bool
+    public function viewAny(User $user): bool
     {
-        return $user->id === $order->user_id || $user->role === 'manager';
+        return $user->role === 'user' || 'manager';
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Order $order): bool
+    public function view(User $user, OrderDetail $orderDetail): bool
     {
-        return $user->id === $order->user_id || $user->role === 'manager';
+        return $user->id === $orderDetail->order->user_id || $user->role === 'manager';
     }
 
     /**

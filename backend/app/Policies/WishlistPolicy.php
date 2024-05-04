@@ -11,8 +11,8 @@ class WishlistPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user, Wishlist $wishlist): bool
+    public function viewAny(User $user): bool
     {
-        return $user->id === $wishlist->user_id;
+        return $user->role === 'user';
     }
 }

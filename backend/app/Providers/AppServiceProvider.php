@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
         OrderDetail::class => OrderDetailPolicy::class,
         Wishlist::class => WishlistPolicy::class,
         WishlistItem::class => WishlistItemPolicy::class,
-        Shipping::class => ShippingPolicy::class,
+        ShippingDetail::class => ShippingDetailPolicy::class,
         User::class => UserPolicy::class,
     ];
 
