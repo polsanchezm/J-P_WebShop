@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -86,8 +86,8 @@ class StripeController extends Controller
             $order = $this->createOrderAndDetails($lineItems);
 
             return response()->json([
-                "message" => "Order and order details created successfully",
-                "order" => $order,
+                'message' => 'Order and order details created successfully',
+                'order' => $order,
                 'paymentStatus' => $session->payment_status,
                 'shippingId' => $session->custom_fields[0]->dropdown->value,
             ], 200);

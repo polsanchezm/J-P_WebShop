@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
@@ -19,7 +19,6 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('viewAny', User::class);
-
         $users = User::all();
         return UserResource::collection($users);
     }
@@ -41,18 +40,12 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $this->authorize('verify', $user);
-
-        $id = $user->id;
-
         if (!$user) {
             return response()->json(['message' => 'User not logged in or not found'], 401);
         }
-
         $request->validated();
-
         $email = $request->input('email');
         $password = $request->input('password');
-
         // Verifica si el correo electrónico y la contraseña proporcionados son correctos
         if ($user->email === $email && Hash::check($password, $user->password)) {
             return response()->json(['message' => 'Credentials verified successfully'], 200);
@@ -68,28 +61,16 @@ class UserController extends Controller
     public function update(UserRequest $request)
     {
         $user = Auth::user();
-
         $this->authorize('update', $user);
-
-        $id = $user->id;
-
-        $request->validated();
-
-        $user->name = $request->input('name');
-        $user->surnames = $request->input('surnames');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-
-        $user->update();
-
-
-        // TODO: implementar esto y eliminar lo de arriba
-        // $user = Auth::user();
-        // $validData = $request->validated();
-        // $user->update($validData);
-
+        $validData = $request->validated();
+        $user->update([
+            'name' => $validData['name'],
+            'surnames' => $validData['surnames'],
+            'email' => $validData['email'],
+            'password' => Hash::make($validData['password']),
+        ]);
         return response()->json([
-            "message" => "User updated successfully",
+            'message' => 'User updated successfully',
             'user' => $user
         ], 200);
     }
@@ -100,9 +81,7 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         $user = Auth::user();
-
         $this->authorize('delete', $user);
-
         if (!$user) {
             return response()->json(['message' => 'User not logged or not found'], 401);
         }

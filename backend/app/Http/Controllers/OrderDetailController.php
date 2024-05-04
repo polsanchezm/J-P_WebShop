@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderDetailRequest;
@@ -17,7 +17,6 @@ class OrderDetailController extends Controller
     public function index(string $id)
     {
         $this->authorize('viewAny', OrderDetail::class);
-
         $orderDetail = OrderDetail::where('order_id', $id)->get();
         if (!$orderDetail) {
             return response()->json(['message' => 'Order details not found'], 404);
@@ -31,40 +30,24 @@ class OrderDetailController extends Controller
     public function store(OrderDetailRequest $request)
     {
         $this->authorize('create', OrderDetail::class);
-
         $request->validated();
-
         $order = Order::find($request->order_id);
-
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
-
         $productVariant = ProductVariant::find($request->variant_id);
-
         if (!$productVariant) {
             return response()->json(['message' => 'Product variant not found'], 404);
         }
-
-        $orderDetail = new OrderDetail;
-        $orderDetail->order_id = $order->id;
-        $orderDetail->variant_id = $productVariant->id;
-        $orderDetail->quantity = $request->quantity;
-        $orderDetail->purchase_price = $request->purchase_price;
-        $orderDetail->save();
-
-
-        // TODO: implementar esto y eliminar lo de arriba
-        // $orderDetail = OrderDetail::create([
-        //     'order_id' => $order->id,
-        //     'variant_id' => $productVariant->id,
-        //     'quantity' => $request->quantity,
-        //     'purchase_price' => $request->purchase_price
-        // ]);
-
+        $orderDetail = OrderDetail::create([
+            'order_id' => $order->id,
+            'variant_id' => $productVariant->id,
+            'quantity' => $request->quantity,
+            'purchase_price' => $request->purchase_price
+        ]);
         return response()->json([
-            "message" => "Order detail stored successfully",
-            'shipping' => $orderDetail
+            'message' => 'Order detail stored successfully',
+            'orderDetail' => $orderDetail
         ], 200);
     }
 
@@ -74,9 +57,7 @@ class OrderDetailController extends Controller
     public function show(string $id)
     {
         $orderDetail = OrderDetail::find($id);
-
         $this->authorize('view', $orderDetail);
-
         if (!$orderDetail) {
             return response()->json(['message' => 'Order detail not found'], 404);
         }

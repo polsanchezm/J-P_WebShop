@@ -1,16 +1,15 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\OrderDetailController;
-use App\Http\Controllers\Api\PaymentController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\ProductVariantController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\ShippingController;
-use App\Http\Controllers\Api\WishlistController;
-use App\Http\Controllers\Api\WishlistItemController;
-use App\Http\Controllers\Api\StripeController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderDetailController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\WishlistItemController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,12 +80,6 @@ Route::prefix('app')->name('app.')->middleware("auth:sanctum")->group(function (
     Route::prefix('payment')->name('payment.')->group(function () {
         Route::post('initiate', [StripeController::class, 'initiatePayment'])->name('initiate');
         Route::get('success/{sessionId}', [StripeController::class, 'paymentStatus'])->name('success');
-
-        Route::get("", [PaymentController::class, "index"])->name("index");
-        Route::post("create/{orderId}", [PaymentController::class, "store"])->name("create");
-        Route::get("detail/{id}", [PaymentController::class, "show"])->name("detail");
-        Route::post("update/{id}", [PaymentController::class, "update"])->name("update");
-        Route::delete("delete/{id}", [PaymentController::class, "destroy"])->name("delete");
     });
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
@@ -16,7 +16,6 @@ class OrderController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Order::class);
-
         $user = Auth::user();
         $orders = $user->role === 'manager' ? Order::all() : Order::where('user_id', $user->id)->get();
         if (!$orders) {
@@ -31,19 +30,10 @@ class OrderController extends Controller
     public function store()
     {
         $this->authorize('create', Order::class);
-
-        $order = new Order;
-        $order->user_id = Auth::user()->id;
-        $order->order_date = Carbon::now();
-
-        $order->save();
-
-        // TODO: implementar esto y eliminar lo de arriba
-        // $userId = Auth::user()->id;
-        // $order = Order::create(['user_id' => $userId, 'order_date' => Carbon::now()]);
-
+        $userId = Auth::user()->id;
+        $order = Order::create(['user_id' => $userId, 'order_date' => Carbon::now()]);
         return response()->json([
-            "message" => "Order stored successfully",
+            'message' => 'Order stored successfully',
             'order' => $order
         ], 200);
     }
@@ -54,9 +44,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
         $order = Order::find($id);
-
         $this->authorize('view', $order);
-
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
@@ -69,15 +57,11 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         $order = Order::find($id);
-
         $this->authorize('delete', $order);
-
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
-
         $order->delete();
-
         return response()->json(['message' => 'Order deleted successfully'], 200);
     }
 }

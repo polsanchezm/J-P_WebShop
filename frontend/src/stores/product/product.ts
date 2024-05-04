@@ -60,7 +60,7 @@ export const useProductStore = defineStore('product', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-            console.log(response.data)
+            console.log(response.data);
             if (response.status == 200) {
                 oneProductDetail.value = response.data;
                 productVariants.value = response.data.productVariants;
