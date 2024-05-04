@@ -18,6 +18,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::all();
         return UserResource::collection($users);
     }
@@ -28,6 +30,7 @@ class UserController extends Controller
     public function show()
     {
         $user = Auth::user();
+        $this->authorize('view', $user);
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
@@ -37,6 +40,9 @@ class UserController extends Controller
     public function verifyCredentials(VerifyCredentialsRequest $request)
     {
         $user = Auth::user();
+        $this->authorize('verify', $user);
+
+        $id = $user->id;
 
         if (!$user) {
             return response()->json(['message' => 'User not logged in or not found'], 401);
@@ -61,8 +67,11 @@ class UserController extends Controller
      */
     public function update(UserRequest $request)
     {
-
         $user = Auth::user();
+
+        $this->authorize('update', $user);
+
+        $id = $user->id;
 
         $request->validated();
 
@@ -91,6 +100,9 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         $user = Auth::user();
+
+        $this->authorize('delete', $user);
+
         if (!$user) {
             return response()->json(['message' => 'User not logged or not found'], 401);
         }

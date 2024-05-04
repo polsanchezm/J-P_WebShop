@@ -60,17 +60,10 @@ export const useProductStore = defineStore('product', () => {
                     Authorization: `Bearer ${tokenObj.value}`
                 }
             });
-
+            console.log(response.data)
             if (response.status == 200) {
                 oneProductDetail.value = response.data;
-                const variantResponse = await axios.get<ProductVariant[]>('/app/products/variants/' + productId, {
-                    headers: {
-                        Authorization: `Bearer ${tokenObj.value}`
-                    }
-                });
-                if (response.status == 200) {
-                    productVariants.value = variantResponse.data;
-                }
+                productVariants.value = response.data.productVariants;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;

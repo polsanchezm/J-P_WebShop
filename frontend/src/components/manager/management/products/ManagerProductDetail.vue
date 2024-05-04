@@ -42,10 +42,10 @@ const newVariant: ProductVariant = {
 
 <template>
     <div v-if="productStore.oneProductDetail" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+        <img v-if="productStore.oneProductDetail!.image" :src="productStore.oneProductDetail!.image" />
         <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ productStore.oneProductDetail!.id }}</p>
         <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ productStore.oneProductDetail!.name }}</p>
         <p class="text-gray-700"><span class="font-semibold">Description:</span> {{ productStore.oneProductDetail!.description }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Image:</span> {{ productStore.oneProductDetail!.image }}</p>
         <p class="text-gray-700"><span class="font-semibold">Price:</span> {{ productStore.oneProductDetail!.price }}</p>
         <p class="text-gray-700"><span class="font-semibold">Category ID:</span> {{ productStore.oneProductDetail!.categoryId }}</p>
 

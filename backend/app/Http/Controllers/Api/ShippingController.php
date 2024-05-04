@@ -16,6 +16,8 @@ class ShippingController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', ShippingDetail::class);
+
         $userId = Auth::user()->id;
         $shipping = ShippingDetail::where('user_id', $userId)->get();
         if (!$shipping) {
@@ -30,6 +32,7 @@ class ShippingController extends Controller
      */
     public function store(ShippingRequest $request)
     {
+        $this->authorize('create', ShippingDetail::class);
         $request->validated();
 
         $shipping = new ShippingDetail;
@@ -70,6 +73,8 @@ class ShippingController extends Controller
     public function show(string $id)
     {
         $shipping = ShippingDetail::find($id);
+        
+        $this->authorize('view', $shipping);
 
         if (!$shipping) {
             return response()->json(['message' => 'Shipping detail not found'], 404);
@@ -85,6 +90,8 @@ class ShippingController extends Controller
     public function update(ShippingRequest $request, string $id)
     {
         $shipping = ShippingDetail::find($id);
+
+        $this->authorize('update', $shipping);
 
         if (!$shipping) {
             return response()->json(['message' => 'Shipping not found'], 404);
@@ -119,6 +126,8 @@ class ShippingController extends Controller
     public function destroy(string $id)
     {
         $shipping = ShippingDetail::find($id);
+
+        $this->authorize('delete', $shipping);
 
         if (!$shipping) {
             return response()->json(['message' => 'Shipping not found'], 404);

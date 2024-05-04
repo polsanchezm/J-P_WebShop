@@ -13,6 +13,6 @@ class WishlistItem extends Model
 
     public function wishlist()
     {
-        return $this->belongsToMany(Wishlist::class);
+        return $this->belongsTo(Wishlist::class);
     }
 }

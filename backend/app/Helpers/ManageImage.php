@@ -12,10 +12,9 @@ class ManageImage
 
     public static function storeImage($imagePath)
     {
-        $path = $imagePath->store('images');
-        $imageName = preg_replace("~^.*/~", "", $path);
+        $path = $imagePath->store('', 'images');
 
-        return $imageName;
+        return $path;
     }
 
     public static function getImage($imageName)
@@ -29,7 +28,6 @@ class ManageImage
 
     public static function deleteImage($imageName)
     {
-        $filePath = 'images/' . $imageName;
-        Storage::delete($filePath);
+        Storage::disk('images')->delete($imageName);
     }
 }

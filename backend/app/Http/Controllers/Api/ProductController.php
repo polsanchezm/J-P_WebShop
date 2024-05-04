@@ -10,8 +10,11 @@ use App\Helpers\ManageImage;
 
 class ProductController extends Controller
 {
+
     public function index()
     {
+        $this->authorize('viewAny', Product::class);
+
         $products = Product::all();
         return response()->json(ProductResource::collection($products));
     }
@@ -22,10 +25,9 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        $this->authorize('create', Product::class);
         $validData = $request->validated();
 
-        $product = new Product;
-        $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->category_id = $request->input('category_id');
         $product->price = floatval($request->input('price'));
@@ -57,6 +59,8 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
+        $this->authorize('view', Product::class);
+        
         $product = Product::find($id);
 
         if (!$product) {
@@ -71,6 +75,8 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, string $id)
     {
+        $this->authorize('update', Product::class);
+
         $product = Product::find($id);
 
         if (!$product) {
@@ -117,6 +123,8 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->authorize('delete', Product::class);
+
         $product = Product::find($id);
 
         if (!$product) {
@@ -130,6 +138,5 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Product deleted successfully'], 200);
     }
-
 
 }

@@ -16,6 +16,8 @@ class OrderDetailController extends Controller
      */
     public function index(string $id)
     {
+        $this->authorize('viewAny', OrderDetail::class);
+
         $orderDetail = OrderDetail::where('order_id', $id)->get();
         if (!$orderDetail) {
             return response()->json(['message' => 'Order details not found'], 404);
@@ -28,6 +30,8 @@ class OrderDetailController extends Controller
      */
     public function store(OrderDetailRequest $request)
     {
+        $this->authorize('create', OrderDetail::class);
+
         $request->validated();
 
         $order = Order::find($request->order_id);
@@ -70,6 +74,9 @@ class OrderDetailController extends Controller
     public function show(string $id)
     {
         $orderDetail = OrderDetail::find($id);
+
+        $this->authorize('view', $orderDetail);
+
         if (!$orderDetail) {
             return response()->json(['message' => 'Order detail not found'], 404);
         }
