@@ -17,11 +17,10 @@ onBeforeMount(async () => {
         <p class="text-lg font-semibold mb-2 text-gray-700">Products</p>
         <ul>
             <li v-for="(product, index) in productStore.allProductsArray" :key="index">
-                <img :src="'http://127.0.0.1:8000/image/' + product!.image" />
+                <img v-if="product!.image" :src="product!.image" />
                 <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ product!.id }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ product!.name }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Description:</span> {{ product!.description }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Image:</span> {{ product!.image }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Price:</span> {{ product!.price }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Category ID:</span> {{ product!.categoryId }}</p>
 
