@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderDetailRequest;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductVariant;
-use Illuminate\Http\Request;
 use App\Http\Resources\OrderDetailResource;
 
 class OrderDetailController extends Controller
@@ -28,17 +28,11 @@ class OrderDetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OrderDetailRequest $request)
     {
         $this->authorize('create', OrderDetail::class);
 
-        $request->validate([
-            'order_id' => 'required|exists:orders,id',
-            'variant_id' => 'required|exists:product_variants,id',
-            'quantity' => 'required|numeric|min:1',
-            'purchase_price' => 'required|numeric'
-        ]);
-
+        $request->validated();
 
         $order = Order::find($request->order_id);
 
@@ -57,8 +51,16 @@ class OrderDetailController extends Controller
         $orderDetail->variant_id = $productVariant->id;
         $orderDetail->quantity = $request->quantity;
         $orderDetail->purchase_price = $request->purchase_price;
-
         $orderDetail->save();
+
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $orderDetail = OrderDetail::create([
+        //     'order_id' => $order->id,
+        //     'variant_id' => $productVariant->id,
+        //     'quantity' => $request->quantity,
+        //     'purchase_price' => $request->purchase_price
+        // ]);
 
         return response()->json([
             "message" => "Order detail stored successfully",
@@ -79,24 +81,5 @@ class OrderDetailController extends Controller
             return response()->json(['message' => 'Order detail not found'], 404);
         }
         return response()->json(new OrderDetailResource($orderDetail));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        // TODO: ELIMINAR
-        $orderDetail = OrderDetail::find($id);
-
-        if (!$orderDetail) {
-            return response()->json(['message' => 'Order detail not found'], 404);
-        }
-
-        $orderDetail->delete();
-
-        return response()->json([
-            "message" => "Order detail removed from order successfully",
-        ], 200);
     }
 }

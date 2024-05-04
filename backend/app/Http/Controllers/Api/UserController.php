@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\VerifyCredentialsRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,20 +30,16 @@ class UserController extends Controller
     public function show()
     {
         $user = Auth::user();
-
         $this->authorize('view', $user);
-
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
-
         return response()->json(new UserResource($user));
     }
 
-    public function verifyCredentials(Request $request)
+    public function verifyCredentials(VerifyCredentialsRequest $request)
     {
         $user = Auth::user();
-
         $this->authorize('verify', $user);
 
         $id = $user->id;
@@ -50,10 +48,7 @@ class UserController extends Controller
             return response()->json(['message' => 'User not logged in or not found'], 401);
         }
 
-        $request->validate([
-            "email" => "required|string|max:255|email:rfc,dns|unique:users,email," . $id,
-            "password" => "required|string|min:8",
-        ]);
+        $request->validated();
 
         $email = $request->input('email');
         $password = $request->input('password');
@@ -70,7 +65,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(UserRequest $request)
     {
         $user = Auth::user();
 
@@ -78,12 +73,7 @@ class UserController extends Controller
 
         $id = $user->id;
 
-        $request->validate([
-            "name" => "nullable|string|max:255",
-            "surnames" => "nullable|string|max:255",
-            "email" => "nullable|string|max:255|email:rfc,dns|unique:users,email," . $id,
-            "password" => "nullable|string|min:8|confirmed",
-        ]);
+        $request->validated();
 
         $user->name = $request->input('name');
         $user->surnames = $request->input('surnames');
@@ -91,6 +81,12 @@ class UserController extends Controller
         $user->password = Hash::make($request->input('password'));
 
         $user->update();
+
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $user = Auth::user();
+        // $validData = $request->validated();
+        // $user->update($validData);
 
         return response()->json([
             "message" => "User updated successfully",
@@ -110,9 +106,7 @@ class UserController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User not logged or not found'], 401);
         }
-
         $user->delete();
-
         return response()->json(['message' => 'User deleted successfully']);
     }
 }

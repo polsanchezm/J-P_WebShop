@@ -8,9 +8,9 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Payment;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+// TODO: ELIMINAR ESTE ARCHIVO
 class PaymentController extends Controller
 {
     /**
@@ -30,7 +30,7 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $orderId)
+    public function store(string $orderId)
     {
         $order = Order::find($orderId);
         $userId = Auth::user()->id;
@@ -80,7 +80,7 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $paymentId)
+    public function update(string $paymentId)
     {
         $payment = Payment::find($paymentId);
 

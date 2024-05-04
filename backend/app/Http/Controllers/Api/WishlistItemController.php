@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\WishlistItemRequest;
 use App\Http\Resources\WishlistItemCollection;
 use App\Http\Resources\WishlistItemResource;
 use App\Models\Product;
@@ -41,20 +42,13 @@ class WishlistItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(WishlistItemRequest $request)
     {
         $this->authorize('create', WishlistItem::class);
-
-        $request->validate([
-            // 'wishlist_id' => 'required|exists:wishlists,id',
-            'variant_id' => 'required|exists:product_variants,id',
-            // 'quantity' => 'required|numeric|min:1'
-        ]);
+        $request->validated();
 
         $userId = Auth::user()->id;
         $wishlist = Wishlist::where('user_id', $userId)->first();
-
-        // $wishlist = Wishlist::find($request->wishlist_id);
 
         if (!$wishlist) {
             return response()->json(['message' => 'Wishlist not found'], 404);
@@ -71,15 +65,18 @@ class WishlistItemController extends Controller
             ->first();
 
         if ($existingItem) {
-            return response()->json(['message' => 'El producte ja existeix en la wishlist, no es pot afegir una altra vegada'], 409); // Código de estado HTTP 409 Conflict
+            return response()->json(['message' => 'El producte ja existeix en la wishlist, no es pot afegir una altra vegada'], 409);
         }
 
         $wishlistItem = new WishlistItem;
         $wishlistItem->wishlist_id = $wishlist->id;
         $wishlistItem->variant_id = $productVariant->id;
-        // $wishlistItem->quantity = $request->quantity;
 
         $wishlistItem->save();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $wishlistItem = WishlistItem::create(['wishlist_id' => $wishlist->id, 'variant_id' => $productVariant->id]);
+
 
         return response()->json([
             "message" => "Wishlist item stored successfully",
@@ -109,36 +106,7 @@ class WishlistItemController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        $wishlistItemDetails = [
-            'id' => $wishlistItem->id,
-            'wishlistId' => $wishlistItem->wishlist_id,
-            'variantId' => $wishlistItem->variant_id,
-            'quantity' => $wishlistItem->quantity,
-            'productId' => $product->id,
-            'productName' => $product->name,
-            'productImage' => $product->image,
-            'productPrice' => $product->price,
-            'productSize' => $productVariant->size,
-            'productColor' => $productVariant->color,
-        ];
-
         return response()->json(new WishlistItemResource($wishlistItem));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**
@@ -153,9 +121,7 @@ class WishlistItemController extends Controller
         if (!$wishlistItem) {
             return response()->json(['message' => 'Wishlist item not found'], 404);
         }
-
         $wishlistItem->delete();
-
         return response()->json([
             "message" => "Wishlist item removed from order successfully",
         ], 200);

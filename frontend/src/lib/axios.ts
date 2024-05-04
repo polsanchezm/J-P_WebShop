@@ -15,6 +15,7 @@ export interface UserApiResponse {
 const axios = Axios.create({
     baseURL: 'http://localhost:8000/api',
     headers: {
+        'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
     },
     withCredentials: true,

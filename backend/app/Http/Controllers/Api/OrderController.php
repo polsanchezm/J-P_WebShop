@@ -7,7 +7,6 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -29,16 +28,19 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
         $this->authorize('create', Order::class);
 
         $order = new Order;
-
         $order->user_id = Auth::user()->id;
         $order->order_date = Carbon::now();
 
         $order->save();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $userId = Auth::user()->id;
+        // $order = Order::create(['user_id' => $userId, 'order_date' => Carbon::now()]);
 
         return response()->json([
             "message" => "Order stored successfully",

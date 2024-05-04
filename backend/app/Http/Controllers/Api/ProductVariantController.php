@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\ProductVariantRequest;
 use App\Models\ProductVariant;
 use App\Http\Resources\ProductVariantResource;
 
@@ -28,24 +27,21 @@ class ProductVariantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductVariantRequest $request)
     {
         $this->authorize('create', Productvariant::class);
-
-        $request->validate([
-            'size' => 'required|string|max:2',
-            'color' => 'required|string|max:45',
-            'stock' => 'nullable|integer',
-            'product_id' => 'required|exists:products,id'
-        ]);
+        $request->validated();
 
         $productVariant = new ProductVariant;
         $productVariant->size = $request->input('size');
         $productVariant->color = $request->input('color');
         $productVariant->stock = $request->input('stock');
         $productVariant->product_id = $request->input('product_id');
-
         $productVariant->save();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $validData = $request->validated();
+        // $productVariant = ProductVariant::create($validData);
 
         return response()->json([
             "message" => "ProductVariant stored successfully",
@@ -72,7 +68,7 @@ class ProductVariantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductVariantRequest $request, string $id)
     {
         $this->authorize('update', Productvariant::class);
 
@@ -82,12 +78,7 @@ class ProductVariantController extends Controller
             return response()->json(['message' => 'ProductVariant not found'], 404);
         }
 
-        $request->validate([
-            'size' => 'required|string|max:2',
-            'color' => 'required|string|max:45',
-            'stock' => 'nullable|integer',
-            'product_id' => 'required|exists:products,id'
-        ]);
+        $request->validated();
 
         $productVariant->size = $request->input('size');
         $productVariant->color = $request->input('color');
@@ -95,6 +86,10 @@ class ProductVariantController extends Controller
         $productVariant->product_id = $request->input('product_id');
 
         $productVariant->update();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $validData = $request->validated();
+        // $productVariant->update($validData);
 
         return response()->json([
             "message" => "ProductVariant updated successfully",

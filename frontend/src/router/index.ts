@@ -94,6 +94,24 @@ const router = createRouter({
                             path: 'wishlist',
                             name: 'wishlist',
                             component: () => import('@/views/client/wishlist/WishlistView.vue')
+                        },
+                        {
+                            path: 'payment',
+                            name: 'payment',
+                            children: [
+                                {
+                                    path: 'success',
+                                    name: 'payment.success',
+                                    component: () => import('@/views/client/cart/payment/PaymentSuccessView.vue'),
+                                    meta: { requiresAuth: true }
+                                },
+                                {
+                                    path: 'cancel',
+                                    name: 'payment.cancel',
+                                    component: () => import('@/views/client/cart/payment/PaymentCancelView.vue'),
+                                    meta: { requiresAuth: true }
+                                }
+                            ]
                         }
                     ]
                 },

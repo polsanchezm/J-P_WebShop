@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\ShippingRequest;
 use App\Models\ShippingDetail;
 use App\Http\Resources\ShippingResource;
 use Illuminate\Support\Facades\Auth;
@@ -30,19 +30,10 @@ class ShippingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ShippingRequest $request)
     {
         $this->authorize('create', ShippingDetail::class);
-
-        $request->validate([
-            'phone' => 'required|string|max:20',
-            'street' => 'required|string|max:255',
-            'unit' => 'required|string|max:50',
-            'apartment_number' => 'required|integer|digits_between:1,3',
-            'country' => 'required|string|max:100',
-            'city' => 'required|string|max:100',
-            'other_instructions' => 'nullable|string|max:300',
-        ]);
+        $request->validated();
 
         $shipping = new ShippingDetail;
         $shipping->user_id = Auth::user()->id;
@@ -53,8 +44,21 @@ class ShippingController extends Controller
         $shipping->country = $request->input('country');
         $shipping->city = $request->input('city');
         $shipping->other_instructions = $request->input('other_instructions');
-
         $shipping->save();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $input = $request->all();
+        // $userId = Auth::user()->id;
+        // $shipping = ShippingDetail::create([
+        //     'user_id' => $userId,
+        //     'phone' => $input['phone'],
+        //     'street' => $input['street'],
+        //     'unit' => $input['unit'],
+        //     'apartment_number' => $input['apartment_number'],
+        //     'country' => $input['country'],
+        //     'city' => $input['city'],
+        //     'other_instructions' => $input['other_instructions']
+        // ]);
 
         return response()->json([
             "message" => "Shipping stored successfully",
@@ -83,7 +87,7 @@ class ShippingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ShippingRequest $request, string $id)
     {
         $shipping = ShippingDetail::find($id);
 
@@ -93,15 +97,7 @@ class ShippingController extends Controller
             return response()->json(['message' => 'Shipping not found'], 404);
         }
 
-        $request->validate([
-            'phone' => 'required|string|max:20',
-            'street' => 'required|string|max:255',
-            'unit' => 'required|string|max:50',
-            'apartment_number' => 'required|integer|digits_between:1,3',
-            'country' => 'required|string|max:100',
-            'city' => 'required|string|max:100',
-            'other_instructions' => 'nullable|string|max:300',
-        ]);
+        $request->validated();
 
         $shipping->user_id = Auth::user()->id;
         $shipping->phone = $request->input('phone');
@@ -111,8 +107,11 @@ class ShippingController extends Controller
         $shipping->country = $request->input('country');
         $shipping->city = $request->input('city');
         $shipping->other_instructions = $request->input('other_instructions');
-
         $shipping->update();
+
+        // TODO: implementar esto y eliminar lo de arriba
+        // $validData = $request->validated();
+        // $shipping->update($validData);
 
         return response()->json([
             "message" => "Shipping updated successfully",
