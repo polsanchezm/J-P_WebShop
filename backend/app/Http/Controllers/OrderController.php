@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -22,20 +21,6 @@ class OrderController extends Controller
             return response()->json(['message' => 'User orders not found'], 404);
         }
         return response()->json(OrderResource::collection($orders));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store()
-    {
-        $this->authorize('create', Order::class);
-        $userId = Auth::user()->id;
-        $order = Order::create(['user_id' => $userId, 'order_date' => Carbon::now()]);
-        return response()->json([
-            'message' => 'Order stored successfully',
-            'order' => $order
-        ], 200);
     }
 
     /**

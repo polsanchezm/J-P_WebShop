@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OrderDetailRequest;
-use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\ProductVariant;
 use App\Http\Resources\OrderDetailResource;
 
 class OrderDetailController extends Controller
@@ -24,32 +21,6 @@ class OrderDetailController extends Controller
         return response()->json(OrderDetailResource::collection($orderDetail));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(OrderDetailRequest $request)
-    {
-        $this->authorize('create', OrderDetail::class);
-        $request->validated();
-        $order = Order::find($request->order_id);
-        if (!$order) {
-            return response()->json(['message' => 'Order not found'], 404);
-        }
-        $productVariant = ProductVariant::find($request->variant_id);
-        if (!$productVariant) {
-            return response()->json(['message' => 'Product variant not found'], 404);
-        }
-        $orderDetail = OrderDetail::create([
-            'order_id' => $order->id,
-            'variant_id' => $productVariant->id,
-            'quantity' => $request->quantity,
-            'purchase_price' => $request->purchase_price
-        ]);
-        return response()->json([
-            'message' => 'Order detail stored successfully',
-            'orderDetail' => $orderDetail
-        ], 200);
-    }
 
     /**
      * Display the specified resource.

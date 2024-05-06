@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Stripe\Checkout\Session as StripeSession;
 
 class OrderPolicy
 {
@@ -38,5 +38,10 @@ class OrderPolicy
     public function delete(User $user, Order $order): bool
     {
         return $user->id === $order->user_id || $user->role === 'manager';
+    }
+
+    public function createOrder(User $user, StripeSession $stripeSession): bool
+    {
+        return $stripeSession->payment_status === 'paid' && $stripeSession->customer_email === $user->email;
     }
 }

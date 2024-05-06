@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Wishlist;
 use App\Http\Resources\WishlistResource;
 use Illuminate\Support\Facades\Auth;
