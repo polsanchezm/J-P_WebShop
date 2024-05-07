@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    // Registre de polítiques
     protected $policies = [
         Product::class => ProductPolicy::class,
         ProductVariant::class => ProductVariantPolicy::class,

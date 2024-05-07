@@ -12,6 +12,8 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        // Creació de les categories
+        
         DB::table("categories")->insert([
             "type" => "Top"
         ]);

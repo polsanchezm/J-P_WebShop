@@ -40,6 +40,7 @@ class OrderPolicy
         return $user->id === $order->user_id || $user->role === 'manager';
     }
 
+    // Determina si es pot crear la comanda
     public function createOrder(User $user, StripeSession $stripeSession): bool
     {
         return $stripeSession->payment_status === 'paid' && $stripeSession->customer_email === $user->email;
