@@ -20,7 +20,7 @@ class AuthController extends Controller
             'name' => $registerUserData['name'],
             'surnames' => $registerUserData['surnames'],
             'birthdate' => $registerUserData['birthdate'],
-            'role' => 'user',
+            'role' => 'client',
             'email' => $registerUserData['email'],
             'password' => Hash::make($registerUserData['password']),
         ]);

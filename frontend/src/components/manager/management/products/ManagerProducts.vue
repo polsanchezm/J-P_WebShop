@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { useProductStore } from '@/stores/product/product';
 import { onBeforeMount } from 'vue';
+import { productService } from '@/services/client/product/product';
 
-const productStore = useProductStore();
+const productServ = productService();
 
 onBeforeMount(async () => {
-    await productStore.allProducts();
-    console.log('products', productStore.allProductsArray);
+    await productServ.allProducts();
+    console.log('products', productServ.allProductsArray.value);
 });
 </script>
 
 <template>
     <RouterLink class="inline-block mt-24 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'manager.products.add' }">Add Product</RouterLink>
 
-    <div v-if="productStore.allProductsArray" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+    <div v-if="productServ.allProductsArray.value" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
         <p class="text-lg font-semibold mb-2 text-gray-700">Products</p>
         <ul>
-            <li v-for="(product, index) in productStore.allProductsArray" :key="index">
+            <li v-for="(product, index) in productServ.allProductsArray.value" :key="index">
                 <img v-if="product!.image" :src="product!.image" />
                 <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ product!.id }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ product!.name }}</p>
@@ -36,7 +36,7 @@ onBeforeMount(async () => {
                     Remove</button> -->
             </li>
         </ul>
-        <p v-if="productStore.allProductsArray.length === 0">No products available</p>
+        <p v-if="productServ.allProductsArray.value.length === 0">No products available</p>
     </div>
 </template>
 

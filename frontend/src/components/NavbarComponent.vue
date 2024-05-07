@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { initFlowbite } from 'flowbite';
-import { onMounted } from 'vue';
-import { useAuthStore } from '@/stores/client/auth';
-const authStore = useAuthStore();
+import { onBeforeMount, onMounted } from 'vue';
+import { authService } from '@/services/auth/auth';
+const authServ = authService();
 
 onMounted(() => {
     initFlowbite();
@@ -17,8 +17,8 @@ onMounted(() => {
             </div>
 
             <div class="flex justify-end lg:order-2 w-1/3 items-center">
-                <div v-if="authStore.isLoggedIn">
-                    <RouterLink class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'logout' }">Logout</RouterLink>
+                <div v-if="authServ.isLoggedIn.value">
+                    <button class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" @click="authServ.userLogout()">Logout</button>
                     <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'user.detail' }">Profile</RouterLink>
                 </div>
                 <div v-else>

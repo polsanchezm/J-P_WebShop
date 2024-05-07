@@ -1,14 +1,9 @@
-import { defineStore } from 'pinia';
-import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
+import axios, { type ErrorResponse } from '@/lib/axios';
 import router from '@/router';
-import { ref } from 'vue';
 import { type Product } from '@/models/product';
 import { type ProductVariant } from '@/models/productVariant';
 
-export const useProductManageStore = defineStore('productManagement', () => {
-    const isLoggedIn = ref(!!localStorage.getItem('token'));
-    console.log('init', isLoggedIn.value);
-
+export function productManagementService() {
     const addProduct = async (product: Product) => {
         console.log(product);
         try {
@@ -254,4 +249,4 @@ export const useProductManageStore = defineStore('productManagement', () => {
     };
 
     return { addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant };
-});
+}

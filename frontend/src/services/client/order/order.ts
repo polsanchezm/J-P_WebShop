@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia';
 import axios, { type ErrorResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
@@ -6,7 +5,7 @@ import { type Order } from '@/models/order';
 import { type OrderDetail } from '@/models/orderDetail';
 import { useVerifyToken } from '@/composables/verifyToken';
 
-export const useOrderStore = defineStore('order', () => {
+export function orderService() {
     const orders = ref<Order[]>([]);
     const orderDetail = ref<OrderDetail[]>([]);
     const { verifyToken } = useVerifyToken();
@@ -79,4 +78,4 @@ export const useOrderStore = defineStore('order', () => {
     };
 
     return { userOrders, userOrderDetail, deleteUserOrder, orders, orderDetail };
-});
+}

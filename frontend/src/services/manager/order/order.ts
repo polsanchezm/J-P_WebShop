@@ -1,15 +1,9 @@
-import { defineStore } from 'pinia';
-import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
-import router from '@/router';
+import axios, { type ErrorResponse } from '@/lib/axios';
 import { ref } from 'vue';
 import { type Order } from '@/models/order';
-import { type OrderDetail } from '@/models/orderDetail';
 
-export const useOrderManageStore = defineStore('orderManagement', () => {
+export function orderManagementService() {
     const allOrders = ref<Order[]>([]);
-
-    const isLoggedIn = ref(!!localStorage.getItem('token'));
-    console.log('init', isLoggedIn.value);
 
     const Orders = async () => {
         try {
@@ -70,4 +64,4 @@ export const useOrderManageStore = defineStore('orderManagement', () => {
     };
 
     return { Orders, deleteOrder, allOrders };
-});
+}

@@ -2,65 +2,8 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { type ProductItem } from '@/models/productItem';
 import type { Product } from '@/models/product';
-import axios, { type ErrorResponse } from '@/lib/axios';
-import router from '@/router';
-import { useVerifyToken } from '@/composables/verifyToken';
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<ProductItem[]>([]);
-    const payment = ref<[]>([]);
-    const { verifyToken } = useVerifyToken();
-
-    const initiateStripePayment = async (cartItems: any) => {
-        try {
-            const userToken = verifyToken();
-
-            const successUrl = window.location.origin + router.resolve({ name: 'payment.success' }).href;
-            const cancelUrl = window.location.origin + router.resolve({ name: 'payment.cancel' }).href;
-
-            const response = await axios.post(
-                '/app/payment/initiate ',
-                {
-                    cartItems: cartItems,
-                    success_url: successUrl,
-                    cancel_url: cancelUrl
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`
-                    }
-                }
-            );
-            console.log(response);
-
-            if (response.status === 200) {
-                window.location.href = response.data.url; // URL para completar el pago en Stripe
-            }
-        } catch (error) {
-            const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
-            console.error('Error al fer el pagament', errorMessage);
-        }
-    };
-
-    const paymentInfo = async (sessionId: any) => {
-        try {
-            const userToken = verifyToken();
-
-            const response = await axios.get(`/app/payment/success/${sessionId}`, {
-                headers: {
-                    Authorization: `Bearer ${userToken}`
-                }
-            });
-
-            if (response.status === 200) {
-                payment.value = response.data;
-            }
-        } catch (error) {
-            const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
-            console.error('Error al fer el pagament', errorMessage);
-        }
-    };
 
     const addToCart = (productItem: ProductItem) => {
         const identifiedItem = cart.value.find((item) => item.id === productItem.id);
@@ -126,5 +69,5 @@ export const useCartStore = defineStore('cart', () => {
         return null;
     };
 
-    return { payment, addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart, initiateStripePayment, paymentInfo };
+    return { addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart };
 });

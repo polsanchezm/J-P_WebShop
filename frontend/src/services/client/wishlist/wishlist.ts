@@ -1,11 +1,10 @@
-import { defineStore } from 'pinia';
 import axios, { type ErrorResponse } from '@/lib/axios';
 import { ref } from 'vue';
 import { type ProductItem } from '@/models/productItem';
 import { type ProductVariant } from '@/models/productVariant';
 import { useVerifyToken } from '@/composables/verifyToken';
 
-export const useWishlistStore = defineStore('wishlist', () => {
+export function wishlistService() {
     const wishlist = ref<ProductItem[]>([]);
     const { verifyToken } = useVerifyToken();
 
@@ -58,4 +57,4 @@ export const useWishlistStore = defineStore('wishlist', () => {
     };
 
     return { wishlistItems, addToWishlist, wishlist };
-});
+}

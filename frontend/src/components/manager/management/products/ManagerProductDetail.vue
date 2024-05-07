@@ -1,22 +1,21 @@
 <script setup lang="ts">
-import { useProductStore } from '@/stores/product/product';
-import { useProductManageStore } from '@/stores/manager/product';
 import { useRoute } from 'vue-router';
 import { onBeforeMount, ref } from 'vue';
 import { type ProductVariant } from '@/models/productVariant';
+import { productService } from '@/services/client/product/product';
+import { productManagementService } from '@/services/manager/product/product';
+
+const productServ = productService();
+const managerProductServ = productManagementService();
 
 const route = useRoute();
-
 const paramId = route.params.id;
 const productId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 
-const productStore = useProductStore();
-const productStoreManager = useProductManageStore();
-
 onBeforeMount(async () => {
-    await productStore.oneProduct(productId);
-    console.log('product', productStore.oneProductDetail);
-    newVariant.productId = productStore.oneProductDetail!.id;
+    await productServ.oneProduct(productId);
+    console.log('product', productServ.oneProductDetail.value);
+    newVariant.productId = productServ.oneProductDetail.value!.id;
 });
 
 let addVariantAreVisible = ref(false);
@@ -41,17 +40,17 @@ const newVariant: ProductVariant = {
 </script>
 
 <template>
-    <div v-if="productStore.oneProductDetail" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
-        <img v-if="productStore.oneProductDetail!.image" :src="productStore.oneProductDetail!.image" />
-        <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ productStore.oneProductDetail!.id }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ productStore.oneProductDetail!.name }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Description:</span> {{ productStore.oneProductDetail!.description }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Price:</span> {{ productStore.oneProductDetail!.price }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Category ID:</span> {{ productStore.oneProductDetail!.categoryId }}</p>
+    <div v-if="productServ.oneProductDetail.value" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+        <img v-if="productServ.oneProductDetail.value!.image" :src="productServ.oneProductDetail.value!.image" />
+        <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ productServ.oneProductDetail.value!.id }}</p>
+        <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ productServ.oneProductDetail.value!.name }}</p>
+        <p class="text-gray-700"><span class="font-semibold">Description:</span> {{ productServ.oneProductDetail.value!.description }}</p>
+        <p class="text-gray-700"><span class="font-semibold">Price:</span> {{ productServ.oneProductDetail.value!.price }}</p>
+        <p class="text-gray-700"><span class="font-semibold">Category ID:</span> {{ productServ.oneProductDetail.value!.categoryId }}</p>
 
-        <RouterLink class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'manager.products.edit', params: { id: productStore.oneProductDetail!.id } }">Edit</RouterLink>
+        <RouterLink class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'manager.products.edit', params: { id: productServ.oneProductDetail.value!.id } }">Edit</RouterLink>
 
-        <button @click="productStoreManager.deleteProduct(productStore.oneProductDetail!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Delete</button>
+        <button @click="managerProductServ.deleteProduct(productServ.oneProductDetail.value!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Delete</button>
 
         <button @click="toggleAddVariant" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
             {{ addVariantAreVisible ? 'Cancel' : 'Add Variant' }}
@@ -60,7 +59,7 @@ const newVariant: ProductVariant = {
         <div v-if="addVariantAreVisible">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add a new product</h2>
-                <form @submit.prevent="productStoreManager.addVariant(newVariant)">
+                <form @submit.prevent="managerProductServ.addVariant(newVariant)">
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div class="w-full">
                             <label for="product_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product ID</label>
@@ -91,8 +90,8 @@ const newVariant: ProductVariant = {
             </div>
         </div>
 
-        <ul v-if="productStore.productVariants">
-            <li v-for="(productVariant, index) in productStore.productVariants" :key="index">
+        <ul v-if="productServ.productVariants">
+            <li v-for="(productVariant, index) in productServ.productVariants.value" :key="index">
                 <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ productVariant!.id }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Size:</span> {{ productVariant!.size }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Color:</span> {{ productVariant.color }}</p>
@@ -103,12 +102,12 @@ const newVariant: ProductVariant = {
                     {{ editVariantAreVisible ? 'Cancel' : 'Edit Variant' }}
                 </button>
 
-                <button @click="productStoreManager.deleteVariant(productVariant!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Delete Variant</button>
+                <button @click="managerProductServ.deleteVariant(productVariant!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Delete Variant</button>
 
                 <div v-if="editVariantAreVisible">
                     <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
                         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add a new product</h2>
-                        <form @submit.prevent="productStoreManager.updateVariant(productVariant!)">
+                        <form @submit.prevent="managerProductServ.updateVariant(productVariant!)">
                             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                                 <div class="w-full">
                                     <label for="product_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product ID</label>

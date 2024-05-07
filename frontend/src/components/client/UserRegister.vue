@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { User } from '@/models/user';
-import { useAuthStore } from '@/stores/client/auth';
 import { ref } from 'vue';
-const authStore = useAuthStore();
+import { authService } from '@/services/auth/auth';
+const authServ = authService();
 
 const user = ref<User>({
     id: 0,
@@ -13,6 +13,7 @@ const user = ref<User>({
     currentPassword: '',
     currentPasswordConfirmation: '',
     newPassword: '',
+    role: '',
     newPasswordConfirmation: ''
 });
 </script>
@@ -23,7 +24,7 @@ const user = ref<User>({
             <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-lg shadow md:mt-0 sm:max-w-lg xl:p-0">
                 <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create an account</h1>
-                    <form class="max-w-md mx-auto" @submit.prevent="authStore.userRegister(user)">
+                    <form class="max-w-md mx-auto" @submit.prevent="authServ.userRegister(user)">
                         <div class="relative z-0 w-full mb-5 group">
                             <input type="text" name="floating_name" id="floating_name" v-model="user.name" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
                             <label for="floating_name" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>

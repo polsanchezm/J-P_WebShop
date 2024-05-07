@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCartStore } from '@/stores/client/cart';
+import { useCartStore } from '@/stores/cart/cart';
 import { onMounted } from 'vue';
 const cartStore = useCartStore();
 onMounted(async () => {

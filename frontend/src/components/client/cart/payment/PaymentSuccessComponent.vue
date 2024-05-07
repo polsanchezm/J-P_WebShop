@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { useCartStore } from '@/stores/client/cart';
+import { cartService } from '@/services/client/cart/cart';
+import { useCartStore } from '@/stores/cart/cart';
 import { onBeforeMount } from 'vue';
 const cartStore = useCartStore();
+const cartServ = cartService();
 onBeforeMount(async () => {
     const queryParams = new URLSearchParams(window.location.search);
     const sessionId = queryParams.get('session_id');
     console.log(sessionId);
-    await cartStore.paymentInfo(sessionId);
+    await cartServ.paymentInfo(sessionId);
 
-    console.log('payment', cartStore.payment);
-    if (cartStore.payment.paymentStatus === 'paid') {
+    console.log('payment', cartServ.payment.value);
+    if (cartServ.payment.value.paymentStatus === 'paid') {
         cartStore.removeAllFromCart();
     }
 });

@@ -3,9 +3,9 @@ import type { ErrorResponse } from '@/lib/axios';
 import axios from '@/lib/axios';
 import type { Shipping } from '@/models/shipping';
 import router from '@/router';
-import { defineStore } from 'pinia';
 import { ref } from 'vue';
-export const useShippingStore = defineStore('shipping', () => {
+
+export function shippingService() {
     const shipping = ref<Shipping[]>([]);
     const oneShipping = ref<Shipping | null>(null);
     const { verifyToken } = useVerifyToken();
@@ -140,4 +140,4 @@ export const useShippingStore = defineStore('shipping', () => {
     };
 
     return { shipping, shippingIndex, shippingCreate, shippingDetail, shippingEdit, shippingDelete, oneShipping };
-});
+}

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/client/auth';
 import { onBeforeMount } from 'vue';
-const authStore = useAuthStore();
+import { authService } from '@/services/auth/auth';
+const authServ = authService();
 
 onBeforeMount(async () => {
-    await authStore.userDetail();
-    console.log('user', authStore.user);
+    await authServ.userDetail();
+    console.log('user', authServ.user.value);
 });
 
 const formatDate = (date: string | Date | null): string => {
@@ -20,14 +20,14 @@ const formatDate = (date: string | Date | null): string => {
 </script>
 
 <template>
-    <div v-if="authStore.user" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+    <div v-if="authServ.user.value" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
         <p class="text-lg font-semibold mb-2 text-gray-700">User Information</p>
         <div>
-            <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ authStore.user!.id }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ authStore.user!.name }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Surnames:</span> {{ authStore.user!.surnames }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Birthdate:</span> {{ formatDate(authStore.user!.birthdate) }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Email:</span> {{ authStore.user!.email }}</p>
+            <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ authServ.user.value!.id }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ authServ.user.value!.name }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Surnames:</span> {{ authServ.user.value!.surnames }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Birthdate:</span> {{ formatDate(authServ.user.value!.birthdate) }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Email:</span> {{ authServ.user.value!.email }}</p>
             <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'user.edit' }">Edit</RouterLink>
         </div>
     </div>

@@ -102,24 +102,40 @@ class StripeController extends Controller
             ['expand' => ['line_items.data.price.product']]
         );
 
-        if (Gate::allows('createOrder', [Order::class, $stripeSession])) {
+        if (Gate::allows('createOrder', [Order::class, $stripeSession]) && request()->query('token') === session('payment_token')) {
             $lineItems = $this->convertStripeLineItems($stripeSession->line_items->data);
-            $order = $this->createOrder($lineItems);
+            $result = $this->createOrder($lineItems, $sessionId);
 
             return response()->json([
-                'message' => 'Order created successfully',
-                'order' => $order,
+                'message' => $result['message'],
+                'order' => $result['order'],
                 'paymentStatus' => $stripeSession->payment_status,
                 'shippingId' => $stripeSession->custom_fields[0]->dropdown->value,
-            ], 200);
+            ], $result['status']);
         }
     }
 
-    protected function createOrder($lineItems)
+    protected function createOrder($lineItems, $sessionId)
     {
+        if (!$sessionId) {
+            return [
+                'message' => 'Invalid Stripe session ID.',
+                'status' => 400,
+            ];
+        }
+
+        $existingOrder = Order::where('stripe_session_id', $sessionId)->first() ? true : false;
+        if ($existingOrder) {
+            return [
+                'message' => 'An order with this Stripe session ID already exists.',
+                'order' => $existingOrder,
+                'status' => 409,
+            ];
+        }
+
         $this->authorize('create', OrderDetail::class);
         $userId = Auth::user()->id;
-        $order = Order::create(['user_id' => $userId, 'order_date' => Carbon::now()]);
+        $order = Order::create(['user_id' => $userId, 'stripe_session_id' => $sessionId]);
 
         foreach ($lineItems as $item) {
             OrderDetail::create([
@@ -129,6 +145,11 @@ class StripeController extends Controller
                 'purchase_price' => $item['price'],
             ]);
         }
-        return $order;
+
+        return [
+            'message' => 'Order created successfully.',
+            'order' => $order,
+            'status' => 200,
+        ];
     }
 }

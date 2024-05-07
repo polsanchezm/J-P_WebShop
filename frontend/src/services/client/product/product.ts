@@ -1,16 +1,12 @@
-import { defineStore } from 'pinia';
 import axios, { type ErrorResponse } from '@/lib/axios';
 import { ref } from 'vue';
 import { type Product } from '@/models/product';
 import { type ProductVariant } from '@/models/productVariant';
 
-export const useProductStore = defineStore('product', () => {
+export function productService() {
     const allProductsArray = ref<Product[]>([]);
     const oneProductDetail = ref<Product | null>(null);
     const productVariants = ref<ProductVariant[]>([]);
-
-    const isLoggedIn = ref(!!localStorage.getItem('token'));
-    console.log('init', isLoggedIn.value);
 
     const allProducts = async () => {
         try {
@@ -44,4 +40,4 @@ export const useProductStore = defineStore('product', () => {
     };
 
     return { allProducts, oneProduct, allProductsArray, oneProductDetail, productVariants };
-});
+}

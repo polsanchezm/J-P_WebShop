@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { Shipping } from '@/models/shipping';
-import { useShippingStore } from '@/stores/client/shipping';
 import { ref } from 'vue';
-
-const shippingStore = useShippingStore();
+import type { Shipping } from '@/models/shipping';
+import { shippingService } from '@/services/client/shipping/shipping';
+const shippingServ = shippingService();
 
 const shipping = ref<Shipping>({
     id: 0,
@@ -24,7 +23,7 @@ const shipping = ref<Shipping>({
             <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">Create details</h1>
-                    <form class="space-y-4 md:space-y-6" @submit.prevent="shippingStore.shippingCreate(shipping)">
+                    <form class="space-y-4 md:space-y-6" @submit.prevent="shippingServ.shippingCreate(shipping)">
                         <div>
                             <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your phone number</label>
                             <input type="text" name="phone" id="phone" v-model="shipping.phone" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />

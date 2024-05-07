@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/client/auth';
-import { useShippingStore } from '@/stores/client/shipping';
 import { onBeforeMount } from 'vue';
-const authStore = useAuthStore();
-const shippingStore = useShippingStore();
+import { authService } from '@/services/auth/auth';
+import { shippingService } from '@/services/client/shipping/shipping';
+const authServ = authService();
+const shippingServ = shippingService();
 
 onBeforeMount(async () => {
-    await authStore.userDetail();
-    console.log('user', authStore.user);
-    await shippingStore.shippingIndex();
-    console.log('shipping', shippingStore.shipping);
+    await authServ.userDetail();
+    console.log('user', authServ.user.value);
+    await shippingServ.shippingIndex();
+    console.log('shipping', shippingServ.shipping);
 });
 </script>
 
 <template>
-    <div v-if="shippingStore.shipping.length > 0" class="max-w-md mx-auto mt-24 bg-white shadow-md rounded px-4 py-6">
+    <div v-if="shippingServ.shipping.value.length > 0" class="max-w-md mx-auto mt-24 bg-white shadow-md rounded px-4 py-6">
         <ul>
-            <li v-for="(shipping, index) in shippingStore.shipping" :key="index">
-                <div v-if="shipping!.userId === authStore.user!.id">
+            <li v-for="(shipping, index) in shippingServ.shipping.value" :key="index">
+                <div v-if="shipping!.userId === authServ.user.value!.id">
                     <p class="text-lg font-semibold mb-2 text-gray-700">Shipping Information {{ index + 1 }}</p>
                     <p class="text-gray-700"><span class="font-semibold">User ID:</span> {{ shipping.userId }}</p>
                     <p class="text-gray-700"><span class="font-semibold">User Phone:</span> {{ shipping.phone }}</p>
@@ -28,7 +28,7 @@ onBeforeMount(async () => {
                     <p class="text-gray-700"><span class="font-semibold">User City:</span> {{ shipping.city }}</p>
                     <p class="text-gray-700"><span class="font-semibold">User Other Instructions:</span> {{ shipping.otherInstructions }}</p>
                     <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'shipping.edit', params: { id: shipping.id } }">Edit</RouterLink>
-                    <button class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" @click="shippingStore.shippingDelete(shipping.id)">Delete</button>
+                    <button class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" @click="shippingServ.shippingDelete(shipping.id)">Delete</button>
                 </div>
             </li>
         </ul>
