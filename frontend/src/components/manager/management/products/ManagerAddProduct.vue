@@ -6,26 +6,39 @@ import { productManagementService } from '@/services/manager/product/product';
 
 const managerProductServ = productManagementService();
 const imageFile = ref<File | null>(null);
-const imageUrl = ref<string | null>(null);
+const imageUrl = ref<string | ArrayBuffer | null>(null);
 
-const insertedFile = (e: any) => {
-    imageFile.value = e.target.files[0];
-    imageUrl.value = URL.createObjectURL(e.target.files[0]);
-};
+// const insertedFile = (e: any) => {
+//     imageFile.value = e.target.files[0];
+//     imageUrl.value = URL.createObjectURL(e.target.files[0]);
+// };
 
-// const onFileChanged = (e: Event) => {
-//     const files = (e.target as HTMLInputElement).files;
-//     if (files && files[0]) {
-//         imageFile.value = files[0];
-//         imageUrl.value = URL.createObjectURL(files[0]);
+// const handleFileChange = (event: any) => {
+//     if (event.target.files.length > 0) {
+//         imageFile.value = event.target.files[0];
+//         console.log(imageFile.value);
+//         const reader = new FileReader();
+//         reader.readAsDataURL(imageFile.value!);
+
+//         reader.onload = (e) => {
+//             imageUrl.value = e.target!.result;
+//         };
 //     }
 // };
+
+const handleFileChange = (e: Event) => {
+    const files = (e.target as HTMLInputElement).files;
+    if (files && files[0]) {
+        imageFile.value = files[0];
+        imageUrl.value = URL.createObjectURL(files[0]);
+    }
+};
 yup.addMethod(yup.mixed, 'image', function (message = 'Invalid file') {
     return this.test('image', message, function (value: any) {
         const { path, createError } = this;
 
         if (!value) {
-            return createError({ path, message: 'An image file is required CHCKPOINT.' });
+            return createError({ path, message: 'An image file is required.' });
         }
 
         const file = value;
@@ -67,7 +80,7 @@ const { handleSubmit } = useForm({
 
 const onSubmit = handleSubmit((values) => {
     console.log(values);
-    managerProductServ.addProduct({ ...values, image: imageUrl.value });
+    managerProductServ.addProduct({ ...values, image: imageFile.value });
 });
 </script>
 
@@ -77,7 +90,7 @@ const onSubmit = handleSubmit((values) => {
             <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-lg shadow md:mt-0 sm:max-w-lg xl:p-0">
                 <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create Product</h1>
-                    <form class="max-w-md mx-auto" @submit.prevent="onSubmit">
+                    <form class="max-w-md mx-auto" @submit.prevent="onSubmit" enctype="multipart/form-data">
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="name" v-slot="{ field, meta }">
                                 <input type="text" id="name" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
@@ -99,7 +112,7 @@ const onSubmit = handleSubmit((values) => {
                         </div>
 
                         <div class="relative z-0 w-full mb-5 group">
-                            <input type="file" id="image" @change="insertedFile" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" required />
+                            <input type="file" id="image" @change="handleFileChange" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" required />
                         </div>
 
                         <div class="relative z-0 w-full mb-5 group">

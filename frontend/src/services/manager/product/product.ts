@@ -7,22 +7,32 @@ import { useVerifyToken } from '@/composables/verifyToken';
 export function productManagementService() {
     const { verifyToken } = useVerifyToken();
     const addProduct = async (productData: any) => {
-        console.log(productData);
+        console.log('data', {
+            name: productData.name,
+            description: productData.description,
+            category_id: productData.categoryId,
+            image: productData.image,
+            price: productData.price
+        });
         try {
             const userToken = verifyToken();
             const formData = new FormData();
 
             formData.append('name', productData.name);
             formData.append('description', productData.description);
+            formData.append('category_id', productData.categoryId.toString());
+            formData.append('image', productData.image);
             formData.append('price', productData.price);
-            formData.append('category_id', productData.categoryId);
-            formData.append('image', productData.file);
+
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
 
             // fem una crida a la api
             const response = await axios.post<Product>('/app/products/create', formData, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
                 }
             });
 
