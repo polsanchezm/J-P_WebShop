@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Retorna el llistat d'usuaris
     public function index()
     {
         $this->authorize('viewAny', User::class);
@@ -23,9 +21,8 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    
+    // Retorna els detalls d'un usuari específic
     public function show()
     {
         $user = Auth::user();
@@ -36,6 +33,7 @@ class UserController extends Controller
         return response()->json(new UserResource($user));
     }
 
+
     public function verifyCredentials(VerifyCredentialsRequest $request)
     {
         $user = Auth::user();
@@ -43,10 +41,14 @@ class UserController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User not logged in or not found'], 401);
         }
+
+        // Validació de dades
         $request->validated();
+
         $email = $request->input('email');
         $password = $request->input('password');
-        // Verifica si el correo electrónico y la contraseña proporcionados son correctos
+
+        // Verifica si l'email y la contrasenya proporcionades són correctes
         if ($user->email === $email && Hash::check($password, $user->password)) {
             return response()->json(['message' => 'Credentials verified successfully'], 200);
         } else {
@@ -55,29 +57,30 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UserRequest $request)
     {
         $user = Auth::user();
         $this->authorize('update', $user);
+
+        // Validació de dades
         $validData = $request->validated();
+
+        // Actualitza els detalls de l'usuari loguejat
         $user->update([
             'name' => $validData['name'],
             'surnames' => $validData['surnames'],
             'email' => $validData['email'],
             'password' => Hash::make($validData['password']),
         ]);
+
         return response()->json([
             'message' => 'User updated successfully',
             'user' => $user
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
+    // Mètode que elimina el compte de l'usuari loguejat
     public function destroy(Request $request)
     {
         $user = Auth::user();

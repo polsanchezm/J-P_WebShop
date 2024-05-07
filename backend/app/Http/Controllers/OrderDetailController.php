@@ -8,9 +8,7 @@ use App\Http\Resources\OrderDetailResource;
 
 class OrderDetailController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Retorna els detalls d'una comanda específica
     public function index(string $id)
     {
         $this->authorize('viewAny', OrderDetail::class);
@@ -22,9 +20,7 @@ class OrderDetailController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
+    // Retorna un detall de comanda en específic
     public function show(string $id)
     {
         $orderDetail = OrderDetail::find($id);

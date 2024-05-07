@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class WishlistItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Mètode que retorna els items d'una wishlist
     public function index()
     {
         $this->authorize('viewAny', WishlistItem::class);
@@ -32,13 +30,13 @@ class WishlistItemController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(WishlistItemRequest $request)
     {
         $this->authorize('create', WishlistItem::class);
+
+        // Validació de dades
         $request->validated();
+
         $wishlist = Wishlist::where('user_id', Auth::user()->id)->first();
         if (!$wishlist) {
             return response()->json(['message' => 'Wishlist not found'], 404);
@@ -53,16 +51,21 @@ class WishlistItemController extends Controller
         if ($existingItem) {
             return response()->json(['message' => 'El producte ja existeix en la wishlist, no es pot afegir una altra vegada'], 409);
         }
-        $wishlistItem = WishlistItem::create(['wishlist_id' => $wishlist->id, 'variant_id' => $productVariant->id]);
+
+        // Crea un nou wishlist item
+        $wishlistItem = WishlistItem::create([
+            'wishlist_id' => $wishlist->id, 
+            'variant_id' => $productVariant->id
+        ]);
+
         return response()->json([
             'message' => 'Wishlist item stored successfully',
             'wishlistItem' => $wishlistItem
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    
+    // Retorna el detall d'un wishlist item
     public function show(string $id)
     {
         $this->authorize('view', WishlistItem::class);
@@ -81,9 +84,8 @@ class WishlistItemController extends Controller
         return response()->json(new WishlistItemResource($wishlistItem));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
+    // Elimina un wishlist item específic
     public function destroy(string $id)
     {
         $wishlistItem = WishlistItem::find($id);

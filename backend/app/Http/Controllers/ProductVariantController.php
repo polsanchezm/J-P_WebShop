@@ -9,9 +9,7 @@ use App\Http\Resources\ProductVariantResource;
 
 class ProductVariantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Retorna un llistat de les variants d'un producte específic
     public function index(string $id)
     {
         $this->authorize('viewAny', Productvariant::class);
@@ -22,23 +20,25 @@ class ProductVariantController extends Controller
         return response()->json(ProductVariantResource::collection($productVariant->load('product')));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(ProductVariantRequest $request)
     {
         $this->authorize('create', Productvariant::class);
+        
+        // Validació de dades
         $validData = $request->validated();
+
+        // Crea una variant de producte
         $productVariant = ProductVariant::create($validData);
+
         return response()->json([
             'message' => 'ProductVariant stored successfully',
             'productVariant' => $productVariant
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+    // Retorna la informació d'una variant de producte específica
     public function show(string $id)
     {
         $this->authorize('view', Productvariant::class);
@@ -49,27 +49,31 @@ class ProductVariantController extends Controller
         return response()->json(new ProductVariantResource($productVariant));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(ProductVariantRequest $request, string $id)
     {
         $this->authorize('update', Productvariant::class);
+
+        // Cerca la variant per la ID
         $productVariant = ProductVariant::find($id);
         if (!$productVariant) {
             return response()->json(['message' => 'ProductVariant not found'], 404);
         }
+
+        // Validació de dades
         $validData = $request->validated();
+
+        // Actualitza la variant
         $productVariant->update($validData);
+
         return response()->json([
             'message' => 'ProductVariant updated successfully',
             'productVariant' => $productVariant
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
+    // Elimina una variant de producte específica
     public function destroy(string $id)
     {
         $this->authorize('delete', Productvariant::class);

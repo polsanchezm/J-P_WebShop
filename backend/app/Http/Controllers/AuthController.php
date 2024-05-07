@@ -12,10 +12,12 @@ use App\Models\Wishlist;
 
 class AuthController extends Controller
 {
-    // Register API (POST, formdata)
     public function register(RegisterRequest $request)
     {
+        // Validació de dades
         $registerUserData = $request->validated();
+
+        // Creació de l'usuari
         $user = User::create([
             'name' => $registerUserData['name'],
             'surnames' => $registerUserData['surnames'],
@@ -24,11 +26,17 @@ class AuthController extends Controller
             'email' => $registerUserData['email'],
             'password' => Hash::make($registerUserData['password']),
         ]);
+
+        // Logueja l'usuari
         Auth::login($user);
-        // Generar token para la sesión del usuario
+
+        // Generar token per a la sessió de l'usuari
         $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
+
+        // Creació de la wishlist de l'usuari
         $userId = Auth::user()->id;
         $whislist = Wishlist::create(['user_id' => $userId]);
+
         return response()->json([
             'message' => 'User registered and logged in successfully',
             'user' => $user,
@@ -38,11 +46,16 @@ class AuthController extends Controller
 
     }
 
-    // Login API (POST, formdata)
+    
     public function login(LoginRequest $request)
     {
+        // Validació de dades
         $loginUserData = $request->validated();
+
+        // Troba l'usuari mitjançant l'email
         $user = User::where('email', $loginUserData['email'])->first();
+
+        // Comprova que les dades d'accés siguien vàlides
         if (!empty($user)) {
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
@@ -62,7 +75,8 @@ class AuthController extends Controller
         ], 404);
     }
 
-    // Logout API (GET)
+    
+    // Mètode per a tancar la sessió de l'usuari
     public function logout()
     {
         auth()->user()->tokens()->delete();
