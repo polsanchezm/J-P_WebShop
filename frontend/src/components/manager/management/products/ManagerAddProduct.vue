@@ -5,15 +5,30 @@ import { ref } from 'vue';
 import { productManagementService } from '@/services/manager/product/product';
 
 const managerProductServ = productManagementService();
+const imageFile = ref<File | null>(null);
+const imageUrl = ref<string | null>(null);
+
+const insertedFile = (e: any) => {
+    imageFile.value = e.target.files[0];
+    imageUrl.value = URL.createObjectURL(e.target.files[0]);
+};
+
+// const onFileChanged = (e: Event) => {
+//     const files = (e.target as HTMLInputElement).files;
+//     if (files && files[0]) {
+//         imageFile.value = files[0];
+//         imageUrl.value = URL.createObjectURL(files[0]);
+//     }
+// };
 yup.addMethod(yup.mixed, 'image', function (message = 'Invalid file') {
     return this.test('image', message, function (value: any) {
         const { path, createError } = this;
 
         if (!value) {
-            return createError({ path, message: 'An image file is required.' });
+            return createError({ path, message: 'An image file is required CHCKPOINT.' });
         }
 
-        const file = value[0];
+        const file = value;
         const allowedFormats = ['image/jpeg', 'image/png', 'image/gif'];
         const maxSize = 2 * 1024 * 1024;
 
@@ -38,7 +53,6 @@ const formSchema = yup.object({
         .string()
         .required('Description is required.')
         .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’ 0-9]+$/, 'Description can only contain letters and numbers.'),
-    image: yup.mixed().required('Product image is required.').image('Invalid image file.'),
     price: yup
         .string()
         .required('Product price is required.')
@@ -47,35 +61,14 @@ const formSchema = yup.object({
     category_id: yup.string().required('Country is required.').notOneOf(['', '0'], 'Please select a category.')
 });
 
-const { handleSubmit, setFieldValue, validateField } = useForm({
-    validationSchema: formSchema
+const { handleSubmit } = useForm({
+    // validationSchema: formSchema
 });
 
 const onSubmit = handleSubmit((values) => {
-    if (imageFile.value) {
-        managerProductServ.addProduct(values, imageFile.value);
-    } else {
-        console.error('Image file is missing');
-    }
+    console.log(values);
+    managerProductServ.addProduct({ ...values, image: imageUrl.value });
 });
-
-const imageFile = ref<File | null>(null);
-const imageUrl = ref<string | null>(null);
-
-const onFileChanged = (event: any) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-        const file: File = target.files[0];
-        console.log('file', file);
-        console.log('file size', file.size);
-
-        imageFile.value = file;
-        if (file) {
-            imageUrl.value = URL.createObjectURL(file);
-            console.log('imageUrl value', imageUrl.value);
-        }
-    }
-};
 </script>
 
 <template>
@@ -83,7 +76,7 @@ const onFileChanged = (event: any) => {
         <div class="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
             <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-lg shadow md:mt-0 sm:max-w-lg xl:p-0">
                 <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
-                    <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create Shipping Address</h1>
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create Product</h1>
                     <form class="max-w-md mx-auto" @submit.prevent="onSubmit">
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="name" v-slot="{ field, meta }">
@@ -106,10 +99,7 @@ const onFileChanged = (event: any) => {
                         </div>
 
                         <div class="relative z-0 w-full mb-5 group">
-                            <Field name="image" v-slot="{ field, meta }">
-                                <input type="file" id="image" @change="onFileChanged" accept="image/*" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" required />
-                                <ErrorMessage name="image" class="text-red-500 text-xs mt-1" />
-                            </Field>
+                            <input type="file" id="image" @change="insertedFile" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" required />
                         </div>
 
                         <div class="relative z-0 w-full mb-5 group">

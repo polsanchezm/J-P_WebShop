@@ -157,4 +157,4 @@ export function authService() {
     };
 
     return { userRegister, userLogin, userLogout, userDetail, userEdit, isLoggedIn, user, userRole };
-};
+}

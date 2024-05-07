@@ -59,5 +59,5 @@ export function cartService() {
         }
     };
 
-    return { initiateStripePayment, paymentInfo, payment }
+    return { initiateStripePayment, paymentInfo, payment };
 }

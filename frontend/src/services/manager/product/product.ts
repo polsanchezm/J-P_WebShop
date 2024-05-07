@@ -6,9 +6,8 @@ import { useVerifyToken } from '@/composables/verifyToken';
 
 export function productManagementService() {
     const { verifyToken } = useVerifyToken();
-    const addProduct = async (productData: any, file: any) => {
+    const addProduct = async (productData: any) => {
         console.log(productData);
-        console.log(file);
         try {
             const userToken = verifyToken();
             const formData = new FormData();
@@ -17,19 +16,15 @@ export function productManagementService() {
             formData.append('description', productData.description);
             formData.append('price', productData.price);
             formData.append('category_id', productData.categoryId);
-            formData.append('file', file.value);
+            formData.append('image', productData.file);
 
             // fem una crida a la api
-            const response = await axios.post<Product>(
-                '/app/products/create',
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                        'Content-Type': 'multipart/form-data'
-                    }
+            const response = await axios.post<Product>('/app/products/create', formData, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                    'Content-Type': 'multipart/form-data'
                 }
-            );
+            });
 
             if (response.status == 200) {
                 router.push({ name: 'manager.products.all' });
@@ -37,7 +32,7 @@ export function productManagementService() {
         } catch (error) {
             const errorMessage = error as ErrorResponse;
             // mostrem els error en cas que no pugui retornar les dades
-            console.error('Error al crear el producte', errorMessage.response);
+            console.error('Error al crear el producte', errorMessage);
         }
     };
 
@@ -48,7 +43,6 @@ export function productManagementService() {
                 return;
             }
             const userToken = verifyToken();
-
 
             // fem una crida a la api
             const response = await axios.delete(`/app/products/delete/${id}`, {
@@ -77,7 +71,6 @@ export function productManagementService() {
             }
 
             const userToken = verifyToken();
-
 
             // fem una crida a la api
             const response = await axios.post<Product>(
@@ -111,7 +104,6 @@ export function productManagementService() {
         console.log(productVariant);
         try {
             const userToken = verifyToken();
-
 
             // fem una crida a la api
             const response = await axios.post<ProductVariant>(
@@ -153,7 +145,6 @@ export function productManagementService() {
 
             const userToken = verifyToken();
 
-
             // fem una crida a la api
             const response = await axios.post<ProductVariant>(
                 `/app/products/variants/update/${productVariant.id}`,
@@ -188,7 +179,6 @@ export function productManagementService() {
                 return;
             }
             const userToken = verifyToken();
-
 
             // fem una crida a la api
             const response = await axios.delete(`/app/products/variants/delete/${id}`, {

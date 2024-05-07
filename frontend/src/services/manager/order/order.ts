@@ -32,7 +32,6 @@ export function orderManagementService() {
         try {
             const userToken = verifyToken();
 
-
             // fem crida a la api per eliminar l'order
             const response = await axios.delete(`/app/orders/delete/${orderId}`, {
                 headers: {
