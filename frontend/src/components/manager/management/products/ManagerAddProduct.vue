@@ -73,7 +73,6 @@ const onFileChanged = (event: any) => {
         if (file) {
             imageUrl.value = URL.createObjectURL(file);
             console.log('imageUrl value', imageUrl.value);
-            validateField('image');
         }
     }
 };
