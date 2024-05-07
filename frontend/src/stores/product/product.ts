@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
-import router from '@/router';
+import axios, { type ErrorResponse } from '@/lib/axios';
 import { ref } from 'vue';
 import { type Product } from '@/models/product';
 import { type ProductVariant } from '@/models/productVariant';
@@ -15,22 +14,8 @@ export const useProductStore = defineStore('product', () => {
 
     const allProducts = async () => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
-
             // fem una crida a la api
-            const response = await axios.get<Product[]>('/app/products/', {
-                headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
-                }
-            });
+            const response = await axios.get<Product[]>('/app/products/');
 
             if (response.status == 200) {
                 allProductsArray.value = response.data;
@@ -44,22 +29,8 @@ export const useProductStore = defineStore('product', () => {
 
     const oneProduct = async (productId: number) => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
-
             // fem una crida a la api
-            const response = await axios.get<Product>('/app/products/detail/' + productId, {
-                headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
-                }
-            });
+            const response = await axios.get<Product>('/app/products/detail/' + productId);
             console.log(response.data);
             if (response.status == 200) {
                 oneProductDetail.value = response.data;

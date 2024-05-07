@@ -3,36 +3,25 @@ import axios, { type ErrorResponse } from '@/lib/axios';
 import { ref } from 'vue';
 import { type ProductItem } from '@/models/productItem';
 import { type ProductVariant } from '@/models/productVariant';
+import { useVerifyToken } from '@/composables/verifyToken';
 
 export const useWishlistStore = defineStore('wishlist', () => {
     const wishlist = ref<ProductItem[]>([]);
-
-    const isLoggedIn = ref(!!localStorage.getItem('token'));
-    console.log('init', isLoggedIn.value);
+    const { verifyToken } = useVerifyToken();
 
     const wishlistItems = async () => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.get<ProductItem[]>('/app/wishlist/items', {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
             if (response.status == 200) {
-                const wishlistData = response.data;
-                console.log('datas', wishlistData);
-                wishlist.value = wishlistData;
+                wishlist.value = response.data;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
@@ -43,15 +32,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     const addToWishlist = async (productVariant: ProductVariant) => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.post<ProductItem>(
@@ -61,13 +42,13 @@ export const useWishlistStore = defineStore('wishlist', () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`
+                        Authorization: `Bearer ${userToken}`
                     }
                 }
             );
 
             if (response.status == 200) {
-                console.log('Added correctly');
+                console.log(response.data.message);
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;

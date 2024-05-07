@@ -1,33 +1,24 @@
 import { defineStore } from 'pinia';
-import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
+import axios, { type ErrorResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
 import { type Order } from '@/models/order';
 import { type OrderDetail } from '@/models/orderDetail';
+import { useVerifyToken } from '@/composables/verifyToken';
 
 export const useOrderStore = defineStore('order', () => {
     const orders = ref<Order[]>([]);
     const orderDetail = ref<OrderDetail[]>([]);
-
-    const isLoggedIn = ref(!!localStorage.getItem('token'));
-    console.log('init', isLoggedIn.value);
+    const { verifyToken } = useVerifyToken();
 
     const userOrders = async () => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.get<Order[]>('/app/orders/', {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -43,20 +34,12 @@ export const useOrderStore = defineStore('order', () => {
 
     const userOrderDetail = async (orderId: number | null) => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.get<OrderDetail[]>(`/app/orders/details/${orderId}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -72,26 +55,18 @@ export const useOrderStore = defineStore('order', () => {
 
     const deleteUserOrder = async (orderId: number | null, redirect: boolean = false) => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem crida a la api per eliminar l'order
             const response = await axios.delete(`/app/orders/delete/${orderId}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
             if (response.status === 200) {
                 if (redirect) {
-                    router.push({ path: '/user/orders' });
+                    router.push({ name: 'user.orders.all' });
                 } else {
                     orders.value = orders.value.filter((order) => order.id !== orderId);
                 }

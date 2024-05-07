@@ -1,3 +1,4 @@
+import { useVerifyToken } from '@/composables/verifyToken';
 import type { ErrorResponse } from '@/lib/axios';
 import axios from '@/lib/axios';
 import type { Shipping } from '@/models/shipping';
@@ -7,28 +8,11 @@ import { ref } from 'vue';
 export const useShippingStore = defineStore('shipping', () => {
     const shipping = ref<Shipping[]>([]);
     const oneShipping = ref<Shipping | null>(null);
+    const { verifyToken } = useVerifyToken();
 
     const shippingCreate = async (shipping: Shipping) => {
-        console.log({
-            phone: shipping.phone,
-            street: shipping.street,
-            unit: shipping.unit,
-            apartmentNumber: shipping.apartmentNumber,
-            country: shipping.country,
-            city: shipping.city,
-            otherInstructions: shipping.otherInstructions
-        });
-
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.post<Shipping>(
@@ -37,19 +21,17 @@ export const useShippingStore = defineStore('shipping', () => {
                     phone: shipping.phone,
                     street: shipping.street,
                     unit: shipping.unit,
-                    apartmentNumber: shipping.apartmentNumber,
+                    apartment_number: shipping.apartmentNumber,
                     country: shipping.country,
                     city: shipping.city,
-                    otherInstructions: shipping.otherInstructions
+                    other_instructions: shipping.otherInstructions
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`
+                        Authorization: `Bearer ${userToken}`
                     }
                 }
             );
-            console.log(response);
-            console.log(response.data);
 
             if (response.status == 200) {
                 router.push({ name: 'shipping.all' });
@@ -62,23 +44,8 @@ export const useShippingStore = defineStore('shipping', () => {
     };
 
     const shippingEdit = async (shipping: Shipping, id: number | null) => {
-        console.log(shipping);
-
         try {
-            if (id === null) {
-                console.log('Received null ID, aborting detail retrieval.');
-                return;
-            }
-
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.post<Shipping>(
@@ -94,12 +61,10 @@ export const useShippingStore = defineStore('shipping', () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`
+                        Authorization: `Bearer ${userToken}`
                     }
                 }
             );
-            console.log(response);
-            console.log(response.data);
 
             if (response.status == 200) {
                 router.push({ name: 'shipping.all' });
@@ -113,25 +78,14 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const shippingIndex = async () => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.get('/app/shipping', {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
-
-            console.log(response);
-            console.log(response.data);
 
             if (response.status == 200) {
                 shipping.value = response.data;
@@ -145,25 +99,12 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const shippingDetail = async (id: number | null) => {
         try {
-            if (id === null) {
-                console.log('Received null ID, aborting detail retrieval.');
-                return;
-            }
-
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.get(`/app/shipping/detail/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -179,29 +120,14 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const shippingDelete = async (id: number | null) => {
         try {
-            if (id === null) {
-                console.log('Received null ID, aborting detail retrieval.');
-                return;
-            }
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.delete(`/app/shipping/delete/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
-
-            console.log('response detail', response);
-            console.log('data detail', response.data);
 
             if (response.status == 200) {
                 shipping.value = shipping.value.filter((ship) => ship.id !== id);

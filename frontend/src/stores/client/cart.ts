@@ -4,25 +4,15 @@ import { type ProductItem } from '@/models/productItem';
 import type { Product } from '@/models/product';
 import axios, { type ErrorResponse } from '@/lib/axios';
 import router from '@/router';
+import { useVerifyToken } from '@/composables/verifyToken';
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<ProductItem[]>([]);
     const payment = ref<[]>([]);
-
-    const isLoggedIn = ref(!!localStorage.getItem('token'));
-    console.log('init', isLoggedIn.value);
+    const { verifyToken } = useVerifyToken();
 
     const initiateStripePayment = async (cartItems: any) => {
-        console.log(cartItems);
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             const successUrl = window.location.origin + router.resolve({ name: 'payment.success' }).href;
             const cancelUrl = window.location.origin + router.resolve({ name: 'payment.cancel' }).href;
@@ -36,7 +26,7 @@ export const useCartStore = defineStore('cart', () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`
+                        Authorization: `Bearer ${userToken}`
                     }
                 }
             );
@@ -54,22 +44,13 @@ export const useCartStore = defineStore('cart', () => {
 
     const paymentInfo = async (sessionId: any) => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             const response = await axios.get(`/app/payment/success/${sessionId}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
-            // console.log(response.data.data);
 
             if (response.status === 200) {
                 payment.value = response.data;
@@ -82,8 +63,6 @@ export const useCartStore = defineStore('cart', () => {
     };
 
     const addToCart = (productItem: ProductItem) => {
-        console.log('variant', productItem);
-
         const identifiedItem = cart.value.find((item) => item.id === productItem.id);
         if (!identifiedItem) {
             const item: ProductItem = productItem;
@@ -115,9 +94,9 @@ export const useCartStore = defineStore('cart', () => {
     };
 
     const saveCartToCookie = (cart: ProductItem[], daysToExpire: number = 30) => {
-        const d = new Date();
-        d.setTime(d.getTime() + daysToExpire * 24 * 60 * 60 * 1000); // Días a milisegundos
-        const expires = 'expires=' + d.toUTCString();
+        const date = new Date();
+        date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000); // Dies a milisegons
+        const expires = 'expires=' + date.toUTCString();
         const cartString = JSON.stringify(cart);
         document.cookie = 'cart=' + encodeURIComponent(cartString) + ';' + expires + ';path=/';
     };

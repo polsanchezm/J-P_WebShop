@@ -3,8 +3,11 @@ import axios, { type ErrorResponse, type UserApiResponse } from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
 import { type User } from '@/models/user';
+import { useVerifyToken } from '@/composables/verifyToken';
+
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
+    const { verifyToken, setWithExpiry } = useVerifyToken();
     const isLoggedIn = ref(!!localStorage.getItem('token'));
     console.log('init', isLoggedIn.value);
 
@@ -22,8 +25,6 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (response.status == 201 && response.data.token) {
                 setWithExpiry(response.data.token);
-                console.log(response.data.token);
-
                 isLoggedIn.value = true;
                 router.push({ name: 'home' });
             }
@@ -35,7 +36,6 @@ export const useAuthStore = defineStore('auth', () => {
     };
 
     const userLogin = async (user: any) => {
-        console.log(user);
         try {
             // fem una crida a la api
             const response = await axios.post<UserApiResponse>('/auth/login', {
@@ -45,9 +45,6 @@ export const useAuthStore = defineStore('auth', () => {
 
             if (response.status == 200 && response.data.token) {
                 setWithExpiry(response.data.token);
-                console.log(response.data.token);
-                console.log(response.data.user);
-
                 isLoggedIn.value = true;
                 const role = response.data.user.role;
                 role === 'user' ? router.push({ name: 'home' }) : router.push({ name: 'manager.dashboard' });
@@ -57,25 +54,23 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (error) {
             const errorMessage = error as ErrorResponse;
             // mostrem els error en cas que no pugui retornar les dades
-            console.error('Error al fer login:', errorMessage.message);
+            console.error('Error al fer login:', errorMessage);
         }
     };
 
     const userLogout = async () => {
         try {
-            // const getToken = localStorage.getItem('token');
-            const getToken = retrieveTokenValue();
-            console.log(getToken);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.post<UserApiResponse>('/auth/users/logout', null, {
                 headers: {
-                    Authorization: `Bearer ${getToken}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
-            isLoggedIn.value = false;
 
             if (response.status == 200) {
+                isLoggedIn.value = false;
                 localStorage.removeItem('token');
                 router.push({ name: 'home' });
             }
@@ -89,20 +84,12 @@ export const useAuthStore = defineStore('auth', () => {
 
     const userDetail = async () => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.get('/auth/users/detail', {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -118,15 +105,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     const userEdit = async (user: any) => {
         try {
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
             const verificationResponse = await axios.post<UserApiResponse>(
                 '/auth/users/verify-credentials',
                 {
@@ -135,7 +115,7 @@ export const useAuthStore = defineStore('auth', () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`
+                        Authorization: `Bearer ${userToken}`
                     }
                 }
             );
@@ -154,7 +134,7 @@ export const useAuthStore = defineStore('auth', () => {
                     },
                     {
                         headers: {
-                            Authorization: `Bearer ${tokenObj.value}`
+                            Authorization: `Bearer ${userToken}`
                         }
                     }
                 );
@@ -170,32 +150,5 @@ export const useAuthStore = defineStore('auth', () => {
         }
     };
 
-    const setWithExpiry = (value: any) => {
-        const now = new Date();
-        const ttl = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
-        const item = {
-            value: value,
-            expiry: now.getTime() + ttl
-        };
-        localStorage.setItem('token', JSON.stringify(item));
-    };
-
-    const retrieveTokenValue = () => {
-        const tokenString = localStorage.getItem('token');
-        if (!tokenString) {
-            return null;
-        }
-
-        const tokenObj = JSON.parse(tokenString);
-        const now = new Date();
-
-        if (now.getTime() > tokenObj.expiry) {
-            localStorage.removeItem('token');
-            return null;
-        }
-
-        return tokenObj.value;
-    };
-
-    return { userRegister, userLogin, userLogout, userDetail, userEdit, isLoggedIn, user, setWithExpiry, retrieveTokenValue };
+    return { userRegister, userLogin, userLogout, userDetail, userEdit, isLoggedIn, user };
 });
