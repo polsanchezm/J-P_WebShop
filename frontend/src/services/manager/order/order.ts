@@ -1,26 +1,20 @@
 import axios, { type ErrorResponse } from '@/lib/axios';
 import { ref } from 'vue';
 import { type Order } from '@/models/order';
+import { useVerifyToken } from '@/composables/verifyToken';
 
 export function orderManagementService() {
     const allOrders = ref<Order[]>([]);
+    const { verifyToken } = useVerifyToken();
 
     const Orders = async () => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // fem una crida a la api
             const response = await axios.get<Order[]>('/app/orders', {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -36,20 +30,13 @@ export function orderManagementService() {
 
     const deleteOrder = async (orderId: number | null) => {
         try {
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
 
             // fem crida a la api per eliminar l'order
             const response = await axios.delete(`/app/orders/delete/${orderId}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 

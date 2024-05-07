@@ -12,17 +12,17 @@ class ManageImage
     public static function storeImage($imagePath)
     {
         $path = $imagePath->store('', 'images');
-
         return $path;
     }
 
     public static function getImage($imageName)
     {
-        $image = Storage::disk('images')->get($imageName);
-        if (!$image) {
+        if (!Storage::disk('images')->exists($imageName)) {
             return response()->json(['message' => 'Image not found'], 404);
         }
-        return new Response($image, 200);
+        $image = Storage::disk('images')->get($imageName);
+        $type = Storage::disk('images')->mimeType($imageName);
+        return response($image, 200)->header('Content-Type', $type);
     }
 
     public static function deleteImage($imageName)

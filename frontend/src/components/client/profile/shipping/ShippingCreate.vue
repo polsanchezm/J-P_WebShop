@@ -1,61 +1,122 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import type { Shipping } from '@/models/shipping';
+import { useForm, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 import { shippingService } from '@/services/client/shipping/shipping';
 const shippingServ = shippingService();
 
-const shipping = ref<Shipping>({
-    id: 0,
-    userId: 0,
-    phone: '',
-    street: '',
-    unit: '',
-    apartmentNumber: '',
-    country: '',
-    city: '',
-    otherInstructions: ''
+const formSchema = yup.object({
+    phone: yup
+        .string()
+        .required('Phone number is required.')
+        .matches(/^[0-9]{9}$/, 'Phone number must be exactly 9 digits.')
+        .typeError('Phone number must be numeric.'),
+    street: yup
+        .string()
+        .required('Street address is required.')
+        .min(1, 'Street address must be at least 1 character long.')
+        .max(100, 'Street address must be no more than 100 characters long.')
+        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’]+$/, 'Street address can only contain letters.'),
+    unit: yup
+        .string()
+        .required('Unit is required.')
+        .min(1, 'Unit must be at least 1 character long.')
+        .max(50, 'Unit must be no more than 50 characters long.')
+        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’]+$/, 'Unit address can only contain letters.'),
+    apartmentNumber: yup
+        .string()
+        .required('Apartment number is required.')
+        .matches(/^[0-9]{1,3}$/, 'Apartment number must be between 1 and 999.')
+        .typeError('Apartment number must be numeric.'),
+    country: yup
+        .string()
+        .required('Country is required.')
+        .min(1, 'Country must be at least 1 character long.')
+        .max(100, 'Country must be no more than 100 characters long.')
+        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’]+$/, 'Country can only contain letters.'),
+    city: yup
+        .string()
+        .required('City is required.')
+        .min(1, 'City must be at least 1 character long.')
+        .max(100, 'City must be no more than 100 characters long.')
+        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’]+$/, 'City can only contain letters.'),
+    otherInstructions: yup
+        .string()
+        .max(300, 'Other instructions must be no more than 300 characters long.')
+        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’ 0-9]+$/, 'Other instructions can only contain letters and numbers.')
+});
+
+const { handleSubmit } = useForm({
+    validationSchema: formSchema
+});
+
+const onSubmit = handleSubmit((values) => {
+    shippingServ.shippingCreate(values);
 });
 </script>
 
 <template>
     <section>
-        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 mt-24">
-            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">Create details</h1>
-                    <form class="space-y-4 md:space-y-6" @submit.prevent="shippingServ.shippingCreate(shipping)">
-                        <div>
-                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your phone number</label>
-                            <input type="text" name="phone" id="phone" v-model="shipping.phone" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
-                        </div>
-                        <div>
-                            <label for="street" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your street</label>
-                            <input type="text" name="street" id="street" v-model="shipping.street" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
-                        </div>
-                        <div>
-                            <label for="unit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your unit</label>
-                            <input type="text" name="unit" id="unit" v-model="shipping.unit" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
-                        </div>
-                        <div class="flex flex-wrap -mx-3">
-                            <div class="w-full px-3">
-                                <label for="apartment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apartment number</label>
-                                <input type="number" name="apartment" id="apartment" v-model="shipping.apartmentNumber" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
-                            </div>
-                            <div class="w-1/2 px-3 mt-6">
-                                <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                                <input type="text" name="country" id="country" v-model="shipping.country" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
-                            </div>
-                            <div class="w-1/2 px-3 mt-6">
-                                <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
-                                <input type="text" name="city" id="city" v-model="shipping.city" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
-                            </div>
-                        </div>
-                        <div>
-                            <label for="other_instructions" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Other Instructions</label>
-                            <textarea type="text" name="other_instructions" id="other_instructions" v-model="shipping.otherInstructions" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" />
+        <div class="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
+            <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-lg shadow md:mt-0 sm:max-w-lg xl:p-0">
+                <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create Shipping Address</h1>
+                    <form class="max-w-md mx-auto" @submit.prevent="onSubmit">
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="phone" v-slot="{ field, meta }">
+                                <input type="text" id="floating_phone" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_phone" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone number</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="phone" class="text-red-500 text-xs mt-1" />
+                            </Field>
                         </div>
 
-                        <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700">Create details</button>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="street" v-slot="{ field, meta }">
+                                <input type="text" id="floating_street" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_street" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Street address</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="street" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
+
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="unit" v-slot="{ field, meta }">
+                                <input type="text" id="floating_unit" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_unit" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Unit address</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="unit" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
+
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="apartmentNumber" v-slot="{ field, meta }">
+                                <input type="number" id="apartmentNumber" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="apartmentNumber" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apartment umber</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="apartmentNumber" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
+
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="country" v-slot="{ field, meta }">
+                                <input type="text" id="country" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="country" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Country</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="country" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
+
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="city" v-slot="{ field, meta }">
+                                <input type="text" id="city" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="city" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">City</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="city" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
+
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="otherInstructions" v-slot="{ field, meta }">
+                                <textarea type="text" id="otherInstructions" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="otherInstructions" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Other instruction</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="otherInstructions" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
+                        <button type="submit" class="w-full text-gray-50 bg-gray-700 hover:bg-gray-900 dark:text-ecru-50 dark:bg-ecru-950 dark:hover:bg-ecru-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
                     </form>
                 </div>
             </div>

@@ -25,13 +25,14 @@ export function authService() {
 
             if (response.status == 201 && response.data.token) {
                 setWithExpiry(response.data.token);
+                localStorage.setItem('userRole', response.data.user.role);
                 isLoggedIn.value = true;
                 router.push({ name: 'home' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
             // mostrem els error en cas que no pugui retornar les dades
-            console.error('Error al fer register:', errorMessage.message);
+            console.error('Error al fer register:', errorMessage);
         }
     };
 
@@ -107,14 +108,16 @@ export function authService() {
     };
 
     const userEdit = async (user: any) => {
+        console.log(user);
+
         try {
             const userToken = verifyToken();
 
             const verificationResponse = await axios.post<UserApiResponse>(
                 '/auth/users/verify-credentials',
                 {
-                    email: user.value.email,
-                    password: user.value.currentPassword
+                    email: user.email,
+                    password: user.currentPassword
                 },
                 {
                     headers: {
@@ -128,12 +131,12 @@ export function authService() {
                 const response = await axios.post<UserApiResponse>(
                     '/auth/users/update',
                     {
-                        name: user.value.name,
-                        surnames: user.value.surnames,
-                        email: user.value.email,
-                        birthdate: user.value.birthdate,
-                        password: user.value.newPassword,
-                        password_confirmation: user.value.newPasswordConfirmation
+                        name: user.name,
+                        surnames: user.surnames,
+                        email: user.email,
+                        birthdate: user.birthdate,
+                        password: user.newPassword,
+                        password_confirmation: user.newPasswordConfirmation
                     },
                     {
                         headers: {

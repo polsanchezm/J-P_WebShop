@@ -104,7 +104,7 @@ class StripeController extends Controller
 
         if (Gate::allows('createOrder', [Order::class, $stripeSession]) && request()->query('token') === session('payment_token')) {
             $lineItems = $this->convertStripeLineItems($stripeSession->line_items->data);
-            $result = $this->createOrder($lineItems, $sessionId);
+            $result = $this->createOrder($lineItems, $sessionId, $stripeSession);
 
             return response()->json([
                 'message' => $result['message'],
@@ -115,7 +115,7 @@ class StripeController extends Controller
         }
     }
 
-    protected function createOrder($lineItems, $sessionId)
+    protected function createOrder($lineItems, $sessionId, $stripeSession)
     {
         if (!$sessionId) {
             return [
@@ -133,7 +133,7 @@ class StripeController extends Controller
             ];
         }
 
-        $this->authorize('create', OrderDetail::class);
+        $this->authorize('createOrder', $stripeSession);
         $userId = Auth::user()->id;
         $order = Order::create(['user_id' => $userId, 'stripe_session_id' => $sessionId]);
 

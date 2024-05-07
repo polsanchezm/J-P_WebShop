@@ -13,7 +13,7 @@ class OrderPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === 'user' || 'manager';
+        return $user->role === 'client' || 'manager';
     }
 
     /**
@@ -29,7 +29,7 @@ class OrderPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'user';
+        return $user->role === 'client';
     }
 
     /**

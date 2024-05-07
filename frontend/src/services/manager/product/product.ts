@@ -2,37 +2,31 @@ import axios, { type ErrorResponse } from '@/lib/axios';
 import router from '@/router';
 import { type Product } from '@/models/product';
 import { type ProductVariant } from '@/models/productVariant';
+import { useVerifyToken } from '@/composables/verifyToken';
 
 export function productManagementService() {
-    const addProduct = async (product: Product) => {
-        console.log(product);
+    const { verifyToken } = useVerifyToken();
+    const addProduct = async (productData: any, file: any) => {
+        console.log(productData);
+        console.log(file);
         try {
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
+            const formData = new FormData();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            formData.append('name', productData.name);
+            formData.append('description', productData.description);
+            formData.append('price', productData.price);
+            formData.append('category_id', productData.categoryId);
+            formData.append('file', file.value);
 
             // fem una crida a la api
             const response = await axios.post<Product>(
                 '/app/products/create',
-                {
-                    category_id: product.categoryId,
-                    id: product.id,
-                    description: product.description,
-                    image: product.image,
-                    name: product.name,
-                    price: product.price,
-                    quantity: product.quantity
-                },
+                formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
-                        'content-type': 'multipart/form-data'
+                        Authorization: `Bearer ${userToken}`,
+                        'Content-Type': 'multipart/form-data'
                     }
                 }
             );
@@ -53,20 +47,13 @@ export function productManagementService() {
                 console.log('Received null ID, aborting detail retrieval.');
                 return;
             }
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
             const response = await axios.delete(`/app/products/delete/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -89,15 +76,8 @@ export function productManagementService() {
                 return;
             }
 
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
             const response = await axios.post<Product>(
@@ -111,7 +91,7 @@ export function productManagementService() {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
+                        Authorization: `Bearer ${userToken}`,
                         'content-type': 'multipart/form-data'
                     }
                 }
@@ -130,15 +110,8 @@ export function productManagementService() {
     const addVariant = async (productVariant: ProductVariant) => {
         console.log(productVariant);
         try {
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
             const response = await axios.post<ProductVariant>(
@@ -153,7 +126,7 @@ export function productManagementService() {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
+                        Authorization: `Bearer ${userToken}`,
                         'content-type': 'multipart/form-data'
                     }
                 }
@@ -178,15 +151,8 @@ export function productManagementService() {
                 return;
             }
 
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
             const response = await axios.post<ProductVariant>(
@@ -199,7 +165,7 @@ export function productManagementService() {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
+                        Authorization: `Bearer ${userToken}`,
                         'content-type': 'multipart/form-data'
                     }
                 }
@@ -221,20 +187,13 @@ export function productManagementService() {
                 console.log('Received null ID, aborting detail retrieval.');
                 return;
             }
-            const tokenString = localStorage.getItem('token');
+            const userToken = verifyToken();
 
-            if (tokenString === null) {
-                // No hay token disponible, maneja esta situación adecuadamente
-                console.error('No token found in localStorage.');
-                return null; // Salimos de la función si no hay token
-            }
-
-            const tokenObj = JSON.parse(tokenString);
 
             // fem una crida a la api
             const response = await axios.delete(`/app/products/variants/delete/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
