@@ -27,7 +27,7 @@ export function productService() {
         try {
             // fem una crida a la api
             const response = await axios.get<Product>('/app/products/detail/' + productId);
-            console.log(response.data);
+            // console.log(response.data);
             if (response.status == 200) {
                 oneProductDetail.value = response.data;
                 productVariants.value = response.data.productVariants;

@@ -7,13 +7,6 @@ import { useVerifyToken } from '@/composables/verifyToken';
 export function productManagementService() {
     const { verifyToken } = useVerifyToken();
     const addProduct = async (productData: any) => {
-        console.log('data', {
-            name: productData.name,
-            description: productData.description,
-            category_id: productData.categoryId,
-            image: productData.image,
-            price: productData.price
-        });
         try {
             const userToken = verifyToken();
             const formData = new FormData();
@@ -23,10 +16,6 @@ export function productManagementService() {
             formData.append('category_id', productData.categoryId.toString());
             formData.append('image', productData.image);
             formData.append('price', productData.price);
-
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
 
             // fem una crida a la api
             const response = await axios.post<Product>('/app/products/create', formData, {
@@ -71,27 +60,25 @@ export function productManagementService() {
         }
     };
 
-    const updateProduct = async (product: Product) => {
-        console.log(product);
-
+    const updateProduct = async (productData: any) => {
         try {
-            if (product.id === null) {
+            if (productData.id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
                 return;
             }
 
             const userToken = verifyToken();
+            const formData = new FormData();
+
+            formData.append('name', productData.name);
+            formData.append('description', productData.description);
+            formData.append('category_id', productData.categoryId.toString());
+            formData.append('image', productData.image);
+            formData.append('price', productData.price);
 
             // fem una crida a la api
             const response = await axios.post<Product>(
-                `/app/products/update/${product.id}`,
-                {
-                    name: product.name,
-                    description: product.description,
-                    image: product.image,
-                    category_id: product.categoryId,
-                    price: product.price
-                },
+                `/app/products/update/${productData.productId}`, formData,
                 {
                     headers: {
                         Authorization: `Bearer ${userToken}`,
@@ -110,8 +97,7 @@ export function productManagementService() {
         }
     };
 
-    const addVariant = async (productVariant: ProductVariant) => {
-        console.log(productVariant);
+    const addVariant = async (productVariant: any) => {
         try {
             const userToken = verifyToken();
 
@@ -144,9 +130,8 @@ export function productManagementService() {
         }
     };
 
-    const updateVariant = async (productVariant: ProductVariant) => {
-        console.log(productVariant);
-
+    const updateVariant = async (productVariant: any) => {
+        console.log('service', productVariant);
         try {
             if (productVariant.id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
