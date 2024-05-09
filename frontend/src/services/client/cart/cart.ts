@@ -14,6 +14,7 @@ export function cartService() {
             const successUrl = window.location.origin + router.resolve({ name: 'payment.success' }).href;
             const cancelUrl = window.location.origin + router.resolve({ name: 'payment.cancel' }).href;
 
+            // Petició a l'API per a iniciar el pagament
             const response = await axios.post(
                 '/app/payment/initiate ',
                 {
@@ -30,19 +31,20 @@ export function cartService() {
             console.log(response);
 
             if (response.status === 200) {
-                window.location.href = response.data.url; // URL para completar el pago en Stripe
+                window.location.href = response.data.url; // URL per completar el pagament en Stripe
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al fer el pagament', errorMessage);
         }
     };
+
 
     const paymentInfo = async (sessionId: any) => {
         try {
             const userToken = verifyToken();
 
+            // Petició a l'API per a obtenir la informació del pagament
             const response = await axios.get(`/app/payment/success/${sessionId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -54,7 +56,6 @@ export function cartService() {
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al fer el pagament', errorMessage);
         }
     };

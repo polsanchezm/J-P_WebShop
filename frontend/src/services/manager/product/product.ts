@@ -11,13 +11,7 @@ export function productManagementService() {
             const userToken = verifyToken();
             const formData = new FormData();
 
-            formData.append('name', productData.name);
-            formData.append('description', productData.description);
-            formData.append('category_id', productData.categoryId.toString());
-            formData.append('image', productData.image);
-            formData.append('price', productData.price);
-
-            // fem una crida a la api
+            // Crida a l'API per crear un nou producte
             const response = await axios.post<Product>('/app/products/create', formData, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
@@ -26,6 +20,7 @@ export function productManagementService() {
             });
 
             if (response.status == 200) {
+                // Porta a la ruta que mostra tots els productes
                 router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
@@ -35,15 +30,18 @@ export function productManagementService() {
         }
     };
 
+
     const deleteProduct = async (id: number | null) => {
         try {
             if (id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
+
+                // Surt de la funció si no rep un ID vàlid
                 return;
             }
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Petició a l'API per eliminar un producte
             const response = await axios.delete(`/app/products/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -51,11 +49,11 @@ export function productManagementService() {
             });
 
             if (response.status == 200) {
+                // Porta a la pàgina de tots els productes
                 router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en eliminar el producte:', errorMessage.message);
         }
     };
@@ -64,9 +62,11 @@ export function productManagementService() {
         try {
             if (productData.id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
+
+                // Surt de la funció si no rep un ID vàlid
                 return;
             }
-
+          
             const userToken = verifyToken();
             const formData = new FormData();
 
@@ -76,7 +76,7 @@ export function productManagementService() {
             formData.append('image', productData.image);
             formData.append('price', productData.price);
 
-            // fem una crida a la api
+            // Crida a l'API per modificar els detalls d'un producte
             const response = await axios.post<Product>(
                 `/app/products/update/${productData.productId}`, formData,
                 {
@@ -88,11 +88,11 @@ export function productManagementService() {
             );
 
             if (response.status == 200) {
+                // Porta a la ruta que mostra tots els productes
                 router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al editar el producte:', errorMessage);
         }
     };
@@ -101,7 +101,7 @@ export function productManagementService() {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Petició a l'APi per afegir una nova variant d'un producte
             const response = await axios.post<ProductVariant>(
                 '/app/products/variants/create',
                 {
@@ -121,11 +121,11 @@ export function productManagementService() {
             );
 
             if (response.status == 200) {
+                // Porta a la pàgina de tots els productes
                 router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al crear la variant', errorMessage.response);
         }
     };
@@ -135,12 +135,14 @@ export function productManagementService() {
         try {
             if (productVariant.id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
+
+                // Surt de la funció si no rep un ID vàlid
                 return;
             }
 
             const userToken = verifyToken();
-
-            // fem una crida a la api
+          
+            // Crida a l'API per modificar una variant d'un producte
             const response = await axios.post<ProductVariant>(
                 `/app/products/variants/update/${productVariant.id}`,
                 {
@@ -158,24 +160,27 @@ export function productManagementService() {
             );
 
             if (response.status == 200) {
+                // Redirigeix a la pàgina de tots els productes
                 router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al editar la variant:', errorMessage.response);
         }
     };
+
 
     const deleteVariant = async (id: number | null) => {
         try {
             if (id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
+
+                // Surt de la funció si no repp un ID vàlid
                 return;
             }
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Crida a l'API per eliminar una variant d'un producte
             const response = await axios.delete(`/app/products/variants/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -183,11 +188,11 @@ export function productManagementService() {
             });
 
             if (response.status == 200) {
+                // Redirigeix a la pàgina de tots els productes
                 router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en eliminar la variant:', errorMessage.message);
         }
     };

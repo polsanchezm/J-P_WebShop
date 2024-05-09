@@ -12,7 +12,7 @@ export function wishlistService() {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Petició per a obtenir els ítems que pertanyen a la wishlist
             const response = await axios.get<ProductItem[]>('/app/wishlist/items', {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -24,7 +24,6 @@ export function wishlistService() {
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en obtenir el wishlist items', errorMessage.message);
         }
     };
@@ -33,7 +32,7 @@ export function wishlistService() {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Petició per afegir/crear un nou ítem a la wishlist
             const response = await axios.post<ProductItem>(
                 '/app/wishlist/items/create',
                 {
@@ -51,7 +50,6 @@ export function wishlistService() {
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al crear el wishlist item:', errorMessage.response);
         }
     };

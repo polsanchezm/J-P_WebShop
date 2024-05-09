@@ -10,7 +10,7 @@ export function productService() {
 
     const allProducts = async () => {
         try {
-            // fem una crida a la api
+            // Petició a l'API per a obtenir tots els productes
             const response = await axios.get<Product[]>('/app/products/');
 
             if (response.status == 200) {
@@ -18,23 +18,25 @@ export function productService() {
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en obtenir els productes', errorMessage.message);
         }
     };
 
+    
     const oneProduct = async (productId: number) => {
         try {
-            // fem una crida a la api
+            // Crida a l'API per a obtenir el detall i les variants d'un producte
             const response = await axios.get<Product>('/app/products/detail/' + productId);
             // console.log(response.data);
             if (response.status == 200) {
+                // Detall general d'un producte
                 oneProductDetail.value = response.data;
+                
+                // Les seves variants com color, mida,...
                 productVariants.value = response.data.productVariants;
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en obtenir el detail del producte', errorMessage.message);
         }
     };
