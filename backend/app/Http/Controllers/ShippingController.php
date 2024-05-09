@@ -32,18 +32,21 @@ class ShippingController extends Controller
     public function store(ShippingRequest $request)
     {
         $this->authorize('create', ShippingDetail::class);
-        $input = $request->all();
         $userId = Auth::user()->id;
         $shipping = ShippingDetail::create([
             'user_id' => $userId,
-            'phone' => $input['phone'],
-            'street' => $input['street'],
-            'unit' => $input['unit'],
-            'apartment_number' => $input['apartment_number'],
-            'country' => $input['country'],
-            'city' => $input['city'],
-            'other_instructions' => $input['other_instructions']
+            'phone' => $request->phone,
+            'street' => $request->street,
+            'unit' => $request->unit,
+            'apartment_number' => $request->apartment_number,
+            'country' => $request->country,
+            'city' => $request->city,
         ]);
+        if ($request->other_instructions) {
+            $shipping->other_instructions = $request->other_instructions;
+        }
+        $shipping->save();
+        $shipping->refresh();
         return response()->json([
             'message' => 'Shipping stored successfully',
             'shipping' => $shipping

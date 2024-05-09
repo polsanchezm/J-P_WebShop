@@ -15,14 +15,13 @@ class AuthController extends Controller
     // Register API (POST, formdata)
     public function register(RegisterRequest $request)
     {
-        $registerUserData = $request->validated();
         $user = User::create([
-            'name' => $registerUserData['name'],
-            'surnames' => $registerUserData['surnames'],
-            'birthdate' => $registerUserData['birthdate'],
+            'name' => $request->name,
+            'surnames' => $request->surnames,
+            'birthdate' => $request->birthdate,
             'role' => 'client',
-            'email' => $registerUserData['email'],
-            'password' => Hash::make($registerUserData['password']),
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
         Auth::login($user);
         // Generar token para la sesión del usuario
@@ -41,8 +40,7 @@ class AuthController extends Controller
     // Login API (POST, formdata)
     public function login(LoginRequest $request)
     {
-        $loginUserData = $request->validated();
-        $user = User::where('email', $loginUserData['email'])->first();
+        $user = User::where('email', $request->email)->first();
         if (!empty($user)) {
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;

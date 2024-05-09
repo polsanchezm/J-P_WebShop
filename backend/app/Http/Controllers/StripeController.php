@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StripeRequest;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Stripe\StripeClient;
@@ -75,12 +74,11 @@ class StripeController extends Controller
 
     public function initiatePayment(StripeRequest $request)
     {
-        $validData = $request->validated();
         $user = Auth::user();
-        $items = $validData['cartItems'];
+        $items = $request->cartItems;
         $lineItems = $this->prepareLineItems($items);
-        $successUrl = $validData['success_url'] . '?session_id={CHECKOUT_SESSION_ID}';
-        $cancelUrl = $validData['cancel_url'] . '?session_id={CHECKOUT_SESSION_ID}';
+        $successUrl = $request->success_url . '?session_id={CHECKOUT_SESSION_ID}';
+        $cancelUrl = $request->cancel_url . '?session_id={CHECKOUT_SESSION_ID}';
         $customFields = $this->prepareCustomFields($user->shippingDetails);
 
         $response = $this->stripeClient->checkout->sessions->create([
@@ -102,20 +100,19 @@ class StripeController extends Controller
             ['expand' => ['line_items.data.price.product']]
         );
 
-        if (Gate::allows('createOrder', [Order::class, $stripeSession]) && request()->query('token') === session('payment_token')) {
-            $lineItems = $this->convertStripeLineItems($stripeSession->line_items->data);
-            $result = $this->createOrder($lineItems, $sessionId, $stripeSession);
+        $lineItems = $this->convertStripeLineItems($stripeSession->line_items->data);
+        $result = $this->createOrder($lineItems, $sessionId);
 
-            return response()->json([
-                'message' => $result['message'],
-                'order' => $result['order'],
-                'paymentStatus' => $stripeSession->payment_status,
-                'shippingId' => $stripeSession->custom_fields[0]->dropdown->value,
-            ], $result['status']);
-        }
+        return response()->json([
+            'message' => $result['message'],
+            'order' => $result['order'],
+            'paymentStatus' => $stripeSession->payment_status,
+            'shippingId' => $stripeSession->custom_fields[0]->dropdown->value,
+        ], $result['status']);
+
     }
 
-    protected function createOrder($lineItems, $sessionId, $stripeSession)
+    protected function createOrder($lineItems, $sessionId)
     {
         if (!$sessionId) {
             return [
@@ -133,9 +130,9 @@ class StripeController extends Controller
             ];
         }
 
-        $this->authorize('createOrder', $stripeSession);
         $userId = Auth::user()->id;
         $order = Order::create(['user_id' => $userId, 'stripe_session_id' => $sessionId]);
+        $this->authorize('createOrder', $order);
 
         foreach ($lineItems as $item) {
             OrderDetail::create([

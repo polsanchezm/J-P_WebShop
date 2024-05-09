@@ -27,13 +27,13 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
         $validData = $request->validated();
-        $imagePath = $validData['image'];
+        $imagePath = $request->image;
         $image = ManageImage::storeImage($imagePath);
         $product = Product::create([
-            'name' => $validData['name'],
-            'description' => $validData['description'],
-            'category_id' => $validData['category_id'],
-            'price' => floatval($validData['price']),
+            'name' => $request->name,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'price' => floatval($request->price),
             'image' => $image,
         ]);
         return response()->json([
@@ -67,16 +67,16 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
-        $validData = $request->validated();
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image');
             if ($product->image) {
                 ManageImage::deleteImage($product->image);
             }
             $imageName = ManageImage::storeImage($imagePath);
-            $validData['image'] = $imageName;
+            $product->image = $imageName;
         }
-        $product->update($validData);
+        $product->update($request->except(['image']));
+
         return response()->json([
             'message' => 'Product updated successfully',
             'product' => $product
