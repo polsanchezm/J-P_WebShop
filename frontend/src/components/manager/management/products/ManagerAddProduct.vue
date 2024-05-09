@@ -1,70 +1,97 @@
 <script setup lang="ts">
+import { useForm, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 import { ref } from 'vue';
-import { type Product } from '@/models/product';
 import { productManagementService } from '@/services/manager/product/product';
 
 const managerProductServ = productManagementService();
+const imageFile = ref<File | null>(null);
+const imageUrl = ref<string | null>(null);
 
-let product = ref<Product>({
-    id: 0,
-    name: '',
-    description: '',
-    image: '',
-    price: '',
-    categoryId: 0,
-    productVariants: [],
-    quantity: 1,
-    wishlistId: 0
+const handleFileChange = (e: Event) => {
+    const files = (e.target as HTMLInputElement).files;
+    if (files && files[0]) {
+        imageFile.value = files[0];
+        imageUrl.value = URL.createObjectURL(files[0]);
+    }
+};
+
+const formSchema = yup.object({
+    name: yup
+        .string()
+        .required('Name is required.')
+        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’]+$/, 'Name can only contain letters.'),
+    description: yup
+        .string()
+        .required('Description is required.')
+        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’0-9]+$/, 'Description can only contain letters and numbers.'),
+    price: yup
+        .string()
+        .required('Product price is required.')
+        .matches(/^[0-9]+(\.[0-9]{1,2})?$/, 'Product price must be a valid number.')
+        .typeError('Product price must be numeric.')
 });
 
-let imageUrl: any = ref(null);
+const { handleSubmit } = useForm({
+    validationSchema: formSchema
+});
 
-const insertedFile = (e: any) => {
-    product.value.image = e.target.files[0];
-    imageUrl.value = URL.createObjectURL(e.target.files[0]);
-};
+const onSubmit = handleSubmit((values) => {
+    managerProductServ.addProduct({ ...values, image: imageFile.value });
+});
 </script>
 
 <template>
-    <div class="mt-28">
-        <form @submit.prevent="managerProductServ.addProduct(product)" enctype="multipart/form-data" class="max-w-md mx-auto">
-            <div class="relative z-0 w-full mb-5 group">
-                <input type="text" name="name" id="name" v-model="product.name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                <label for="name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"> Product Name</label>
-            </div>
+    <section>
+        <div class="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
+            <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-lg shadow md:mt-0 sm:max-w-lg xl:p-0">
+                <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create Product</h1>
+                    <form class="max-w-md mx-auto" @submit.prevent="onSubmit" enctype="multipart/form-data">
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="name" v-slot="{ field, meta }">
+                                <input type="text" id="name" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="name" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product name</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="name" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
 
-            <div class="relative z-0 w-full mb-5 group">
-                <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Product description</label>
-                <textarea id="message" rows="4" v-model="product.description" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Leave a comment..."></textarea>
-            </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="description" v-slot="{ field, meta }">
+                                <input type="text" id="floating_description" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_description" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product description</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="description" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
 
-            <div id="preview">
-                <img v-if="imageUrl" :src="imageUrl" />
-            </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <img v-if="imageUrl" :src="imageUrl" />
+                            <input type="file" id="image" @change="handleFileChange" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" required />
+                        </div>
 
-            <div class="relative z-0 w-full mb-5 group">
-                <input type="file" accept="image/*" v-on:change="insertedFile" name="image" id="image" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                <label for="image" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"> Product image</label>
-            </div>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="price" v-slot="{ field, meta }">
+                                <input type="text" id="price" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="price" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product price</label>
+                                <ErrorMessage v-if="meta.touched && meta.dirty" name="price" class="text-red-500 text-xs mt-1" />
+                            </Field>
+                        </div>
 
-            <div class="relative z-0 w-full mb-5 group">
-                <input type="text" name="price" id="price" v-model="product.price" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                <label for="price" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"> Product Price</label>
+                        <div class="relative z-0 w-full mb-5 group">
+                            <Field name="categoryId" id="categoryId" as="select" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required>
+                                <option :value="1">Top</option>
+                                <option :value="2">Bottom</option>
+                                <option :value="3">Underwear</option>
+                                <option :value="4">Footwear</option>
+                            </Field>
+                            <label for="categoryId" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product category</label>
+                        </div>
+                        <button type="submit" class="w-full text-gray-50 bg-gray-700 hover:bg-gray-900 dark:text-ecru-50 dark:bg-ecru-950 dark:hover:bg-ecru-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create</button>
+                    </form>
+                </div>
             </div>
-
-            <div class="relative z-0 w-full mb-5 group">
-                <label for="categories" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category product</label>
-                <select id="categories" v-model="product.categoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option :value="1" selected>Top</option>
-                    <option :value="2">Bottom</option>
-                    <option :value="3">Underwear</option>
-                    <option :value="4">Footwear</option>
-                </select>
-            </div>
-
-            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-        </form>
-    </div>
+        </div>
+    </section>
 </template>
 
 <style scoped></style>

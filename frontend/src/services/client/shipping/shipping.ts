@@ -10,7 +10,7 @@ export function shippingService() {
     const oneShipping = ref<Shipping | null>(null);
     const { verifyToken } = useVerifyToken();
 
-    const shippingCreate = async (shipping: Shipping) => {
+    const shippingCreate = async (shipping: any) => {
         try {
             const userToken = verifyToken();
 
@@ -50,7 +50,7 @@ export function shippingService() {
     };
 
 
-    const shippingEdit = async (shipping: Shipping, id: number | null) => {
+    const shippingEdit = async (shipping: any, id: number | null) => {
         try {
             const userToken = verifyToken();
 

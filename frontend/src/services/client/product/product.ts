@@ -27,7 +27,7 @@ export function productService() {
         try {
             // Crida a l'API per a obtenir el detall i les variants d'un producte
             const response = await axios.get<Product>('/app/products/detail/' + productId);
-            console.log(response.data);
+            // console.log(response.data);
             if (response.status == 200) {
                 // Detall general d'un producte
                 oneProductDetail.value = response.data;

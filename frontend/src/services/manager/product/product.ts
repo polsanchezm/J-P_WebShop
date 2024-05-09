@@ -2,42 +2,22 @@ import axios, { type ErrorResponse } from '@/lib/axios';
 import router from '@/router';
 import { type Product } from '@/models/product';
 import { type ProductVariant } from '@/models/productVariant';
+import { useVerifyToken } from '@/composables/verifyToken';
 
 export function productManagementService() {
-    const addProduct = async (product: Product) => {
-        console.log(product);
+    const { verifyToken } = useVerifyToken();
+    const addProduct = async (productData: any) => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hi ha token disponible
-                console.error('No token found in localStorage.');
-
-                // Surt de la funció si no hi ha token
-                return null;
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
+            const formData = new FormData();
 
             // Crida a l'API per crear un nou producte
-            const response = await axios.post<Product>(
-                '/app/products/create',
-                {
-                    category_id: product.categoryId,
-                    id: product.id,
-                    description: product.description,
-                    image: product.image,
-                    name: product.name,
-                    price: product.price,
-                    quantity: product.quantity
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
-                        'content-type': 'multipart/form-data'
-                    }
+            const response = await axios.post<Product>('/app/products/create', formData, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                    'Content-Type': 'multipart/form-data',
                 }
-            );
+            });
 
             if (response.status == 200) {
                 // Porta a la ruta que mostra tots els productes
@@ -45,7 +25,8 @@ export function productManagementService() {
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            console.error('Error al crear el producte', errorMessage.response);
+            // mostrem els error en cas que no pugui retornar les dades
+            console.error('Error al crear el producte', errorMessage);
         }
     };
 
@@ -58,22 +39,12 @@ export function productManagementService() {
                 // Surt de la funció si no rep un ID vàlid
                 return;
             }
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hi ha token disponible
-                console.error('No token found in localStorage.');
-
-                // Surt de la funció si no hi ha token
-                return null;
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // Petició a l'API per eliminar un producte
             const response = await axios.delete(`/app/products/delete/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 
@@ -87,43 +58,30 @@ export function productManagementService() {
         }
     };
 
-
-    const updateProduct = async (product: Product) => {
-        console.log(product);
-
+    const updateProduct = async (productData: any) => {
         try {
-            if (product.id === null) {
+            if (productData.id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
 
                 // Surt de la funció si no rep un ID vàlid
                 return;
             }
+          
+            const userToken = verifyToken();
+            const formData = new FormData();
 
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                // No hi ha token disponible
-                console.error('No token found in localStorage.');
-
-                // Surt de la funció si no hi ha token
-                return null;
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            formData.append('name', productData.name);
+            formData.append('description', productData.description);
+            formData.append('category_id', productData.categoryId.toString());
+            formData.append('image', productData.image);
+            formData.append('price', productData.price);
 
             // Crida a l'API per modificar els detalls d'un producte
             const response = await axios.post<Product>(
-                `/app/products/update/${product.id}`,
-                {
-                    name: product.name,
-                    description: product.description,
-                    image: product.image,
-                    category_id: product.categoryId,
-                    price: product.price
-                },
+                `/app/products/update/${productData.productId}`, formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
+                        Authorization: `Bearer ${userToken}`,
                         'content-type': 'multipart/form-data'
                     }
                 }
@@ -139,20 +97,9 @@ export function productManagementService() {
         }
     };
 
-
-    const addVariant = async (productVariant: ProductVariant) => {
-        console.log(productVariant);
+    const addVariant = async (productVariant: any) => {
         try {
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                console.error('No token found in localStorage.');
-                
-                // Surt de la funció si no hi ha token
-                return null; 
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // Petició a l'APi per afegir una nova variant d'un producte
             const response = await axios.post<ProductVariant>(
@@ -167,7 +114,7 @@ export function productManagementService() {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
+                        Authorization: `Bearer ${userToken}`,
                         'content-type': 'multipart/form-data'
                     }
                 }
@@ -183,10 +130,8 @@ export function productManagementService() {
         }
     };
 
-
-    const updateVariant = async (productVariant: ProductVariant) => {
-        console.log(productVariant);
-
+    const updateVariant = async (productVariant: any) => {
+        console.log('service', productVariant);
         try {
             if (productVariant.id === null) {
                 console.log('Received null ID, aborting detail retrieval.');
@@ -195,17 +140,8 @@ export function productManagementService() {
                 return;
             }
 
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                console.error('No token found in localStorage.');
-
-                // Surt de la funció si no hi ha token
-                return null
-            }
-
-            const tokenObj = JSON.parse(tokenString);
-
+            const userToken = verifyToken();
+          
             // Crida a l'API per modificar una variant d'un producte
             const response = await axios.post<ProductVariant>(
                 `/app/products/variants/update/${productVariant.id}`,
@@ -217,7 +153,7 @@ export function productManagementService() {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${tokenObj.value}`,
+                        Authorization: `Bearer ${userToken}`,
                         'content-type': 'multipart/form-data'
                     }
                 }
@@ -242,21 +178,12 @@ export function productManagementService() {
                 // Surt de la funció si no repp un ID vàlid
                 return;
             }
-            const tokenString = localStorage.getItem('token');
-
-            if (tokenString === null) {
-                console.error('No token found in localStorage.');
-
-                // Surt de la funció si no hi ha token
-                return null;
-            }
-
-            const tokenObj = JSON.parse(tokenString);
+            const userToken = verifyToken();
 
             // Crida a l'API per eliminar una variant d'un producte
             const response = await axios.delete(`/app/products/variants/delete/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${tokenObj.value}`
+                    Authorization: `Bearer ${userToken}`
                 }
             });
 

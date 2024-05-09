@@ -5,17 +5,16 @@ export const isAuthenticatedGuard = async (to: any, from: any, next: any) => {
 
     if (!to.meta.requiresAuth) {
         return next();
-    } else if (!auth.isLoggedIn.value) {
+    }
+    if (!auth.isLoggedIn.value) {
         return next({ name: 'login' });
+    }
+    if (to.meta.requiresRoleManager && auth.userRole.value !== 'manager') {
+        return next({ name: 'home' });
+    }
+    if (to.meta.requiresRoleClient && auth.userRole.value !== 'client') {
+        return next({ name: 'manager.dashboard' });
     } else {
-        console.log(auth.userRole.value);
-
-        if (to.meta.requiresRoleManager && auth.userRole.value !== 'manager') {
-            return next({ name: 'home' });
-        } else if (to.meta.requiresRoleClient && auth.userRole.value !== 'client') {
-            return next({ name: 'manager.dashboard' });
-        } else {
-            return next();
-        }
+        return next();
     }
 };

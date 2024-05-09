@@ -62,21 +62,18 @@ const router = createRouter({
                                     name: 'shipping.all',
                                     component: () => import('@/views/client/profile/shipping/AllShippingsView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
-
                                 },
                                 {
                                     path: 'create',
                                     name: 'shipping.create',
                                     component: () => import('@/views/client/profile/shipping/ShippingCreateView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
-
                                 },
                                 {
                                     path: 'edit/:id',
                                     name: 'shipping.edit',
                                     component: () => import('@/views/client/profile/shipping/ShippingEditView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
-
                                 }
                             ]
                         },
