@@ -14,7 +14,7 @@ const paramId = route.params.id;
 const productId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 
 onBeforeMount(async () => {
-    await productServ.oneProduct(productId);
+    await productServ.oneProduct(productId, editVariantId.value);
     console.log('product', productServ.oneProductDetail.value);
     console.log('product variants', productServ.productVariants.value);
     console.log('productId', productServ.oneProductDetail.value!.id);
@@ -40,7 +40,8 @@ const { handleSubmit } = useForm({
 
 const createVariant = handleSubmit((values) => {
     console.log('component', values);
-    managerProductServ.addVariant(values);
+    const productData = { color: values.color, stock: values.stock, size: values.size, productId: productId };
+    managerProductServ.addVariant(productData);
 });
 
 const updateVariant = handleSubmit((values) => {
@@ -188,8 +189,8 @@ const toggleEditVariant = (index: any, variantId: any) => {
                                         size</label>
                                 </div>
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <Field name="color" v-slot="{ field, meta }">
-                                        <input type="text" id="color" v-bind="field" v-model="productVariant!.color"
+                                    <Field name="color" v-slot="{ field, meta }" v-model="productVariant!.color">
+                                        <input type="text" id="color" v-bind="field"
                                             class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer"
                                             placeholder=" " required />
                                         <label for="color"
@@ -200,8 +201,8 @@ const toggleEditVariant = (index: any, variantId: any) => {
                                     </Field>
                                 </div>
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <Field name="stock" v-slot="{ field, meta }">
-                                        <input type="text" id="stock" v-bind="field" v-model="productVariant!.stock"
+                                    <Field name="stock" v-slot="{ field, meta }" v-model="productVariant!.stock">
+                                        <input type="text" id="stock" v-bind="field"
                                             class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer"
                                             placeholder=" " required />
                                         <label for="stock"

@@ -1,7 +1,9 @@
-import axios, { type ErrorResponse } from '@/lib/axios';
+import axios from '@/lib/axios';
 import { ref } from 'vue';
 import { type Order } from '@/models/order';
 import { useVerifyToken } from '@/composables/verifyToken';
+import type { AxiosError } from 'axios';
+import router from '@/router';
 
 export function orderManagementService() {
     const allOrders = ref<Order[]>([]);
@@ -22,11 +24,13 @@ export function orderManagementService() {
                 allOrders.value = response.data;
             }
         } catch (error) {
-            const errorMessage = error as ErrorResponse;
+            const errorMessage = error as AxiosError;
             console.error('Error en obtenir les ordres', errorMessage.message);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
         }
     };
-
 
     const deleteOrder = async (orderId: number | null) => {
         try {
@@ -44,8 +48,11 @@ export function orderManagementService() {
                 allOrders.value = allOrders.value.filter((order) => order.id !== orderId);
             }
         } catch (error) {
-            const errorMessage = error as ErrorResponse;
+            const errorMessage = error as AxiosError;
             console.error("Error en eliminar l'order", errorMessage.message);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
         }
     };
 

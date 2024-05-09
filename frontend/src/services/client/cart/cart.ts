@@ -1,7 +1,8 @@
-import axios, { type ErrorResponse } from '@/lib/axios';
+import axios from '@/lib/axios';
 import { ref } from 'vue';
 import router from '@/router';
 import { useVerifyToken } from '@/composables/verifyToken';
+import type { AxiosError } from 'axios';
 
 export function cartService() {
     const { verifyToken } = useVerifyToken();
@@ -34,11 +35,13 @@ export function cartService() {
                 window.location.href = response.data.url; // URL per completar el pagament en Stripe
             }
         } catch (error) {
-            const errorMessage = error as ErrorResponse;
+            const errorMessage = error as AxiosError;
             console.error('Error al fer el pagament', errorMessage);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
         }
     };
-
 
     const paymentInfo = async (sessionId: any) => {
         try {
@@ -55,8 +58,11 @@ export function cartService() {
                 payment.value = response.data;
             }
         } catch (error) {
-            const errorMessage = error as ErrorResponse;
+            const errorMessage = error as AxiosError;
             console.error('Error al fer el pagament', errorMessage);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
         }
     };
 

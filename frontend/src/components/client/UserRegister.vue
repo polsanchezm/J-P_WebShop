@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import { authService } from '@/services/auth/auth';
-const authServ = authService();
+import { useAuthStore } from '@/stores/auth/auth';
+const authServ = useAuthStore();
 
 yup.addMethod(yup.date, 'minAge', function (minAge, message) {
     return this.test('minAge', message, function (value) {
@@ -53,7 +53,15 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit((values) => {
-    authServ.userRegister(values);
+    const registerData = {
+        name: values.name,
+        surnames: values.surnames,
+        birthdate: values.birthdate,
+        email: values.email,
+        currentPassword: values.currentPassword,
+        currentPasswordConfirmation: values.currentPasswordConfirmation,
+    };
+    authServ.registerUser(registerData);
 });
 </script>
 

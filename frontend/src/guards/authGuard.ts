@@ -1,20 +1,17 @@
-import { authService } from '@/services/auth/auth';
+import { useAuthStore } from '@/stores/auth/auth';
 
 export const isAuthenticatedGuard = async (to: any, from: any, next: any) => {
-    const auth = authService();
+    const auth = useAuthStore();
 
     if (!to.meta.requiresAuth) {
-        return next();
-    }
-    if (!auth.isLoggedIn.value) {
-        return next({ name: 'login' });
-    }
-    if (to.meta.requiresRoleManager && auth.userRole.value !== 'manager') {
-        return next({ name: 'home' });
-    }
-    if (to.meta.requiresRoleClient && auth.userRole.value !== 'client') {
-        return next({ name: 'manager.dashboard' });
+        next();
+    } else if (!auth.isLoggedIn) {
+        next({ name: 'login' });
+    } else if (to.meta.requiresRoleManager && auth.userRole !== 'manager') {
+        next({ name: 'home' });
+    } else if (to.meta.requiresRoleClient && auth.userRole !== 'client') {
+        next({ name: 'manager.dashboard' });
     } else {
-        return next();
+        next();
     }
 };

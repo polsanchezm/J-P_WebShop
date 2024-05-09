@@ -1,9 +1,10 @@
-import axios, { type ErrorResponse } from '@/lib/axios';
+import axios from '@/lib/axios';
 import router from '@/router';
 import { ref } from 'vue';
 import { type Order } from '@/models/order';
 import { type OrderDetail } from '@/models/orderDetail';
 import { useVerifyToken } from '@/composables/verifyToken';
+import type { AxiosError } from 'axios';
 
 export function orderService() {
     const orders = ref<Order[]>([]);
@@ -25,11 +26,13 @@ export function orderService() {
                 orders.value = response.data;
             }
         } catch (error) {
-            const errorMessage = error as ErrorResponse;
+            const errorMessage = error as AxiosError;
             console.error('Error en obtenir les ordres', errorMessage.message);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
         }
     };
-
 
     const userOrderDetail = async (orderId: number | null) => {
         try {
@@ -46,12 +49,14 @@ export function orderService() {
                 orderDetail.value = response.data;
             }
         } catch (error) {
-            const errorMessage = error as ErrorResponse;
+            const errorMessage = error as AxiosError;
             console.error("Error en obtenir l'order detail", errorMessage.message);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
         }
     };
 
-    
     const deleteUserOrder = async (orderId: number | null, redirect: boolean = false) => {
         try {
             const userToken = verifyToken();
@@ -73,8 +78,11 @@ export function orderService() {
                 }
             }
         } catch (error) {
-            const errorMessage = error as ErrorResponse;
+            const errorMessage = error as AxiosError;
             console.error("Error en eliminar l'order", errorMessage.message);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
         }
     };
 

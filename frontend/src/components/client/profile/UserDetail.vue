@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { authService } from '@/services/auth/auth';
-const authServ = authService();
+import { useAuthStore } from '@/stores/auth/auth';
+const authServ = useAuthStore();
 
 onBeforeMount(async () => {
-    await authServ.userDetail();
-    console.log('user', authServ.user.value);
+    await authServ.detailUser();
+    console.log('user', authServ.user);
 });
 
 const formatDate = (date: string | Date | null): string => {
@@ -20,15 +20,19 @@ const formatDate = (date: string | Date | null): string => {
 </script>
 
 <template>
-    <div v-if="authServ.user.value" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
+    <div v-if="authServ.user" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6">
         <p class="text-lg font-semibold mb-2 text-gray-700">User Information</p>
         <div>
-            <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ authServ.user.value!.id }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ authServ.user.value!.name }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Surnames:</span> {{ authServ.user.value!.surnames }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Birthdate:</span> {{ formatDate(authServ.user.value!.birthdate) }}</p>
-            <p class="text-gray-700"><span class="font-semibold">Email:</span> {{ authServ.user.value!.email }}</p>
-            <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'user.edit' }">Edit</RouterLink>
+            <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ authServ.user!.id }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ authServ.user!.name }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Surnames:</span> {{ authServ.user!.surnames }}
+            </p>
+            <p class="text-gray-700"><span class="font-semibold">Birthdate:</span> {{
+                formatDate(authServ.user!.birthdate) }}</p>
+            <p class="text-gray-700"><span class="font-semibold">Email:</span> {{ authServ.user!.email }}</p>
+            <RouterLink
+                class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"
+                :to="{ name: 'user.edit' }">Edit</RouterLink>
         </div>
     </div>
 </template>
