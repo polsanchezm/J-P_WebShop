@@ -26,7 +26,6 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $this->authorize('create', Product::class);
-        $validData = $request->validated();
         $imagePath = $request->image;
         $image = ManageImage::storeImage($imagePath);
         $product = Product::create([

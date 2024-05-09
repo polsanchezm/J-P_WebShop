@@ -78,8 +78,7 @@ class ShippingController extends Controller
         if (!$shipping) {
             return response()->json(['message' => 'Shipping not found'], 404);
         }
-        $validData = $request->validated();
-        $shipping->update($validData);
+        $shipping->update($request->all());
         return response()->json([
             'message' => 'Shipping updated successfully',
             'shipping' => $shipping

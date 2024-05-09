@@ -62,12 +62,11 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $this->authorize('update', $user);
-        $validData = $request->validated();
         $user->update([
-            'name' => $validData['name'],
-            'surnames' => $validData['surnames'],
-            'email' => $validData['email'],
-            'password' => Hash::make($validData['password']),
+            'name' => $request->name,
+            'surnames' => $request->surnames,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
         return response()->json([
             'message' => 'User updated successfully',
