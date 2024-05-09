@@ -14,7 +14,10 @@ export function shippingService() {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            /* 
+            Petició a l'API per crear un dades d'enviament nou
+            de l'usuari loguejat
+            */
             const response = await axios.post<Shipping>(
                 `/app/shipping/create`,
                 {
@@ -34,20 +37,24 @@ export function shippingService() {
             );
 
             if (response.status == 200) {
+                /* 
+                Redirigeix a la ruta de les dades d'enviament 
+                de l'usuari loguejat 
+                */
                 router.push({ name: 'shipping.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al crear el shipping:', errorMessage.response);
         }
     };
+
 
     const shippingEdit = async (shipping: Shipping, id: number | null) => {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Crida a l'API per editar un dades d'enviament específic
             const response = await axios.post<Shipping>(
                 `/app/shipping/update/${id}`,
                 {
@@ -67,20 +74,24 @@ export function shippingService() {
             );
 
             if (response.status == 200) {
+                /* 
+                Redirigeix a la ruta de les dades d'enviament 
+                de l'usuari loguejat 
+                */
                 router.push({ name: 'shipping.all' });
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al editar el shipping:', errorMessage.response);
         }
     };
+
 
     const shippingIndex = async () => {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Crida a l'API per obtenir les dades d'enviament de l'usuari
             const response = await axios.get('/app/shipping', {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -92,16 +103,16 @@ export function shippingService() {
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en obtenir el detail:', errorMessage.message);
         }
     };
 
+    
     const shippingDetail = async (id: number | null) => {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Petició a l'API per obtenir el detall d'un dades d'enviament
             const response = await axios.get(`/app/shipping/detail/${id}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -113,16 +124,16 @@ export function shippingService() {
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en obtenir el detail:', errorMessage.message);
         }
     };
+
 
     const shippingDelete = async (id: number | null) => {
         try {
             const userToken = verifyToken();
 
-            // fem una crida a la api
+            // Petició per eliminar un dades d'enviament
             const response = await axios.delete(`/app/shipping/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -130,11 +141,11 @@ export function shippingService() {
             });
 
             if (response.status == 200) {
+                // Actualitza el llistat de dades d'enviament de l'usuari
                 shipping.value = shipping.value.filter((ship) => ship.id !== id);
             }
         } catch (error) {
             const errorMessage = error as ErrorResponse;
-            // mostrem els error en cas que no pugui retornar les dades
             console.error('Error en obtenir el detail:', errorMessage.message);
         }
     };
