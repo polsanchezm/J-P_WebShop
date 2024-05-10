@@ -123,12 +123,16 @@ export const useProductStore = defineStore('product', () => {
         }
     };
 
-    const updateVariant = async (productVariant: any) => {
+    const updateVariant = async (productVariant: ProductVariant) => {
+        console.log('store', productVariant);
+
         try {
             const response = await productServ.updateVariant(productVariant);
 
             if (response.status == 200) {
                 // Redirigeix a la pàgina de tots els productes
+                console.log('response', response);
+
                 // router.push({ name: 'manager.products.all' });
             }
         } catch (error) {

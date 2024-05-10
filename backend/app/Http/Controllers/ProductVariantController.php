@@ -58,7 +58,7 @@ class ProductVariantController extends Controller
         if (!$productVariant) {
             return response()->json(['message' => 'ProductVariant not found'], 404);
         }
-        $productVariant->update();
+        $productVariant->update($request->all());
         return response()->json([
             'message' => 'ProductVariant updated successfully',
             'productVariant' => $productVariant

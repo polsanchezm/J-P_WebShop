@@ -103,5 +103,18 @@ export function authService() {
         return response;
     };
 
-    return { userRegister, userLogin, userLogout, userDetail, userEdit, userCredentrials };
+    const userDelete = async () => {
+        const userToken = verifyToken();
+
+        // Crida a l'API per actualitzar les dades de l'usuari loguejat
+        const response = await axios.delete<UserApiResponse>('/auth/users/delete', {
+            headers: {
+                Authorization: `Bearer ${userToken}`
+            }
+        });
+
+        return response;
+    };
+
+    return { userRegister, userLogin, userLogout, userDetail, userEdit, userCredentrials, userDelete };
 }

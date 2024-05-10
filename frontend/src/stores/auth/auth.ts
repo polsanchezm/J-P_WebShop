@@ -122,5 +122,30 @@ export const useAuthStore = defineStore('auth', () => {
         }
     };
 
-    return { registerUser, loginUser, logoutUser, detailUser, editUser, isLoggedIn, userRole, user };
+    const deleteUser = async () => {
+        try {
+            const response = await authServ.userDelete();
+
+            if (response.status == 200) {
+                isLoggedIn.value = false;
+
+                // Canvia el valor de la variable a null
+                userRole.value = null;
+
+                // Elimina el roken i el rol d'usuari del LocalStorage
+                localStorage.removeItem('token');
+                localStorage.removeItem('userRole');
+
+                // Porta al Home
+                router.push({ name: 'home' });
+            }
+            console.log('logout', isLoggedIn.value);
+        } catch (error) {
+            const errorMessage = error as AxiosError;
+            // Mostrar errors en cas que no pugui retornar les dades
+            console.error('Error al fer edit:', errorMessage);
+        }
+    };
+
+    return { registerUser, loginUser, logoutUser, detailUser, editUser, isLoggedIn, userRole, user, deleteUser };
 });
