@@ -106,7 +106,7 @@ export const useProductStore = defineStore('product', () => {
             const response = await productServ.addVariant(productVariant);
 
             if (response.status == 200) {
-                console.log('response variant',response.data.productVariant);
+                console.log('response variant', response.data.productVariant);
 
                 productVariants.value.push(response.data.productVariant);
                 // productServ.productVariants.value = productServ.productVariants.value.filter((variant) => variant.id !== productVariant.id);

@@ -59,7 +59,7 @@ const onSubmit = handleSubmit((values) => {
         birthdate: values.birthdate,
         email: values.email,
         currentPassword: values.currentPassword,
-        currentPasswordConfirmation: values.currentPasswordConfirmation,
+        currentPasswordConfirmation: values.currentPasswordConfirmation
     };
     authServ.registerUser(registerData);
 });

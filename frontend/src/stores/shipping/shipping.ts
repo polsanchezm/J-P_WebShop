@@ -10,7 +10,7 @@ export const useShippingStore = defineStore('shipping', () => {
     const shippinServ = shippingService();
 
     const createShipping = async (shipping: Shipping) => {
-        console.log('store',shipping);
+        console.log('store', shipping);
 
         try {
             const response = await shippinServ.shippingCreate(shipping);
