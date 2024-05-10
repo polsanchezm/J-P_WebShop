@@ -87,7 +87,7 @@ Route::prefix('app')->name('app.')->group(function () {
 
         Route::prefix('payment')->name('payment.')->group(function () {
             Route::post('initiate', [StripeController::class, 'initiatePayment'])->name('initiate');
-            Route::get('success/{sessionId}', [StripeController::class, 'paymentStatus'])->name('success');
+            Route::get('status', [StripeController::class, 'paymentStatus'])->name('status');
         });
 
 

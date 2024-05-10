@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StripeRequest;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 use Stripe\StripeClient;
 
 class StripeController extends Controller
@@ -77,11 +79,11 @@ class StripeController extends Controller
         $user = Auth::user();
         $items = $request->cartItems;
         $lineItems = $this->prepareLineItems($items);
-        $successUrl = $request->success_url . '?session_id={CHECKOUT_SESSION_ID}';
-        $cancelUrl = $request->cancel_url . '?session_id={CHECKOUT_SESSION_ID}';
+        $successUrl = $request->success_url;
+        $cancelUrl = $request->cancel_url;
         $customFields = $this->prepareCustomFields($user->shippingDetails);
 
-        $response = $this->stripeClient->checkout->sessions->create([
+        $session = $this->stripeClient->checkout->sessions->create([
             'line_items' => $lineItems,
             'mode' => 'payment',
             'customer_email' => $user->email,
@@ -90,11 +92,21 @@ class StripeController extends Controller
             'custom_fields' => $customFields,
         ]);
 
-        return response()->json(['url' => $response->url]);
+        // Set the cookie with the correct path and possibly domain
+        $encryptedSessionId = Crypt::encryptString($session->id);
+        $sessionIdCookie = cookie('session_id', $encryptedSessionId, 1, '/', null, false, true);
+        return response()->json(['url' => $session->url])->withCookie($sessionIdCookie);
     }
 
-    public function paymentStatus(string $sessionId)
+    public function paymentStatus(Request $request)
     {
+        $encryptedSessionId = $request->cookie('session_id');
+        if (empty($encryptedSessionId)) {
+            return response()->json(['error' => 'Session data is missing'], 400);
+        }
+
+        $sessionId = Crypt::decryptString($encryptedSessionId);
+
         $stripeSession = $this->stripeClient->checkout->sessions->retrieve(
             $sessionId,
             ['expand' => ['line_items.data.price.product']]
