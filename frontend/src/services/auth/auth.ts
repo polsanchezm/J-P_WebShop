@@ -61,8 +61,8 @@ export function authService() {
         const userToken = verifyToken();
 
         /**
-         * Crida a l'API per verificar les credencials de l'usuari
-         * loguejat abans de modificar les seves dades
+         * Crida a l'API per verificar les credencials de l'usuari loguejat abans de modificar
+         * les seves dades
          */
 
         const response = await axios.post<UserApiResponse>(
