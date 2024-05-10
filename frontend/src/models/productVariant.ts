@@ -5,4 +5,5 @@ export interface ProductVariant {
     stock: number | null;
     productId: number;
     quantity: number;
+    productVariant: any;
 }

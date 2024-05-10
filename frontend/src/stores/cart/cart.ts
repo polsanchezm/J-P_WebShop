@@ -1,73 +1,100 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { type ProductItem } from '@/models/productItem';
-import type { Product } from '@/models/product';
+import { cartService } from '@/services/cart/cart';
+import router from '@/router';
+import type { AxiosError } from 'axios';
+import type { Payment } from '@/models/payment';
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<ProductItem[]>([]);
+    const payment = ref<Payment | null>(null);
+    const cartServ = cartService();
 
-    const addToCart = (productItem: ProductItem) => {
-        const identifiedItem = cart.value.find((item) => item.id === productItem.id);
+    const initiatePayment = async (cartItems: any) => {
+        try {
+            // Petició a l'API per a iniciar el pagament
+            const response = await cartServ.initiatePayment(cartItems);
+            console.log(response);
+
+            if (response.status === 200) {
+                window.location.href = response.data.url; // URL per completar el pagament en Stripe
+            }
+        } catch (error) {
+            const errorMessage = error as AxiosError;
+            console.error('Error al fer el pagament', errorMessage);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
+        }
+    };
+
+    const paymentInfo = async () => {
+        try {
+            const response = await cartServ.paymentInfo();
+
+            if (response.status === 200) {
+                payment.value = response.data;
+            }
+        } catch (error) {
+            const errorMessage = error as AxiosError;
+            console.error('Error al fer el pagament', errorMessage);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
+        }
+    };
+
+    const addToCart = (productItem: ProductItem, variantId: number) => {
+        const currentCart = getCartFromLocalStorage();
+        const identifiedItem = currentCart.find((item) => item.variantId === variantId);
+
         if (!identifiedItem) {
-            const item: ProductItem = productItem;
-            cart.value.push(item);
+            currentCart.push(productItem);
         } else {
             identifiedItem.quantity++;
         }
-        saveCartToCookie(cart.value);
+
+        saveCartToLocalStorage(currentCart);
     };
 
-    const decrementQuantity = (item: ProductItem, index: number) => {
-        item.quantity === 1 ? removeFromCart(index) : item.quantity--;
-        saveCartToCookie(cart.value);
+    const decrementQuantity = (index: number) => {
+        const cart = getCartFromLocalStorage();
+        if (cart[index].quantity === 1) {
+            removeFromCart(index);
+        } else {
+            cart[index].quantity--;
+        }
+        saveCartToLocalStorage(cart);
     };
 
-    const incrementQuantity = (item: ProductItem) => {
-        item.quantity++;
-        saveCartToCookie(cart.value);
+    const incrementQuantity = (index: number) => {
+        const cart = getCartFromLocalStorage();
+        cart[index].quantity++;
+        saveCartToLocalStorage(cart);
     };
 
     const removeFromCart = (index: number) => {
-        cart.value.splice(index, 1);
-        saveCartToCookie(cart.value);
+        const cart = getCartFromLocalStorage();
+        cart.splice(index, 1);
+        saveCartToLocalStorage(cart);
     };
 
     const removeAllFromCart = () => {
-        cart.value = [];
-        saveCartToCookie(cart.value);
+        const cart: ProductItem[] = [];
+        saveCartToLocalStorage(cart);
     };
 
-    const saveCartToCookie = (cart: ProductItem[], daysToExpire: number = 30) => {
-        const date = new Date();
-        date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000); // Dies a milisegons
-        const expires = 'expires=' + date.toUTCString();
+    const saveCartToLocalStorage = (cart: ProductItem[]) => {
         const cartString = JSON.stringify(cart);
-        document.cookie = 'cart=' + encodeURIComponent(cartString) + ';' + expires + ';path=/';
+        localStorage.setItem('cart', cartString);
     };
 
-    const getCartFromCookie = (): Product[] | null => {
-        const cartJson = getCookie('cart');
-        if (cartJson) {
-            try {
-                cart.value = JSON.parse(decodeURIComponent(cartJson));
-            } catch (e) {
-                console.error('Error parsing cart JSON:', e);
-            }
-        }
-        return null;
+    const getCartFromLocalStorage = (): ProductItem[] => {
+        const cartString = localStorage.getItem('cart');
+        const cartValue = cartString ? JSON.parse(cartString) : [];
+        cart.value = cartValue;
+        return cartValue;
     };
 
-    const getCookie = (name: string): string | null => {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            const cookieParts = cookie.split('=');
-            if (cookieParts[0] === name) {
-                console.log(cookieParts[1]);
-                return cookieParts[1];
-            }
-        }
-        return null;
-    };
-
-    return { addToCart, getCartFromCookie, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCart, cart };
+    return { paymentInfo, initiatePayment, payment, addToCart, getCartFromLocalStorage, saveCartToLocalStorage, cart, removeFromCart, removeAllFromCart, incrementQuantity, decrementQuantity };
 });

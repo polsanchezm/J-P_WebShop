@@ -5,6 +5,7 @@ export interface ProductItem {
     id: number;
     product: Product;
     productVariant: ProductVariant;
+    variantId: number;
     quantity: number;
     wishlistId: number;
 }

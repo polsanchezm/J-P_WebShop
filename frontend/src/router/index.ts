@@ -8,17 +8,17 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: () => import('@/components/LayoutComponent.vue'),
+            component: () => import('@/components/layout/LayoutComponent.vue'),
             children: [
                 {
                     path: '/login',
                     name: 'login',
-                    component: () => import('@/views/client/UserLoginView.vue')
+                    component: () => import('@/views/auth/UserLoginView.vue')
                 },
                 {
                     path: '/register',
                     name: 'register',
-                    component: () => import('@/views/client/UserRegisterView.vue')
+                    component: () => import('@/views/auth/UserRegisterView.vue')
                 },
                 {
                     path: '/user',
@@ -42,13 +42,13 @@ const router = createRouter({
                                 {
                                     path: '',
                                     name: 'orders.all',
-                                    component: () => import('@/views/client/profile/UserOrdersView.vue'),
+                                    component: () => import('@/views/client/order/UserOrdersView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
                                 },
                                 {
                                     path: 'detail/:id',
                                     name: 'orders.detail',
-                                    component: () => import('@/views/client/profile/UserOrderDetailView.vue'),
+                                    component: () => import('@/views/client/order/UserOrderDetailView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
                                 }
                             ]
@@ -60,19 +60,19 @@ const router = createRouter({
                                 {
                                     path: '',
                                     name: 'shipping.all',
-                                    component: () => import('@/views/client/profile/shipping/AllShippingsView.vue'),
+                                    component: () => import('@/views/client/shipping/AllShippingsView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
                                 },
                                 {
                                     path: 'create',
                                     name: 'shipping.create',
-                                    component: () => import('@/views/client/profile/shipping/ShippingCreateView.vue'),
+                                    component: () => import('@/views/client/shipping/ShippingCreateView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
                                 },
                                 {
                                     path: 'edit/:id',
                                     name: 'shipping.edit',
-                                    component: () => import('@/views/client/profile/shipping/ShippingEditView.vue'),
+                                    component: () => import('@/views/client/shipping/ShippingEditView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
                                 }
                             ]
@@ -94,15 +94,9 @@ const router = createRouter({
                             name: 'payment',
                             children: [
                                 {
-                                    path: 'success',
-                                    name: 'payment.success',
-                                    component: () => import('@/views/client/cart/payment/PaymentSuccessView.vue'),
-                                    meta: { requiresAuth: true, requiresRoleClient: true }
-                                },
-                                {
-                                    path: 'cancel',
-                                    name: 'payment.cancel',
-                                    component: () => import('@/views/client/cart/payment/PaymentCancelView.vue'),
+                                    path: 'status',
+                                    name: 'payment.status',
+                                    component: () => import('@/views/client/payment/PaymentStatusView.vue'),
                                     meta: { requiresAuth: true, requiresRoleClient: true }
                                 }
                             ]
@@ -115,12 +109,12 @@ const router = createRouter({
                         {
                             path: '',
                             name: 'products',
-                            component: () => import('@/views/product/ProductsView.vue')
+                            component: () => import('@/views/client/product/ProductsView.vue')
                         },
                         {
                             path: 'detail/:id',
                             name: 'products.detail',
-                            component: () => import('@/views/product/ProductDetailView.vue')
+                            component: () => import('@/views/client/product/ProductDetailView.vue')
                         }
                     ]
                 },
@@ -130,12 +124,12 @@ const router = createRouter({
                         {
                             path: 'login',
                             name: 'manager.login',
-                            component: () => import('@/views/manager/ManagerLoginView.vue')
+                            component: () => import('@/views/auth/ManagerLoginView.vue')
                         },
                         {
                             path: '',
                             name: 'manager.dashboard',
-                            component: () => import('@/views/manager/ManagerDashboardView.vue'),
+                            component: () => import('@/views/manager/dashboard/ManagerDashboardView.vue'),
                             meta: { requiresAuth: true, requiresRoleManager: true }
                         },
                         {
@@ -144,25 +138,25 @@ const router = createRouter({
                                 {
                                     path: '',
                                     name: 'manager.products.all',
-                                    component: () => import('@/views/manager/ProductsView.vue'),
+                                    component: () => import('@/views/manager/product/ProductsView.vue'),
                                     meta: { requiresAuth: true, requiresRoleManager: true }
                                 },
                                 {
                                     path: 'add',
                                     name: 'manager.products.add',
-                                    component: () => import('@/views/manager/AddProductView.vue'),
+                                    component: () => import('@/views/manager/product/AddProductView.vue'),
                                     meta: { requiresAuth: true, requiresRoleManager: true }
                                 },
                                 {
                                     path: 'detail/:id',
                                     name: 'manager.products.detail',
-                                    component: () => import('@/views/manager/ProductDetailView.vue'),
+                                    component: () => import('@/views/manager/product/ProductDetailView.vue'),
                                     meta: { requiresAuth: true, requiresRoleManager: true }
                                 },
                                 {
                                     path: 'edit/:id',
                                     name: 'manager.products.edit',
-                                    component: () => import('@/views/manager/EditProductView.vue'),
+                                    component: () => import('@/views/manager/product/EditProductView.vue'),
                                     meta: { requiresAuth: true, requiresRoleManager: true }
                                 }
                             ]
@@ -170,7 +164,7 @@ const router = createRouter({
                         {
                             path: 'orders',
                             name: 'manager.orders',
-                            component: () => import('@/views/manager/OrdersView.vue'),
+                            component: () => import('@/views/manager/order/OrdersView.vue'),
                             meta: { requiresAuth: true, requiresRoleManager: true }
                         }
                     ]

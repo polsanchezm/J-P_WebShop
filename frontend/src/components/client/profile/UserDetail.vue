@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
+import { useFormatDate } from '@/composables/formatDate';
+const { formatDate } = useFormatDate();
 const authServ = useAuthStore();
 
 onBeforeMount(async () => {
@@ -8,15 +10,6 @@ onBeforeMount(async () => {
     console.log('user', authServ.user);
 });
 
-const formatDate = (date: string | Date | null): string => {
-    if (date === null) {
-        return 'Date not provided';
-    }
-    if (typeof date === 'string') {
-        date = new Date(date);
-    }
-    return new Intl.DateTimeFormat(navigator.language, { month: 'long', day: 'numeric', year: 'numeric' }).format(date);
-};
 </script>
 
 <template>
