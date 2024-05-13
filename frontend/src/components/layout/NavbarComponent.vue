@@ -18,15 +18,15 @@ onMounted(() => {
 
             <div class="flex justify-end lg:order-2 w-1/3 items-center">
                 <div v-if="authServ.isLoggedIn">
-                    <button class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" @click="authServ.logoutUser()">Logout</button>
-                    <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'user.detail' }">Profile</RouterLink>
+                    <button class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" @click="authServ.logoutUser()">Logout</button>
+                    <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'user.detail' }">Profile</RouterLink>
                 </div>
                 <div v-else>
-                    <RouterLink class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'login' }">Login</RouterLink>
-                    <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-lg text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'register' }">Register</RouterLink>
+                    <RouterLink class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'login' }">Login</RouterLink>
+                    <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'register' }">Register</RouterLink>
                 </div>
 
-                <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none -200 dark:text-gray-400 dark:hover:bg-gray-700 dark:-600" aria-controls="mobile-menu-2" aria-expanded="false">
+                <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-xl lg:hidden hover:bg-gray-100 focus:outline-none -200 dark:text-gray-400 dark:hover:bg-gray-700 dark:-600" aria-controls="mobile-menu-2" aria-expanded="false">
                     <span class="sr-only">Open main menu</span>
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>

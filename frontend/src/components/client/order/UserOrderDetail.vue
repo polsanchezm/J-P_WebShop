@@ -27,7 +27,7 @@ onBeforeMount(async () => {
                 <p class="text-gray-700"><span class="font-semibold">Product ID:</span> {{ oneOrder!.productVariant.productId }}</p>
             </li>
         </ul>
-        <button @click="orderStore.deleteOrder(orderId, true)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Cancel order</button>
+        <button @click="orderStore.deleteOrder(orderId, true)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Cancel order</button>
     </div>
 </template>
 

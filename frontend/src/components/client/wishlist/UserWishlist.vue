@@ -28,7 +28,7 @@ const addToCart = (productDetail: ProductItem) => {
 </script>
 
 <template>
-    <div v-if="wishlistStore.wishlist" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6 mt-24">
+    <div v-if="wishlistStore.wishlist" class="max-w-md mx-auto bg-white shadow-md rounded-xl px-4 py-6 mt-24">
         <p class="text-lg font-semibold mb-2 text-gray-700">Items</p>
         <ul>
             <li v-for="(item, index) in wishlistStore.wishlist" :key="index">
@@ -39,7 +39,7 @@ const addToCart = (productDetail: ProductItem) => {
                 <p class="text-gray-700"><span class="font-semibold">Product Image:</span> {{ item!.product.image }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Product Prize:</span> {{ item!.product.price }}</p>
 
-                <button @click="addToCart(item)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Comprar</button>
+                <button @click="addToCart(item)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Comprar</button>
             </li>
         </ul>
         <p v-if="wishlistStore.wishlist.length === 0">No items</p>

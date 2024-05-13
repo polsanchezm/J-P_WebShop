@@ -32,13 +32,13 @@ onBeforeMount(async () => {
         <div v-else-if="cartStore.payment?.paymentStatus === 'paid'" class="text-center">
             <h1 class="text-2xl font-bold text-green-800 mb-4">Payment Successfully Completed</h1>
             <p class="text-green-600">Thank you for your purchase! Your order is being processed.</p>
-            <RouterLink :to="{ name: 'orders.all' }" class="mt-6 inline-block bg-green-500 text-white font-medium py-2 px-4 rounded hover:bg-green-600"> View Your Orders </RouterLink>
+            <RouterLink :to="{ name: 'orders.all' }" class="mt-6 inline-block bg-green-500 text-white font-medium py-2 px-4 rounded-xl hover:bg-green-600"> View Your Orders </RouterLink>
         </div>
 
         <div v-else class="text-center">
             <h1 class="text-2xl font-bold text-red-800 mb-4">Payment Error</h1>
             <p class="text-red-600">It seems there was an error with your payment. Please try again.</p>
-            <RouterLink :to="{ name: 'cart' }" class="mt-6 inline-block bg-red-500 text-white font-medium py-2 px-4 rounded hover:bg-red-600">Go Back </RouterLink>
+            <RouterLink :to="{ name: 'cart' }" class="mt-6 inline-block bg-red-500 text-white font-medium py-2 px-4 rounded-xl hover:bg-red-600">Go Back </RouterLink>
         </div>
     </div>
 </template>

@@ -68,7 +68,7 @@ const onSubmit = handleSubmit((values) => {
 <template>
     <section>
         <div class="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-            <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-lg shadow md:mt-0 sm:max-w-lg xl:p-0">
+            <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-xl shadow md:mt-0 sm:max-w-lg xl:p-0">
                 <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create an account</h1>
                     <form class="max-w-md mx-auto" @submit.prevent="onSubmit">
@@ -120,7 +120,7 @@ const onSubmit = handleSubmit((values) => {
                             </Field>
                         </div>
 
-                        <button type="submit" class="w-full text-gray-50 bg-gray-700 hover:bg-gray-900 dark:text-ecru-50 dark:bg-ecru-950 dark:hover:bg-ecru-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign up</button>
+                        <button type="submit" class="w-full text-gray-50 bg-gray-700 hover:bg-gray-900 dark:text-ecru-50 dark:bg-ecru-950 dark:hover:bg-ecru-700 focus:outline-none font-medium rounded-xl text-sm px-5 py-2.5 text-center">Sign up</button>
                         <p class="text-sm font-semibold text-metal-800 dark:text-ecru-200 peer-focus:dark:text-ecru-50 mt-6">
                             Already have an account?
                             <RouterLink :to="{ name: 'login' }" class="font-medium text-gray-700 hover:text-metal-950 dark:text-ecru-400 dark:hover:text-ecru-100 hover:font-bold transition-colors">Sign in</RouterLink>
