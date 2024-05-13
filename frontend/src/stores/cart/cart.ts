@@ -63,8 +63,8 @@ export const useCartStore = defineStore('cart', () => {
             removeFromCart(index);
         } else {
             cart[index].quantity--;
+            saveCartToLocalStorage(cart);
         }
-        saveCartToLocalStorage(cart);
     };
 
     const incrementQuantity = (index: number) => {

@@ -12,6 +12,22 @@ export const useProductStore = defineStore('product', () => {
     const productVariants = ref<ProductVariant[]>([]);
     const productServ = productService();
 
+    const initialProducts = async ($limit: number) => {
+        try {
+            const response = await productServ.initialProducts($limit);
+
+            if (response.status == 200) {
+                products.value = response.data;
+            }
+        } catch (error) {
+            const errorMessage = error as AxiosError;
+            console.error('Error en obtenir els productes', errorMessage);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
+        }
+    };
+
     const allProducts = async () => {
         try {
             const response = await productServ.productsIndex();
@@ -21,7 +37,7 @@ export const useProductStore = defineStore('product', () => {
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
-            console.error('Error en obtenir els productes', errorMessage.message);
+            console.error('Error en obtenir els productes', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
@@ -77,7 +93,7 @@ export const useProductStore = defineStore('product', () => {
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
-            console.error('Error en eliminar el producte:', errorMessage.message);
+            console.error('Error en eliminar el producte:', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
@@ -154,12 +170,12 @@ export const useProductStore = defineStore('product', () => {
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
-            console.error('Error en eliminar la variant:', errorMessage.message);
+            console.error('Error en eliminar la variant:', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
         }
     };
 
-    return { allProducts, oneProduct, products, productDetail, productVariants, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant };
+    return { allProducts, oneProduct, products, productDetail, productVariants, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant, initialProducts };
 });

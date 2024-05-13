@@ -11,11 +11,17 @@ use App\Helpers\ManageImage;
 class ProductController extends Controller
 {
 
-    public function index()
+    public function index($limit = null)
     {
         $this->authorize('viewAny', Product::class);
+        // if ($limit) {
+        //     $products = Product::paginate($limit);
+        // } else {
 
-        $products = Product::all();
+        //     $products = Product::all();
+        // }
+
+        $products = $limit ? Product::paginate($limit) : Product::all();
         return response()->json(ProductResource::collection($products));
     }
 

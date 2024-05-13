@@ -36,6 +36,6 @@ class WishlistItemPolicy
      */
     public function delete(User $user, WishlistItem $wishlistItem): bool
     {
-        return $user->id === $wishlistItem->wishlist->user_id;
+        return $user->role === 'client';
     }
 }

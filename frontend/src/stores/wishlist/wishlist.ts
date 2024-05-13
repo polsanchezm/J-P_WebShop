@@ -37,12 +37,51 @@ export const useWishlistStore = defineStore('wishlist', () => {
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
-            console.error('Error al crear el wishlist item:', errorMessage.response);
+            console.error('Error al crear el wishlist item:', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
         }
     };
 
-    return { wishlistItems, addItemToWishlist, wishlist };
+    const removeItemFromWishlist = async (wishlistItem: any, variantId: number) => {
+        console.log('store item', wishlistItem);
+
+        try {
+            const response = await wishlistServ.removeFromWishlist(wishlistItem);
+
+            if (response.status === 200) {
+                wishlist.value = wishlist.value.filter(item => item.id !== variantId);
+            }
+        } catch (error) {
+            const errorMessage = error as AxiosError;
+            console.error('Error al eliminar el wishlist item:', errorMessage);
+            if (errorMessage.response!.status === 404) {
+                router.push({ name: 'error404' });
+            }
+        }
+    };
+
+    const toggleItemInWishlist = async (productVariant: any, variantId: number) => {
+        console.log('toggle variant', productVariant.id);
+
+        const existingItem = wishlist.value.find(item => item.variantId === variantId);
+        console.log(existingItem);
+        console.log('wishlist', wishlist.value);
+
+
+        if (existingItem) {
+            await removeItemFromWishlist(existingItem, productVariant.variantId);
+        } else {
+            await addItemToWishlist(productVariant);
+        }
+    };
+
+    const isInWishlist = (productVariant: ProductVariant) => {
+        console.log('is in wishlist', productVariant);
+
+        return wishlist.value.some((item) => item.productVariant.id === productVariant.id);
+    };
+
+    return { wishlistItems, addItemToWishlist, toggleItemInWishlist, isInWishlist, removeItemFromWishlist, wishlist };
 });

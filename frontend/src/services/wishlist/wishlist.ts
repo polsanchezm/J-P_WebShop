@@ -38,5 +38,23 @@ export function wishlistService() {
         return response;
     };
 
-    return { wishlistItems, addToWishlist };
+    const removeFromWishlist = async (wishlistItem: any) => {
+        const userToken = verifyToken();
+
+        console.log('service item', wishlistItem);
+
+        // Petició per afegir/crear un nou ítem a la wishlist
+        const response = await axios.delete<ProductItem>(
+            `/app/wishlist/items/delete/${wishlistItem.id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+
+        return response;
+    };
+
+    return { wishlistItems, addToWishlist, removeFromWishlist };
 }
