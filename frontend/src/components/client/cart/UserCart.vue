@@ -40,7 +40,7 @@ const totalQuantity = computed(() => {
 </script>
 
 <template>
-    <div class="bg-white mt-28 md:mt-28 lg:mt-28 px-4 md:px-8 lg:px-14 py-7">
+    <div class="h-dvh bg-white mt-28 md:mt-28 lg:mt-28 px-4 md:px-8 lg:px-14 py-7">
         <div class="flex flex-col lg:flex-row w-full">
             <div class="flex-1 flex flex-col gap-4 p-4">
                 <p class="text-blue-900 text-xl font-extrabold text-center">My cart</p>

@@ -16,7 +16,7 @@ onMounted(() => {
                 <RouterLink class="self-center text-xl font-semibold whitespace-nowrap text-neutral-100 dark:text-neutral-200 hover:scale-125 transition-all" :to="{ name: 'home' }">J &amp; P</RouterLink>
             </div>
 
-            <div class="flex justify-end lg:order-2 w-1/3 items-center">
+            <div class="flex flex-1 lg:flex-none justify-end lg:order-2 w-1/3 items-center">
                 <div v-if="authServ.isLoggedIn">
                     <button class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" @click="authServ.logoutUser()">Logout</button>
                     <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'user.detail' }">Profile</RouterLink>
