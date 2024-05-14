@@ -90,6 +90,18 @@ class StripeController extends Controller
             'success_url' => $successUrl,
             'cancel_url' => $cancelUrl,
             'custom_fields' => $customFields,
+            'shipping_options' => [
+                [
+                    'shipping_rate_data' => [
+                        'display_name' => 'Ground shipping',
+                        'type' => 'fixed_amount',
+                        'fixed_amount' => [
+                            'amount' => 399,
+                            'currency' => 'eur',
+                        ],
+                    ]
+                ],
+            ],
         ]);
 
         // Set the cookie with the correct path and possibly domain
@@ -113,18 +125,19 @@ class StripeController extends Controller
         );
 
         $lineItems = $this->convertStripeLineItems($stripeSession->line_items->data);
-        $result = $this->createOrder($lineItems, $sessionId);
+        $totalPrice = $stripeSession->amount_total * 0.01;
+        $shippingId = $stripeSession->custom_fields[0]->dropdown->value;
+        $result = $this->createOrder($lineItems, $sessionId, $totalPrice, $shippingId);
 
         return response()->json([
             'message' => $result['message'],
             'order' => $result['order'],
             'paymentStatus' => $stripeSession->payment_status,
-            'shippingId' => $stripeSession->custom_fields[0]->dropdown->value,
         ], $result['status']);
 
     }
 
-    protected function createOrder($lineItems, $sessionId)
+    protected function createOrder($lineItems, $sessionId, $totalPrice, $shippingId)
     {
         if (!$sessionId) {
             return [
@@ -143,7 +156,7 @@ class StripeController extends Controller
         }
 
         $userId = Auth::user()->id;
-        $order = Order::create(['user_id' => $userId, 'stripe_session_id' => $sessionId]);
+        $order = Order::create(['user_id' => $userId, 'stripe_session_id' => $sessionId, 'shipping_id' => $shippingId, 'total_price' => $totalPrice]);
         $this->authorize('createOrder', $order);
 
         foreach ($lineItems as $item) {
