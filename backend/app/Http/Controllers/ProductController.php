@@ -7,22 +7,28 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Helpers\ManageImage;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
 
-    public function index($limit = null)
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-        // if ($limit) {
-        //     $products = Product::paginate($limit);
-        // } else {
-
-        //     $products = Product::all();
-        // }
-
-        $products = $limit ? Product::paginate($limit) : Product::all();
-        return response()->json(ProductResource::collection($products));
+        $page = $request->page;
+        $limit = $request->limit;
+        $products = Product::paginate($limit, ['*'], 'page', $page);
+        return response()->json([
+            'products' => ProductResource::collection($products),
+            'pagination' => [
+                'total' => $products->total(),
+                'perPage' => $products->perPage(),
+                'currentPage' => $products->currentPage(),
+                'lastPage' => $products->lastPage(),
+                'nextPageUrl' => $products->nextPageUrl(),
+                'prevPageUrl' => $products->previousPageUrl(),
+            ],
+        ]);
     }
 
 

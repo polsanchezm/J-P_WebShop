@@ -12,15 +12,6 @@ console.log('is home layout', isHome.value);
 console.log(userProfile.value);
 </script>
 
-<!-- <template>
-    <div class="flex flex-row h-screen">
-        <main class="flex flex-1">
-            <SidebarComponent v-if="userProfile" />
-            <RouterView class="flex-1 -ml-64 md:ml-0 sm:-ml-0 transition-all ease-in-out" />
-        </main>
-    </div>
-</template> -->
-
 <template>
     <div class="flex flex-row h-screen">
         <main class="flex flex-1">

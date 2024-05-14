@@ -34,6 +34,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
             if (response.status == 200) {
                 console.log(response.data);
+                wishlist.value.push(response.data);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -51,7 +52,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
             const response = await wishlistServ.removeFromWishlist(wishlistItem);
 
             if (response.status === 200) {
-                wishlist.value = wishlist.value.filter(item => item.id !== variantId);
+                wishlist.value = wishlist.value.filter((item) => item.variantId !== variantId);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -64,24 +65,20 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     const toggleItemInWishlist = async (productVariant: any, variantId: number) => {
         console.log('toggle variant', productVariant.id);
+        console.log('wishlist toggle 1', wishlist.value);
+        wishlist.value = wishlist.value.filter((item) => item.variantId === productVariant.id);
 
-        const existingItem = wishlist.value.find(item => item.variantId === variantId);
-        console.log(existingItem);
-        console.log('wishlist', wishlist.value);
-
+        const existingItem = wishlist.value.find((item) => item.variantId === productVariant.id);
+        console.log('exiting item', existingItem);
+        console.log('wishlist toggle 2', wishlist.value);
 
         if (existingItem) {
             await removeItemFromWishlist(existingItem, productVariant.variantId);
         } else {
+            wishlist.value = wishlist.value.filter((item) => item.variantId === variantId);
             await addItemToWishlist(productVariant);
         }
     };
 
-    const isInWishlist = (productVariant: ProductVariant) => {
-        console.log('is in wishlist', productVariant);
-
-        return wishlist.value.some((item) => item.productVariant.id === productVariant.id);
-    };
-
-    return { wishlistItems, addItemToWishlist, toggleItemInWishlist, isInWishlist, removeItemFromWishlist, wishlist };
+    return { wishlistItems, addItemToWishlist, toggleItemInWishlist, removeItemFromWishlist, wishlist };
 });

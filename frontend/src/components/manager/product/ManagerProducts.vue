@@ -5,7 +5,7 @@ import { useProductStore } from '@/stores/product/product';
 const productStore = useProductStore();
 
 onBeforeMount(async () => {
-    await productStore.allProducts();
+    await productStore.allProducts(20);
     console.log('products', productStore.products);
 });
 </script>

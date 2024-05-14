@@ -63,19 +63,6 @@ const addToCart = () => {
     cartStore.addToCart(productItem, selectedVariant!.id);
 };
 
-const addToWishlist = () => {
-    if (!selectedColor.value || !selectedSize.value) {
-        console.error('Color or size is not selected');
-        return;
-    }
-
-    const selectedVariant = productStore.productDetail?.productVariants.find((variant) => variant.color === selectedColor.value && variant.size === selectedSize.value);
-    console.log('selected Variant', selectedVariant);
-
-    wishlistStore.addItemToWishlist(selectedVariant!);
-    toggleColor();
-};
-
 const toggleItemInWishlist = () => {
     if (!selectedColor.value || !selectedSize.value) {
         console.error('Color or size is not selected');

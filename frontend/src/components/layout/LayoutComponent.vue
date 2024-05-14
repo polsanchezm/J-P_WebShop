@@ -2,8 +2,6 @@
 import NavbarComponent from '@/components/layout/NavbarComponent.vue';
 import FooterComponent from '@/components/layout/FooterComponent.vue';
 import HeaderComponent from '@/components/layout/HeaderComponent.vue';
-import SidebarComponent from '@/components/layout/SidebarComponent.vue';
-import ProductsView from '@/views/client/product/ProductsView.vue';
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 const router = useRoute();
@@ -23,7 +21,6 @@ console.log(userProfile.value);
         </header>
         <main class="flex-1">
             <HeaderComponent v-if="isHome" />
-            <ProductsView v-if="isHome" />
             <RouterView />
         </main>
         <footer class="w-full">

@@ -8,17 +8,22 @@ export const setupTokenExpiryGuard = async (to: any, from: any, next: any) => {
     const { verifyToken } = useVerifyToken();
 
     if (interval !== null) {
+        console.log('Clearing existing interval');
         clearInterval(interval);
         interval = null;
     }
 
     interval = setInterval(() => {
+        console.log('Checking token expiry');
         if (verifyToken() === null) {
+            console.log('Token expired');
             clearInterval(interval);
+            interval = null;
             auth.isLoggedIn = false;
-            next({ name: 'login' }); // Redirigir al login si el token ha expirado
+            next({ name: 'login' });
         }
-    }, 10000); // Comprobar cada 10 segundos
+    }, 10000);
 
-    next(); // Continuar con la navegación si aún no se ha detectado expiración
+    console.log('setupTokenExpiryGuard end');
+    next();
 };
