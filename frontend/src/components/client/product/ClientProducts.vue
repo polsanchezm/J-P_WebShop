@@ -5,12 +5,16 @@ import { useRoute } from 'vue-router';
 const productStore = useProductStore();
 const router = useRoute();
 const isHome = computed(() => router.name === 'home');
+
+// Carrega els productes
 async function loadProducts() {
     try {
         if (isHome.value) {
+            // Si està al home carrega/mostra 4 productes
             await productStore.initialProducts(4);
-            console.log('5 productes:', productStore.products);
+            console.log('4 productes:', productStore.products);
         } else {
+            // Si no, carrega tots
             await productStore.allProducts();
             console.log('tots els productes:', productStore.products);
         }

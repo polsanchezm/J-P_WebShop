@@ -8,9 +8,12 @@ import { useShippingStore } from '@/stores/shipping/shipping';
 const authStore = useAuthStore();
 const shippingStore = useShippingStore();
 const route = useRoute();
+
+// Captura la ID del shipping de la URL
 const paramId = route.params.id;
 const shippingId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 
+// Carrega els detalls de l'usuari, els detalls d'un shipping específic y els shippings de l'usuari
 onBeforeMount(async () => {
     await authStore.detailUser();
     console.log('user', authStore.user);
@@ -19,6 +22,7 @@ onBeforeMount(async () => {
     console.log('shipping', shippingStore.oneShipping);
 });
 
+// Validacions del formulari
 const formSchema = yup.object({
     phone: yup
         .string()
@@ -66,7 +70,7 @@ const { handleSubmit } = useForm({
 
 const onSubmit = handleSubmit((values) => {
     console.log(values);
-
+    // Truca  el mètode editShipping de l'store
     shippingStore.editShipping(values, shippingId);
 });
 </script>

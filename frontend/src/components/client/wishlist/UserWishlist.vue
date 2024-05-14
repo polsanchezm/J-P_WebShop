@@ -7,10 +7,13 @@ import { useWishlistStore } from '@/stores/wishlist/wishlist';
 const wishlistStore = useWishlistStore();
 const cartStore = useCartStore();
 
+// Carrega la wishlist amb els productes que la conformen
 onBeforeMount(async () => {
     await wishlistStore.wishlistItems();
     console.log('wishlist', wishlistStore.wishlist);
 });
+
+// Afegeix al carret de compra
 const addToCart = (productDetail: ProductItem) => {
     const selectedVariant = productDetail.product.productVariants.find((variant) => variant.id === productDetail.variantId);
     console.log(selectedVariant);

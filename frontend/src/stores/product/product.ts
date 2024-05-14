@@ -14,6 +14,7 @@ export const useProductStore = defineStore('product', () => {
 
     const initialProducts = async ($limit: number) => {
         try {
+            // Desa la resposta de la crida a l'API per obtenir certa quantitat de productes
             const response = await productServ.initialProducts($limit);
 
             if (response.status == 200) {
@@ -30,6 +31,7 @@ export const useProductStore = defineStore('product', () => {
 
     const allProducts = async () => {
         try {
+            // Desa la resposta de la crida a l'API per obtenir tots els productes
             const response = await productServ.productsIndex();
 
             if (response.status == 200) {
@@ -46,6 +48,7 @@ export const useProductStore = defineStore('product', () => {
 
     const oneProduct = async (productId: number) => {
         try {
+            // Desa la resposta de la petició a l'API per obtenir el detall d'un producte
             const response = await productServ.productDetail(productId);
 
             if (response.status == 200) {
@@ -54,7 +57,6 @@ export const useProductStore = defineStore('product', () => {
 
                 // Les seves variants com color, mida,...
                 productVariants.value = response.data.productVariants;
-                // productVariants.value = response.data.productVariants.filter((variant) => variant.id !== variantId);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -67,6 +69,7 @@ export const useProductStore = defineStore('product', () => {
 
     const addProduct = async (productData: any) => {
         try {
+            // Desa la resposta de la petició per afegir un producte
             const response = await productServ.addProduct(productData);
 
             if (response.status == 200) {
@@ -85,6 +88,7 @@ export const useProductStore = defineStore('product', () => {
 
     const deleteProduct = async (id: number) => {
         try {
+            // Obté la resposta de la petició per eliminar un producte específic
             const response = await productServ.deleteProduct(id);
 
             if (response.status == 200) {
@@ -102,6 +106,7 @@ export const useProductStore = defineStore('product', () => {
 
     const updateProduct = async (productData: any) => {
         try {
+            // Obté la resposta de la crida per actualitzar un producte
             const response = await productServ.updateProduct(productData);
 
             if (response.status == 200) {
@@ -119,13 +124,14 @@ export const useProductStore = defineStore('product', () => {
 
     const addVariant = async (productVariant: ProductVariant) => {
         try {
+            // Obté la resposta de la crida a l'API per afegir/crear una variant
             const response = await productServ.addVariant(productVariant);
 
             if (response.status == 200) {
                 console.log('response variant', response.data.productVariant);
 
+                // Afegeix la nova variant a l'array de variants de producte
                 productVariants.value.push(response.data.productVariant);
-                // productServ.productVariants.value = productServ.productVariants.value.filter((variant) => variant.id !== productVariant.id);
 
                 // Porta a la pàgina del detall del producte
                 router.push({ name: 'manager.products.detail', params: { id: productVariant.productId } });
@@ -143,13 +149,11 @@ export const useProductStore = defineStore('product', () => {
         console.log('store', productVariant);
 
         try {
+            // Resposta obtinguda de la crida a l'APi per actualitzar una variant
             const response = await productServ.updateVariant(productVariant);
 
             if (response.status == 200) {
-                // Redirigeix a la pàgina de tots els productes
                 console.log('response', response);
-
-                // router.push({ name: 'manager.products.all' });
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -162,6 +166,7 @@ export const useProductStore = defineStore('product', () => {
 
     const deleteVariant = async (id: number) => {
         try {
+            // Resposta obtinguda de la crida per eliminar una variant de producte
             const response = await productServ.deleteVariant(id);
 
             if (response.status == 200) {

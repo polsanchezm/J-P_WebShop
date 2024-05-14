@@ -4,11 +4,13 @@ import { useCartStore } from '@/stores/cart/cart';
 
 const cartStore = useCartStore();
 
+// Carrega les dades del Local Storage
 onBeforeMount(() => {
     cartStore.getCartFromLocalStorage();
     console.log('cart', cartStore.cart);
 });
 
+// Forma array dels productes del carret de compra
 const cartItems = computed(() => {
     const items = cartStore.cart.map((item) => ({
         price: item.product.price,
@@ -19,7 +21,10 @@ const cartItems = computed(() => {
     return items;
 });
 
+// Cost d'enviament per defecte
 const shippingCost = 3.99;
+
+// Calcula el subtotal
 const subtotalPrice = computed(() => {
     return cartStore.cart
         .reduce((total, item: any) => {
@@ -30,10 +35,12 @@ const subtotalPrice = computed(() => {
         .toFixed(2);
 });
 
+// Calcula el total
 const totalPrice = computed(() => {
     return (parseFloat(subtotalPrice.value) + shippingCost).toFixed(2);
 });
 
+// Calcula la quantitat total de productes
 const totalQuantity = computed(() => {
     return cartStore.cart.reduce((sum, item) => sum + item.quantity, 0);
 });

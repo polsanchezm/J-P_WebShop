@@ -85,7 +85,7 @@ export function shippingService() {
     const shippingDelete = async (id: number) => {
         const userToken = verifyToken();
 
-        // Petició per eliminar un dades d'enviament
+        // Petició per eliminar un dades d'enviament específic
         const response = await axios.delete(`/app/shipping/delete/${id}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`

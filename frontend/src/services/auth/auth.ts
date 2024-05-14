@@ -64,7 +64,6 @@ export function authService() {
          * Crida a l'API per verificar les credencials de l'usuari loguejat abans de modificar
          * les seves dades
          */
-
         const response = await axios.post<UserApiResponse>(
             '/auth/users/verify-credentials',
             {
@@ -106,7 +105,7 @@ export function authService() {
     const userDelete = async () => {
         const userToken = verifyToken();
 
-        // Crida a l'API per actualitzar les dades de l'usuari loguejat
+        // Crida a l'API per eliminar l'usuari loguejat
         const response = await axios.delete<UserApiResponse>('/auth/users/delete', {
             headers: {
                 Authorization: `Bearer ${userToken}`

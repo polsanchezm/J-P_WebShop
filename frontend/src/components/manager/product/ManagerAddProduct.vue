@@ -8,6 +8,7 @@ const productStore = useProductStore();
 const imageFile = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
 
+// Gestiona el canvi d'imatge
 const handleFileChange = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
     if (files && files[0]) {
@@ -16,6 +17,7 @@ const handleFileChange = (e: Event) => {
     }
 };
 
+// Validacions
 const formSchema = yup.object({
     name: yup
         .string()
@@ -37,6 +39,7 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit((values) => {
+    // Truca el mètode addProduct de l'store de producte
     productStore.addProduct({ ...values, image: imageFile.value });
 });
 </script>

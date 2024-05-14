@@ -5,6 +5,7 @@ import { useFormatDate } from '@/composables/formatDate';
 const { formatDate } = useFormatDate();
 const authStore = useAuthStore();
 
+// Carrega els detalls de l'usuari loguejat per renderitzar-los
 onBeforeMount(async () => {
     await authStore.detailUser();
     console.log('user', authStore.user);

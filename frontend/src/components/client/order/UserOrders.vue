@@ -5,6 +5,7 @@ import { useFormatDate } from '@/composables/formatDate';
 const { formatDate } = useFormatDate();
 const orderStore = useOrderStore();
 
+// Carrega les comandes de l'usuari abans de renderitzar-les
 onBeforeMount(async () => {
     await orderStore.userOrders();
     console.log('orders', orderStore.orders);

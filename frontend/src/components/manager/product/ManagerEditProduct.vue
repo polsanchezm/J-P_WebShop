@@ -8,9 +8,12 @@ import { useProductStore } from '@/stores/product/product';
 const productStore = useProductStore();
 
 const route = useRoute();
+
+// Captura la ID de producte de la URL
 const paramId = route.params.id;
 const productId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 
+// Carrega els detalls d'un producte per editar-lo
 onBeforeMount(async () => {
     await productStore.oneProduct(productId);
     console.log('product', productStore.productDetail);
@@ -19,6 +22,7 @@ onBeforeMount(async () => {
 const imageFile = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
 
+// Gestiona el canvi d'imatge
 const handleFileChange = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
     if (files && files[0]) {
@@ -29,6 +33,7 @@ const handleFileChange = (e: Event) => {
     }
 };
 
+// Validacions de formulari
 const formSchema = yup.object({
     name: yup
         .string()
@@ -50,8 +55,13 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit((values) => {
-    const productData = { ...values, image: imageFile.value, productId: productStore.productDetail!.id };
+    const productData = { 
+        ...values, 
+        image: imageFile.value, 
+        productId: productStore.productDetail!.id 
+    };
     console.log(productData);
+    // Truca el mètode updateProduct de l'store de producte
     productStore.updateProduct(productData);
 });
 </script>

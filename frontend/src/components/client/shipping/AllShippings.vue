@@ -5,6 +5,7 @@ import { useShippingStore } from '@/stores/shipping/shipping';
 const authStore = useAuthStore();
 const shippingStore = useShippingStore();
 
+// Carrega el detall de l'usuari i les seves dades d'enviament
 onBeforeMount(async () => {
     await authStore.detailUser();
     console.log('user', authStore.user);

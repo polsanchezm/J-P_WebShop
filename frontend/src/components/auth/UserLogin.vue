@@ -2,8 +2,9 @@
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { useAuthStore } from '@/stores/auth/auth';
-const authServ = useAuthStore();
+const authStore = useAuthStore();
 
+// Validacions del formulari
 const formSchema = yup.object({
     email: yup.string().required('Email is required').email('Incorrect email'),
     currentPassword: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters.')
@@ -18,8 +19,8 @@ const onSubmit = handleSubmit((values) => {
         email: values.email,
         currentPassword: values.currentPassword
     };
-
-    authServ.loginUser(loginData);
+    // Truca al mètode loginUser de l'store
+    authStore.loginUser(loginData);
 });
 </script>
 

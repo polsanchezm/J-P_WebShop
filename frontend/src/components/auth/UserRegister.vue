@@ -2,7 +2,7 @@
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { useAuthStore } from '@/stores/auth/auth';
-const authServ = useAuthStore();
+const authStore = useAuthStore();
 
 yup.addMethod(yup.date, 'minAge', function (minAge, message) {
     return this.test('minAge', message, function (value) {
@@ -25,6 +25,7 @@ yup.addMethod(yup.date, 'minAge', function (minAge, message) {
     });
 });
 
+// Validacions del formulari
 const formSchema = yup.object({
     name: yup
         .string()
@@ -61,7 +62,8 @@ const onSubmit = handleSubmit((values) => {
         currentPassword: values.currentPassword,
         currentPasswordConfirmation: values.currentPasswordConfirmation
     };
-    authServ.registerUser(registerData);
+    // Truca al mètode registerUser de l'store
+    authStore.registerUser(registerData);
 });
 </script>
 

@@ -2,8 +2,9 @@
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { useShippingStore } from '@/stores/shipping/shipping';
-const shippingServ = useShippingStore();
+const shippingStore = useShippingStore();
 
+// Validacions del formulari
 const formSchema = yup.object({
     phone: yup
         .string()
@@ -49,6 +50,7 @@ const { handleSubmit } = useForm({
     validationSchema: formSchema
 });
 
+// 
 const onSubmit = handleSubmit((values) => {
     const shippingData = {
         id: 0,
@@ -61,8 +63,8 @@ const onSubmit = handleSubmit((values) => {
         city: values.city,
         otherInstructions: values.otherInstructions
     };
-
-    shippingServ.createShipping(shippingData);
+    // Truca el mètode createShipping de l'store amb les dades insertades
+    shippingStore.createShipping(shippingData);
 });
 </script>
 

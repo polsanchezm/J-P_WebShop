@@ -4,6 +4,7 @@ import { useProductStore } from '@/stores/product/product';
 
 const productStore = useProductStore();
 
+// Carrega tots els productes abans de renderitzar-los
 onBeforeMount(async () => {
     await productStore.allProducts();
     console.log('products', productStore.products);

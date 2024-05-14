@@ -16,12 +16,16 @@ const cartStore = useCartStore();
 const wishlistStore = useWishlistStore();
 
 const route = useRoute();
+
+// Agafa la ID del producte de la URL 
 const paramId = route.params.id;
 const productId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
+
 const selectedColor = ref('');
 const selectedSize = ref('');
 const fillColor = ref('none');
 
+// Carrega el detall d'un producte i els items de la wishlist abans de renderitzar-los
 onBeforeMount(async () => {
     await productStore.oneProduct(productId);
     await wishlistStore.wishlistItems();
@@ -31,10 +35,11 @@ onBeforeMount(async () => {
 
 watch(selectedColor, (newColor) => {
     if (!isSizeAvailableForColor(selectedSize.value, newColor)) {
-        selectedSize.value = ''; // Resetea la selección de tamaño si no está disponible
+        selectedSize.value = ''; // Reseteja la selecció de tamany si no està disponible
     }
 });
 
+// Retorna True o False si la mida està disponible per a un color
 const isSizeAvailableForColor = (size: string, color: string) => {
     return productStore.productVariants.some((variant) => variant.size === size && variant.color === color && variant.stock! > 0);
 };
@@ -43,6 +48,7 @@ const toggleColor = () => {
     fillColor.value = fillColor.value === 'none' ? 'currentColor' : 'none';
 };
 
+// Afegeix al carret de compra
 const addToCart = () => {
     if (!selectedColor.value || !selectedSize.value) {
         console.error('Color or size is not selected');
@@ -63,19 +69,7 @@ const addToCart = () => {
     cartStore.addToCart(productItem, selectedVariant!.id);
 };
 
-const addToWishlist = () => {
-    if (!selectedColor.value || !selectedSize.value) {
-        console.error('Color or size is not selected');
-        return;
-    }
-
-    const selectedVariant = productStore.productDetail?.productVariants.find((variant) => variant.color === selectedColor.value && variant.size === selectedSize.value);
-    console.log('selected Variant', selectedVariant);
-
-    wishlistStore.addItemToWishlist(selectedVariant!);
-    toggleColor();
-};
-
+// Afegeix o treu un producte de la wishlist
 const toggleItemInWishlist = () => {
     if (!selectedColor.value || !selectedSize.value) {
         console.error('Color or size is not selected');
@@ -136,11 +130,6 @@ const toggleItemInWishlist = () => {
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
                                         </svg>
                                     </button>
-                                    <!-- <div v-for="(item, index) in wishlistStore.wishlist" :key="index">
-                                        <button @click="wishlistStore.toggleItemInWishlist(item)">
-                                            {{ isInWishlist(item) ? 'Remove from Wishlist' : 'Add to Wishlist' }}
-                                        </button>
-                                    </div> -->
                                 </div>
                             </div>
                             <div v-else>
