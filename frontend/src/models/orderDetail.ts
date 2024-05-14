@@ -1,3 +1,4 @@
+import type { Product } from './product';
 import type { ProductVariant } from './productVariant';
 
 export interface OrderDetail {
@@ -5,4 +6,7 @@ export interface OrderDetail {
     quantity: number;
     orderId: number;
     productVariant: ProductVariant;
+    product: Product;
+    createdAt: Date;
+    totalPrice: string;
 }

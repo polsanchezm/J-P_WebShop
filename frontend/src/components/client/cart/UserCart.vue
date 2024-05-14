@@ -40,10 +40,12 @@ const totalQuantity = computed(() => {
 </script>
 
 <template>
-    <div class="h-dvh bg-white mt-28 md:mt-28 lg:mt-28 px-4 md:px-8 lg:px-14 py-7">
-        <div class="flex flex-col lg:flex-row w-full">
+    <div class="min-h-screen bg-gray-50 py-7 mt-[85px] overflow-auto">
+        <div class="bg-gray-400 dark:bg-gray-700 pt-[23px] p-5 w-full">
+            <h2 class="text-3xl font-bold text-white text-center">Your Cart</h2>
+        </div>
+        <div class="flex flex-col lg:flex-row w-full mt-6 px-20">
             <div class="flex-1 flex flex-col gap-4 p-4">
-                <p class="text-blue-900 text-xl font-extrabold text-center">My cart</p>
                 <div v-if="cartStore.cart.length > 0">
                     <div v-for="(item, index) in cartStore.cart" :key="index" class="flex flex-col p-4 text-lg font-semibold shadow-md border rounded-xl">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between text-center md:text-left">
@@ -67,7 +69,7 @@ const totalQuantity = computed(() => {
                                         <path d="M5 12h14" />
                                     </svg>
                                 </button>
-                                <input readonly class="w-8 h-8 text-center outline-none" :value="item.quantity" />
+                                <input readonly class="w-8 h-8 text-center bg-gray-50 outline-none" :value="item.quantity" />
                                 <button @click="cartStore.incrementQuantity(index)" class="w-6 h-6 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M12 5v14M5 12h14" />

@@ -10,7 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <nav class="bg-gray-700 dark:bg-gray-900 lg:px-16 px-8 py-8 z-40 fixed w-full">
+    <nav class="bg-gray-700 dark:bg-gray-900 lg:px-16 px-8 py-8 z-50 fixed w-full">
         <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
             <div class="flex items-center w-1/3">
                 <RouterLink class="self-center text-xl font-semibold whitespace-nowrap text-neutral-100 dark:text-neutral-200 hover:scale-125 transition-all" :to="{ name: 'home' }">J &amp; P</RouterLink>

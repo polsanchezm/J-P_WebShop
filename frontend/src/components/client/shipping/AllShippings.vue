@@ -14,26 +14,99 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div v-if="shippingStore.shipping.length > 0" class="max-w-md mx-auto mt-24 bg-white shadow-md rounded-xl px-4 py-6">
-        <ul>
-            <li v-for="(shipping, index) in shippingStore.shipping" :key="index">
-                <div v-if="shipping!.userId === authStore.user!.id">
-                    <p class="text-lg font-semibold mb-2 text-gray-700">Shipping Information {{ index + 1 }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User ID:</span> {{ shipping.userId }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User Phone:</span> {{ shipping.phone }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User Street:</span> {{ shipping.street }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User unit:</span> {{ shipping.unit }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User Apartment Number:</span> {{ shipping.apartmentNumber }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User Country:</span> {{ shipping.country }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User City:</span> {{ shipping.city }}</p>
-                    <p class="text-gray-700"><span class="font-semibold">User Other Instructions:</span> {{ shipping.otherInstructions }}</p>
-                    <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'shipping.edit', params: { id: shipping.id } }">Edit</RouterLink>
-                    <button class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" @click="shippingStore.deleteShipping(shipping.id)">Delete</button>
+    <!-- <div class="flex flex-col w-full bg-gray-50 pt-10 items-center mt-16">
+        <div v-if="authStore.user" class="w-full px-5">
+            <div class="bg-gray-400 dark:bg-gray-700 p-5 pt-8 w-full">
+                <h2 class="text-3xl font-bold text-white text-center">Your Shipping Lines</h2>
+            </div>
+            <div class="flex justify-center my-4">
+                <RouterLink :to="{ name: 'shipping.create' }" class="bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-white text-center py-4 px-5 w-full sm:w-auto sm:max-w-xs"> Add Shipping Line </RouterLink>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div v-for="(shipping, index) in shippingStore.shipping" :key="index" class="bg-white shadow-xl rounded-xl p-4 w-full max-w-xs md:max-w-sm lg:max-w-md">
+                    <div class="space-y-2">
+                        <div class="space-y-2">
+                            <div class="bg-gray-200 p-2 rounded-lg">
+                                <p class="text-gray-700 text-lg text-center"><span class="font-semibold">Shipping Line:</span> {{ index + 1 }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <p class="text-gray-700 text-sm"><span class="font-semibold">Phone Number:</span> {{ shipping.phone }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <p class="text-gray-700 text-sm"><span class="font-semibold">Street:</span> {{ shipping.street }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <p class="text-gray-700 text-sm"><span class="font-semibold">Unit:</span> {{ shipping.unit }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <p class="text-gray-700 text-sm"><span class="font-semibold">Apartment Number:</span> {{ shipping.apartmentNumber }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <p class="text-gray-700 text-sm"><span class="font-semibold">Country:</span> {{ shipping.country }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <p class="text-gray-700 text-sm"><span class="font-semibold">City:</span> {{ shipping.city }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded-lg">
+                                <p class="text-gray-700 text-sm"><span class="font-semibold">Other Instructions:</span> {{ shipping.otherInstructions }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-around mt-4">
+                        <RouterLink :to="{ name: 'shipping.edit', params: { id: shipping.id } }" class="py-2 text-white bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-base text-center w-1/3"> Edit </RouterLink>
+                        <button v-if="authStore.user.role === 'client'" @click="shippingStore.deleteShipping(shipping.id)" class="py-2 text-white bg-red-600 hover:bg-red-700 focus:bg-red-700 focus:outline-none font-medium rounded-lg text-base text-center w-1/3">Delete</button>
+                    </div>
                 </div>
-            </li>
-        </ul>
-    </div>
-    <div v-else class="max-w-md mx-auto mt-24 bg-white shadow-md rounded-xl px-4 py-6">
-        <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'shipping.create' }">Create details</RouterLink>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="flex flex-col w-full bg-gray-50 pt-10 items-center mt-16">
+        <div v-if="authStore.user" class="w-full px-5">
+            <div class="bg-gray-400 dark:bg-gray-700 p-5 pt-8 w-full">
+                <h2 class="text-3xl font-bold text-white text-center">Your Shipping Lines</h2>
+            </div>
+            <div class="flex justify-center my-4">
+                <RouterLink :to="{ name: 'shipping.create' }" class="bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-white text-center py-4 px-5 w-full max-w-xs md:max-w-sm lg:max-w-md"> Add Shipping Line </RouterLink>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4 py-3 my-3">
+                <div v-for="(shipping, index) in shippingStore.shipping" :key="index" class="bg-white shadow-xl rounded-xl p-4 w-full max-w-xs md:max-w-sm lg:max-w-md">
+                    <div class="space-y-2">
+                        <div class="space-y-2">
+                            <div class="space-y-2">
+                                <div class="bg-gray-200 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-lg text-center"><span class="font-semibold">Shipping Line:</span> {{ index + 1 }}</p>
+                                </div>
+                                <div class="bg-gray-100 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-sm"><span class="font-semibold">Phone Number:</span> {{ shipping.phone }}</p>
+                                </div>
+                                <div class="bg-gray-100 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-sm"><span class="font-semibold">Street:</span> {{ shipping.street }}</p>
+                                </div>
+                                <div class="bg-gray-100 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-sm"><span class="font-semibold">Unit:</span> {{ shipping.unit }}</p>
+                                </div>
+                                <div class="bg-gray-100 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-sm"><span class="font-semibold">Apartment Number:</span> {{ shipping.apartmentNumber }}</p>
+                                </div>
+                                <div class="bg-gray-100 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-sm"><span class="font-semibold">Country:</span> {{ shipping.country }}</p>
+                                </div>
+                                <div class="bg-gray-100 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-sm"><span class="font-semibold">City:</span> {{ shipping.city }}</p>
+                                </div>
+                                <div class="bg-gray-100 p-2 rounded-lg">
+                                    <p class="text-gray-700 text-sm"><span class="font-semibold">Other Instructions:</span> {{ shipping.otherInstructions }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-around mt-4">
+                        <RouterLink :to="{ name: 'shipping.edit', params: { id: shipping.id } }" class="py-2 text-white bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-base text-center w-1/3"> Edit </RouterLink>
+                        <button v-if="authStore.user.role === 'client'" @click="shippingStore.deleteShipping(shipping.id)" class="py-2 text-white bg-red-600 hover:bg-red-700 focus:bg-red-700 focus:outline-none font-medium rounded-lg text-base text-center w-1/3">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>

@@ -12,20 +12,23 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div v-if="orderStore.orders" class="max-w-md mx-auto bg-white shadow-md rounded-xl px-4 py-6 mt-24">
-        <p class="text-lg font-semibold mb-2 text-gray-700">Orders</p>
-        <ul>
-            <li v-for="(order, index) in orderStore.orders" :key="index">
-                <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ order!.id }}</p>
-                <p class="text-gray-700"><span class="font-semibold">User ID:</span> {{ order!.userId }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Date:</span> {{ formatDate(order!.createdAt) }}</p>
-
-                <RouterLink class="gradient-button inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none" :to="{ name: 'orders.detail', params: { id: order.id } }">View details </RouterLink>
-                <button @click="orderStore.deleteOrder(order!.id, false)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Cancel order</button>
-            </li>
-        </ul>
-        <p v-if="orderStore.orders.length === 0">No orders available</p>
+    <div class="flex flex-col w-full h-screen bg-gray-50 pt-8 items-center mt-16">
+        <div class="bg-gray-400 dark:bg-gray-700 p-5 pt-10 w-full">
+            <h2 class="text-3xl font-bold text-white text-center">Your Orders</h2>
+        </div>
+        <div v-if="orderStore.orders && orderStore.orders.length > 0" class="flex flex-col w-full h-screen bg-gray-50 pt-12 items-center">
+            <ul class="w-full max-w-4xl mx-auto px-4 md:px-20">
+                <li v-for="order in orderStore.orders" :key="order.id" class="mb-4 p-4 md:p-10 bg-white rounded-lg shadow flex justify-between items-center">
+                    <div class="flex-1 mr-4">
+                        <h3 class="text-lg font-semibold">Order ID: #{{ order.id }}</h3>
+                        <p class="text-sm text-gray-600">Date: {{ formatDate(order.createdAt) }}</p>
+                    </div>
+                    <RouterLink :to="{ name: 'orders.detail', params: { id: order.id } }" class="ml-4 md:ml-20 px-4 py-2 md:py-4 text-white bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-xl text-sm md:text-base text-center"> View details </RouterLink>
+                </li>
+            </ul>
+        </div>
+        <div v-else class="flex flex-col w-full h-full items-center justify-center">
+            <p class="text-lg font-semibold text-gray-800">No orders available</p>
+        </div>
     </div>
 </template>
-
-<style scoped></style>

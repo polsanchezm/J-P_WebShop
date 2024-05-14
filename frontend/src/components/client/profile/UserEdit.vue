@@ -55,39 +55,41 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
     <section v-if="authServ.user">
-        <div class="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-            <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-xl shadow md:mt-0 sm:max-w-lg xl:p-0">
-                <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
-                    <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Edit your account</h1>
+        <div class="flex flex-col items-center justify-center min-h-screen">
+            <div class="flex flex-col w-full h-dvh bg-gray-50 lg:pt-1 pt-0 items-center mt-28 dark:bg-corduroy-900">
+                <div class="bg-gray-400 dark:bg-gray-700 p-5 mt-0 w-full">
+                    <h2 class="text-3xl font-bold text-white text-center">Edit Your Profile</h2>
+                </div>
+                <div class="mt-20 p-6 space-y-6 md:space-y-6 sm:p-8">
                     <form class="max-w-md mx-auto" @submit.prevent="onSubmit">
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="name" v-slot="{ field, meta }" v-model="authServ.user.name">
-                                <input type="text" id="floating_name" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
-                                <label for="floating_name" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>
+                                <input type="text" id="floating_name" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_name" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>
                                 <ErrorMessage v-if="meta.touched && meta.dirty" name="name" class="text-red-500 text-xs mt-1" />
                             </Field>
                         </div>
 
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="surnames" v-slot="{ field, meta }" v-model="authServ.user.surnames">
-                                <input type="text" id="floating_surnames" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
-                                <label for="floating_surnames" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Surnames</label>
+                                <input type="text" id="floating_surnames" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_surnames" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Surnames</label>
                                 <ErrorMessage v-if="meta.touched && meta.dirty" name="surnames" class="text-red-500 text-xs mt-1" />
                             </Field>
                         </div>
 
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="email" v-slot="{ field, meta }" v-model="authServ.user.email">
-                                <input type="text" id="floating_email" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
-                                <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
+                                <input type="text" id="floating_email" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_email" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
                                 <ErrorMessage v-if="meta.touched && meta.dirty" name="email" class="text-red-500 text-xs mt-1" />
                             </Field>
                         </div>
 
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="currentPassword" v-slot="{ field, meta }">
-                                <input type="password" id="floating_current_password" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
-                                <label for="floating_current_password" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"> Current Password </label>
+                                <input type="password" id="floating_current_password" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                <label for="floating_current_password" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"> Current Password </label>
                                 <ErrorMessage v-if="meta.touched && meta.dirty" name="currentPassword" class="text-red-500 text-xs mt-1" />
                             </Field>
                         </div>
@@ -95,21 +97,21 @@ const onSubmit = handleSubmit((values) => {
                         <div class="flex flex-wrap -mx-3">
                             <div class="relative z-0 mb-5 group w-1/2 px-3 mt-6">
                                 <Field name="newPassword" v-slot="{ field, meta }">
-                                    <input type="password" id="floating_new_password" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
-                                    <label for="floating_new_password" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">New Password</label>
+                                    <input type="password" id="floating_new_password" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                    <label for="floating_new_password" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">New Password</label>
                                     <ErrorMessage v-if="meta.touched && meta.dirty" name="newPassword" class="text-red-500 text-xs mt-1" />
                                 </Field>
                             </div>
 
                             <div class="relative z-0 mb-5 group w-1/2 px-3 mt-6">
                                 <Field name="newPasswordConfirmation" v-slot="{ field, meta }">
-                                    <input type="password" id="floating_confirm_new_password" v-bind="field" class="block py-2.5 px-0 w-full text-sm text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
-                                    <label for="floating_confirm_new_password" class="peer-focus:font-medium absolute text-sm text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm New Password</label>
+                                    <input type="password" id="floating_confirm_new_password" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
+                                    <label for="floating_confirm_new_password" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm New Password</label>
                                     <ErrorMessage v-if="meta.touched && meta.dirty" name="newPasswordConfirmation" class="text-red-500 text-xs mt-1" />
                                 </Field>
                             </div>
                         </div>
-                        <button type="submit" class="w-full text-gray-50 bg-gray-700 hover:bg-gray-900 dark:text-ecru-50 dark:bg-ecru-950 dark:hover:bg-ecru-700 focus:outline-none font-medium rounded-xl text-sm px-5 py-2.5 text-center">Edit details</button>
+                        <button type="submit" class="w-full text-gray-50 bg-gray-700 hover:bg-gray-900 dark:text-ecru-50 dark:bg-ecru-950 dark:hover:bg-ecru-700 focus:outline-none font-medium rounded-xl text-base px-5 py-2.5 text-center">Edit details</button>
                     </form>
                 </div>
             </div>

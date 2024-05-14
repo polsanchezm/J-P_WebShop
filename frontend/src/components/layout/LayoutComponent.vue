@@ -11,30 +11,22 @@ const isHome = computed(() => router.name === 'home');
 const userProfile = computed(() => {
     const regex = /^\/user\/?.*/;
     return regex.test(router.path);
-});;
+});
 console.log('is home layout', isHome.value);
 console.log(userProfile.value);
 </script>
 
 <template>
-    <div class="flex flex-col h-screen justify-between">
+    <div class="flex flex-col h-screen">
         <header>
             <NavbarComponent v-if="!isHome" />
         </header>
-        <aside v-if="userProfile">
-            <SidebarComponent />
-        </aside>
         <main class="flex-1">
             <HeaderComponent v-if="isHome" />
             <ProductsView v-if="isHome" />
-            <div v-if="userProfile">
-                <RouterView class="md:ml-64 sm:ml-64"/>
-            </div>
-            <div v-else>
-                <RouterView />
-            </div>
+            <RouterView />
         </main>
-        <footer>
+        <footer class="w-full">
             <FooterComponent />
         </footer>
     </div>
