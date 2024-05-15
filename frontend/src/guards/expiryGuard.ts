@@ -2,8 +2,9 @@ import { useVerifyToken } from '@/composables/verifyToken';
 import { useAuthStore } from '@/stores/auth/auth';
 
 let interval: any = null;
+let nextCalled = false;
 
-export const setupTokenExpiryGuard = async (to: any, from: any, next: any) => {
+export const setupTokenExpiryGuard = (to: any, from: any, next: any) => {
     const auth = useAuthStore();
     const { verifyToken } = useVerifyToken();
 
@@ -13,6 +14,8 @@ export const setupTokenExpiryGuard = async (to: any, from: any, next: any) => {
         interval = null;
     }
 
+    nextCalled = false; // Reset the flag
+
     interval = setInterval(() => {
         console.log('Checking token expiry');
         if (verifyToken() === null) {
@@ -20,10 +23,16 @@ export const setupTokenExpiryGuard = async (to: any, from: any, next: any) => {
             clearInterval(interval);
             interval = null;
             auth.isLoggedIn = false;
-            next({ name: 'login' });
+            if (!nextCalled) {
+                nextCalled = true;
+                next({ name: 'login' });
+            }
         }
     }, 10000);
 
     console.log('setupTokenExpiryGuard end');
-    next();
+    if (!nextCalled) {
+        nextCalled = true;
+        next();
+    }
 };

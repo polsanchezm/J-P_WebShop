@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/stores/auth/auth';
 
-export const isAuthenticatedGuard = async (to: any, from: any, next: any) => {
+export const isAuthenticatedGuard = (to: any, from: any, next: any) => {
     console.log('isAuthenticatedGuard start');
     const auth = useAuthStore();
 
@@ -9,7 +9,7 @@ export const isAuthenticatedGuard = async (to: any, from: any, next: any) => {
         next();
     } else if (!auth.isLoggedIn) {
         console.log('Not logged in');
-        next({ name: 'login' });
+        next({ name: 'manager.login' });
     } else if (to.meta.requiresRoleManager && auth.userRole !== 'manager') {
         console.log('Role manager required');
         next({ name: 'home' });
@@ -17,7 +17,6 @@ export const isAuthenticatedGuard = async (to: any, from: any, next: any) => {
         console.log('Role client required');
         next({ name: 'manager.dashboard' });
     } else {
-        console.log('Authenticated and authorized');
         next();
     }
 };

@@ -170,10 +170,9 @@ const router = createRouter({
                             children: [
                                 {
                                     path: '',
-                                    name: 'manager.orders',
+                                    name: 'manager.orders.all',
                                     component: () => import('@/views/manager/order/ManagerOrdersView.vue'),
                                     meta: { requiresAuth: true, requiresRoleManager: true }
-
                                 },
                                 {
                                     path: 'detail/:id',
@@ -182,7 +181,7 @@ const router = createRouter({
                                     meta: { requiresAuth: true, requiresRoleManager: true }
                                 }
                             ]
-                        },
+                        }
                     ]
                 },
                 {
@@ -194,13 +193,42 @@ const router = createRouter({
         }
     ],
     scrollBehavior(to: any, from: any, savedPosition: any) {
-        return { top: 0 }
+        return { top: 0 };
     }
 });
 
+// router.beforeEach(async (to, from, next) => {
+//     isAuthenticatedGuard(to, from, next);
+//     await setupTokenExpiryGuard(to, from, next);
+// });
+
 router.beforeEach(async (to, from, next) => {
-    await isAuthenticatedGuard(to, from, next);
-    await setupTokenExpiryGuard(to, from, next);
+    try {
+        await new Promise<void>((resolve, reject) => {
+            isAuthenticatedGuard(to, from, (result: any) => {
+                if (result === false) {
+                    reject(new Error('Navigation aborted by isAuthenticatedGuard'));
+                } else {
+                    resolve();
+                }
+            });
+        });
+
+        await new Promise<void>((resolve, reject) => {
+            setupTokenExpiryGuard(to, from, (result: any) => {
+                if (result === false) {
+                    reject(new Error('Navigation aborted by setupTokenExpiryGuard'));
+                } else {
+                    resolve();
+                }
+            });
+        });
+
+        next();
+    } catch (error) {
+        console.error(error);
+        next(false);
+    }
 });
 
 export default router;
