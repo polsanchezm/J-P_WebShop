@@ -2,37 +2,41 @@ import { useVerifyToken } from '@/composables/verifyToken';
 import { useAuthStore } from '@/stores/auth/auth';
 
 let interval: any = null;
-let nextCalled = false;
 
 export const setupTokenExpiryGuard = (to: any, from: any, next: any) => {
     const auth = useAuthStore();
     const { verifyToken } = useVerifyToken();
-
+    // Clear existing interval if any
     if (interval !== null) {
-        console.log('Clearing existing interval');
         clearInterval(interval);
         interval = null;
     }
 
-    nextCalled = false; // Reset the flag
-
-    interval = setInterval(() => {
-        console.log('Checking token expiry');
+    // Function to check token validity
+    const checkToken = () => {
         if (verifyToken() === null) {
             console.log('Token expired');
             clearInterval(interval);
             interval = null;
             auth.isLoggedIn = false;
-            if (!nextCalled) {
-                nextCalled = true;
+            if (to.name !== 'login' && to.name !== 'manager.login') {
                 next({ name: 'login' });
+            } else {
+                console.log('not login', to.name);
+                next();
             }
+            console.log('token null');
+            return false;
         }
-    }, 10000);
+        console.log('token not null');
+        return true;
+    };
 
-    console.log('setupTokenExpiryGuard end');
-    if (!nextCalled) {
-        nextCalled = true;
-        next();
+    // Start token check interval
+    interval = setInterval(checkToken, 10000);
+
+    // Immediately check token on setup
+    if (!checkToken()) {
+        return;
     }
 };

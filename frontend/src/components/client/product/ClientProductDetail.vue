@@ -22,7 +22,9 @@ const isLoading = ref(true);
 
 onBeforeMount(async () => {
     await productStore.oneProduct(productId);
-    await wishlistStore.wishlistItems();
+    if (authServ.user) {
+        await wishlistStore.wishlistItems();
+    }
     isLoading.value = false;
     console.log('wishlist', wishlistStore.wishlist);
     console.log('product', productStore.productDetail);
@@ -144,7 +146,7 @@ const uniqueSizes = computed(() => {
                                         </button>
                                     </div>
                                 </div>
-                                <div v-else-if="authServ.userRole !== 'manager'">
+                                <div v-else-if="authServ.userRole !== 'manager'" class="flex items-center mt-6">
                                     <RouterLink :to="{ name: 'login' }" class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none">Login to Buy</RouterLink>
                                 </div>
                             </div>

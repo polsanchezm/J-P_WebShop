@@ -197,38 +197,10 @@ const router = createRouter({
     }
 });
 
-// router.beforeEach(async (to, from, next) => {
-//     isAuthenticatedGuard(to, from, next);
-//     await setupTokenExpiryGuard(to, from, next);
-// });
-
 router.beforeEach(async (to, from, next) => {
-    try {
-        await new Promise<void>((resolve, reject) => {
-            isAuthenticatedGuard(to, from, (result: any) => {
-                if (result === false) {
-                    reject(new Error('Navigation aborted by isAuthenticatedGuard'));
-                } else {
-                    resolve();
-                }
-            });
-        });
-
-        await new Promise<void>((resolve, reject) => {
-            setupTokenExpiryGuard(to, from, (result: any) => {
-                if (result === false) {
-                    reject(new Error('Navigation aborted by setupTokenExpiryGuard'));
-                } else {
-                    resolve();
-                }
-            });
-        });
-
-        next();
-    } catch (error) {
-        console.error(error);
-        next(false);
-    }
+    isAuthenticatedGuard(to, from, next);
+    setupTokenExpiryGuard(to, from, next);
 });
+
 
 export default router;

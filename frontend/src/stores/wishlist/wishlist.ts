@@ -20,7 +20,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
-            console.error('Error en obtenir el wishlist items', errorMessage.message);
+            console.error('Error en obtenir el wishlist items', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
