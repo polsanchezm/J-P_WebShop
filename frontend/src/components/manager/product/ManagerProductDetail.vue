@@ -110,7 +110,7 @@ const uniqueSizes = computed(() => {
 </script>
 
 <template>
-    <div class="bg-gray-100 mt-28 md:pb-0 md:mb-0 min-h-screen">
+    <div class="bg-gray-100 mt-20 pt-6 md:pt-6 lg:pt-3 md:pb-0 md:mb-0 min-h-screen">
         <div class="bg-gray-400 dark:bg-gray-700 pt-[23px] p-5 w-full">
             <h2 class="text-3xl font-bold text-white text-center">Product Detail</h2>
         </div>

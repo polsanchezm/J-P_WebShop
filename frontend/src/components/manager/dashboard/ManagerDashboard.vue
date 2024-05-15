@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="flex flex-col w-full min-h-screen bg-gray-50 pt-10 items-center mt-16">
+        <div class="flex flex-col w-full min-h-screen bg-gray-50 pt-8 lg:pt-6 items-center mt-16">
             <div class="w-full bg-gray-400 dark:bg-gray-700 p-5 pt-8">
                 <h2 class="text-3xl font-bold text-white text-center">Management options</h2>
             </div>
@@ -11,7 +11,7 @@
                     </svg>
                     <span>Products</span>
                 </RouterLink>
-                <RouterLink class="flex flex-col items-center justify-center w-1/2 h-48 bg-gray-700 hover:bg-gray-900 font-medium rounded-xl text-white text-sm focus:outline-none space-y-2" :to="{ name: 'manager.orders' }">
+                <RouterLink class="flex flex-col items-center justify-center w-1/2 h-48 bg-gray-700 hover:bg-gray-900 font-medium rounded-xl text-white text-sm focus:outline-none space-y-2" :to="{ name: 'manager.orders.all' }">
                     <svg class="w-10 h-10 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h6m-6 4h6m-6 4h6M6 3v18l2-2 2 2 2-2 2 2 2-2 2 2V3l-2 2-2-2-2 2-2-2-2 2-2-2Z" />
                     </svg>

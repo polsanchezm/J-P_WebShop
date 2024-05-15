@@ -58,7 +58,7 @@ const onSubmit = handleSubmit((values) => {
 <template>
     <section>
         <div class="flex flex-col items-center justify-center min-h-screen">
-            <div class="flex flex-col w-full h-dvh bg-gray-50 lg:pt-1 pt-0 items-center mt-20 dark:bg-corduroy-900">
+            <div class="flex flex-col w-full h-dvh bg-gray-50 lg:pt-3 pt-6 items-center mt-20 dark:bg-corduroy-900">
                 <div class="bg-gray-400 dark:bg-gray-700 p-5 -mt-1 w-full pt-8">
                     <h2 class="text-3xl font-bold text-white text-center">Edit Your Profile</h2>
                 </div>

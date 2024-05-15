@@ -8,6 +8,7 @@ const managerProfile = computed(() => {
     const regex = /^\/management\/?.*/;
     return regex.test(router.path);
 });
+
 const managerLogin = computed(() => {
     return router.path === '/management/login';
 });

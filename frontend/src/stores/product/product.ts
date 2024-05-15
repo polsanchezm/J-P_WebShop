@@ -28,7 +28,7 @@ export const useProductStore = defineStore('product', () => {
             if (response.status == 200) {
                 products.value = response.data.products;
                 console.log(response.data.pagination);
-                
+
                 pagination.value = {
                     currentPage: response.data.pagination.currentPage,
                     lastPage: response.data.pagination.lastPage,

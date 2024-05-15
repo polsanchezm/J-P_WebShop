@@ -17,10 +17,7 @@ onMounted(() => {
             </div>
 
             <div class="flex flex-1 lg:flex-none justify-end lg:order-2 w-1/3 items-center">
-                <div v-if="authServ.isLoggedIn">
-                    <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'user.detail' }">Profile</RouterLink>
-                </div>
-                <div v-else>
+                <div v-if="!authServ.isLoggedIn">
                     <RouterLink class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'login' }">Login</RouterLink>
                     <RouterLink class="text-neutral-800 bg-neutral-100 hover:bg-neutral-800 hover:text-neutral-100 dark:text-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-800 dark:hover:text-neutral-100 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none" :to="{ name: 'register' }">Register</RouterLink>
                 </div>
@@ -39,6 +36,12 @@ onMounted(() => {
                 <ul class="flex flex-col font-medium lg:flex-row lg:space-x-8">
                     <li>
                         <RouterLink class="block text-neutral-100 hover:text-neutral-300 dark:text-neutral-300 dark:hover:text-neutral-50 transition-all" :to="{ name: 'home' }">Home</RouterLink>
+                    </li>
+                    <li>
+                        <RouterLink class="block text-neutral-100 hover:text-neutral-300 dark:text-neutral-300 dark:hover:text-neutral-50 transition-all" :to="{ name: 'products' }">Products</RouterLink>
+                    </li>
+                    <li>
+                        <RouterLink class="block text-neutral-100 hover:text-neutral-300 dark:text-neutral-300 dark:hover:text-neutral-50 transition-all" :to="{ name: 'user.detail' }">Profile</RouterLink>
                     </li>
                 </ul>
             </div>

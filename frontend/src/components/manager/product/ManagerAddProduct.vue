@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import { computed, ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useProductStore } from '@/stores/product/product';
 
 const productStore = useProductStore();
 const imageFile = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
-const selectedColor = ref('');
-const selectedSize = ref('');
 
 const handleFileChange = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
@@ -41,32 +39,12 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit((values) => {
     productStore.addProduct({ ...values, image: imageFile.value });
 });
-
-const isSizeAvailableForColor = (size: string, color: string) => {
-    return productStore.productVariants.some((variant) => variant.size === size && variant.color === color && variant.stock! > 0);
-};
-
-watch(selectedColor, (newColor) => {
-    if (!isSizeAvailableForColor(selectedSize.value, newColor)) {
-        selectedSize.value = '';
-    }
-});
-
-const uniqueColors = computed(() => {
-    const colors = productStore.productVariants.map((variant) => variant.color);
-    return [...new Set(colors)];
-});
-
-const uniqueSizes = computed(() => {
-    const sizes = productStore.productVariants.map((variant) => variant.size);
-    return [...new Set(sizes)];
-});
 </script>
 
 <template>
     <section>
         <div class="flex flex-col items-center justify-center">
-            <div class="flex flex-col w-full min-h-screen bg-gray-50 lg:pt-1 pt-0 items-center mt-28 dark:bg-corduroy-900">
+            <div class="flex flex-col w-full min-h-screen bg-gray-50 pt-2 lg:mt-20 items-center mt-24 dark:bg-corduroy-900">
                 <div class="bg-gray-400 dark:bg-gray-700 p-5 mt-0 w-full">
                     <h2 class="text-3xl font-bold text-white text-center">Create Product</h2>
                 </div>

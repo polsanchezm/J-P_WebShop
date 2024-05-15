@@ -16,7 +16,7 @@ onBeforeMount(() => loadProducts(1));
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-100 flex flex-col justify-center mt-28 pt-10">
+    <div class="min-h-screen bg-gray-100 flex flex-col justify-center mt-20 pt-12">
         <div class="relative m-3 flex mx-auto justify-center">
             <div class="flex flex-wrap justify-center max-w-7xl w-full">
                 <div v-if="isLoading" class="flex justify-center items-center h-full w-full" role="status">
@@ -27,7 +27,7 @@ onBeforeMount(() => loadProducts(1));
                     <span class="sr-only">Loading...</span>
                 </div>
                 <div v-else class="flex flex-wrap justify-center max-w-7xl w-full">
-                    <div class="w-full flex justify-center my-4">
+                    <div class="w-1/2 flex justify-center my-4">
                         <RouterLink :to="{ name: 'manager.products.add' }" class="bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-lg text-white text-center py-4 px-5 w-full max-w-7xl"> Add Product </RouterLink>
                     </div>
                     <div v-if="productStore.products.length > 0" class="flex flex-wrap justify-center max-w-7xl w-full">
