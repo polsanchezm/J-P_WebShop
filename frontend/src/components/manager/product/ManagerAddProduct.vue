@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useProductStore } from '@/stores/product/product';
 
 const productStore = useProductStore();
 const imageFile = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
+const selectedColor = ref('');
+const selectedSize = ref('');
 
 const handleFileChange = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
@@ -39,14 +41,36 @@ const { handleSubmit } = useForm({
 const onSubmit = handleSubmit((values) => {
     productStore.addProduct({ ...values, image: imageFile.value });
 });
+
+const isSizeAvailableForColor = (size: string, color: string) => {
+    return productStore.productVariants.some((variant) => variant.size === size && variant.color === color && variant.stock! > 0);
+};
+
+watch(selectedColor, (newColor) => {
+    if (!isSizeAvailableForColor(selectedSize.value, newColor)) {
+        selectedSize.value = '';
+    }
+});
+
+const uniqueColors = computed(() => {
+    const colors = productStore.productVariants.map((variant) => variant.color);
+    return [...new Set(colors)];
+});
+
+const uniqueSizes = computed(() => {
+    const sizes = productStore.productVariants.map((variant) => variant.size);
+    return [...new Set(sizes)];
+});
 </script>
 
 <template>
     <section>
-        <div class="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-            <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-xl shadow md:mt-0 sm:max-w-lg xl:p-0">
-                <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
-                    <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create Product</h1>
+        <div class="flex flex-col items-center justify-center">
+            <div class="flex flex-col w-full min-h-screen bg-gray-50 lg:pt-1 pt-0 items-center mt-28 dark:bg-corduroy-900">
+                <div class="bg-gray-400 dark:bg-gray-700 p-5 mt-0 w-full">
+                    <h2 class="text-3xl font-bold text-white text-center">Create Product</h2>
+                </div>
+                <div class="p-6 space-y-6 md:space-y-6 sm:p-8 mt-20">
                     <form class="max-w-md mx-auto" @submit.prevent="onSubmit" enctype="multipart/form-data">
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="name" v-slot="{ field, meta }">
@@ -93,5 +117,3 @@ const onSubmit = handleSubmit((values) => {
         </div>
     </section>
 </template>
-
-<style scoped></style>

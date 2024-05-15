@@ -7,5 +7,3 @@ import ManagerDashboard from '@/components/manager/dashboard/ManagerDashboard.vu
         <ManagerDashboard />
     </div>
 </template>
-
-<style scoped></style>

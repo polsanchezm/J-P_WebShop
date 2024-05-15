@@ -23,6 +23,7 @@ class WishlistItemResource extends JsonResource
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'product' => new ProductResource(ProductVariant::find($this->variant_id)->product),
+            'productVariant' => new ProductVariantResource(ProductVariant::find($this->variant_id)),
         ];
     }
 }

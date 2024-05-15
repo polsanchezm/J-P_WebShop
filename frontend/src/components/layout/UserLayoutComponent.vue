@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SidebarComponent from '@/components/layout/SidebarComponent.vue';
+import UserSidebarComponent from '@/components/layout/UserSidebarComponent.vue';
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 const router = useRoute();
@@ -15,7 +15,7 @@ console.log(userProfile.value);
 <template>
     <div class="flex flex-row h-screen">
         <main class="flex flex-1">
-            <SidebarComponent v-if="userProfile" />
+            <UserSidebarComponent v-if="userProfile" />
             <RouterView class="flex-1 overflow-auto -ml-64 md:ml-0 sm:-ml-0 transition-all ease-in-out" />
         </main>
     </div>

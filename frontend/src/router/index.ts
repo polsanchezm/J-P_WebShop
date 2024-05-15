@@ -23,7 +23,7 @@ const router = createRouter({
                 {
                     path: '/user',
                     name: 'user',
-                    component: () => import('@/components/layout/UserLayout.vue'),
+                    component: () => import('@/components/layout/UserLayoutComponent.vue'),
                     children: [
                         {
                             path: '',
@@ -121,6 +121,8 @@ const router = createRouter({
                 },
                 {
                     path: '/management',
+                    name: 'management',
+                    component: () => import('@/components/layout/ManagerLayoutComponent.vue'),
                     children: [
                         {
                             path: 'login',
@@ -165,9 +167,22 @@ const router = createRouter({
                         {
                             path: 'orders',
                             name: 'manager.orders',
-                            component: () => import('@/views/manager/order/OrdersView.vue'),
-                            meta: { requiresAuth: true, requiresRoleManager: true }
-                        }
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'manager.orders',
+                                    component: () => import('@/views/manager/order/ManagerOrdersView.vue'),
+                                    meta: { requiresAuth: true, requiresRoleManager: true }
+
+                                },
+                                {
+                                    path: 'detail/:id',
+                                    name: 'manager.orders.detail',
+                                    component: () => import('@/views/manager/order/ManagerOrderDetailView.vue'),
+                                    meta: { requiresAuth: true, requiresRoleManager: true }
+                                }
+                            ]
+                        },
                     ]
                 },
                 {

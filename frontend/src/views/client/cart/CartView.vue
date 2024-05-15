@@ -7,5 +7,3 @@ import UserCart from '@/components/client/cart/UserCart.vue';
         <UserCart />
     </div>
 </template>
-
-<style scoped></style>
