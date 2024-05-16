@@ -86,7 +86,7 @@ const uniqueSizes = computed(() => {
 </script>
 
 <template>
-    <div class="bg-gray-50 mt-0 overflow-auto pb-28 md:pb-0 md:mb-0">
+    <div class="bg-gray-50 overflow-auto pt-8 mt-20 pb-28 md:pb-0 md:mb-0">
         <main class="pt-20 pb-0 mb-0 items-center">
             <div class="container mx-auto px-6 h-screen pb-28">
                 <div v-if="isLoading" class="flex justify-center items-center h-full" role="status">

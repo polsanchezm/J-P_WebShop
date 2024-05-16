@@ -6,8 +6,7 @@ import { computed } from 'vue';
 const route = useRoute();
 
 const showProductSearch = computed(() => {
-    const regex = /^\/products\/?.*/;
-    return regex.test(route.path);
+    return route.path === '/products';
 });
 </script>
 

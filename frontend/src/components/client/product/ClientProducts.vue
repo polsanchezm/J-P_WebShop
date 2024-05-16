@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PaginationComponent from '@/components/layout/PaginationComponent.vue';
-import { onBeforeMount, ref, watch } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useProductStore } from '@/stores/product/product';
 const isLoading = ref(true);
 const productStore = useProductStore();
@@ -14,7 +14,7 @@ onBeforeMount(async () => {
 
 <template>
     <div class="min-h-screen bg-gray-50 flex flex-col justify-center mt-0 pt-0">
-        <div class="relative m-3 flex mx-auto justify-center">
+        <div class="relative m-3 flex mx-auto justify-center w-full">
             <div v-if="isLoading" role="status" class="flex flex-wrap justify-center max-w-7xl w-full">
                 <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -22,24 +22,24 @@ onBeforeMount(async () => {
                 </svg>
                 <span class="sr-only">Loading...</span>
             </div>
-            <div v-if="!isLoading" class="flex">
-                <div class="flex flex-wrap justify-center max-w-7xl w-full">
-                    <div v-for="(product, index) in productStore.products" :key="index" class="relative bg-white shadow-md rounded-xl p-2 cursor-pointer m-6 flex-grow flex-shrink basis-[300px]">
-                        <RouterLink :to="{ name: 'products.detail', params: { id: product.id } }">
-                            <div class="overflow-x-hidden rounded-xl relative">
-                                <img class="h-96 rounded-xl w-full object-cover" :src="product.image" />
+            <div v-if="!isLoading" class="flex flex-wrap justify-center gap-6 max-w-7xl w-full">
+                <div v-for="(product, index) in productStore.products" :key="index" class="bg-white shadow-md rounded-xl p-2 cursor-pointer flex-grow flex-shrink-0 basis-[calc(33%-1rem)] m-3">
+                    <RouterLink :to="{ name: 'products.detail', params: { id: product.id } }">
+                        <div class="overflow-x-hidden rounded-xl relative">
+                            <img class="h-96 rounded-xl w-full object-cover" :src="product.image" />
+                        </div>
+                        <div class="mt-4 pl-2 mb-2 flex justify-between">
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900 mb-0">{{ product.name }}</p>
+                                <p class="text-md text-gray-800 mt-0">{{ product.price }}</p>
                             </div>
-                            <div class="mt-4 pl-2 mb-2 flex justify-between">
-                                <div>
-                                    <p class="text-lg font-semibold text-gray-900 mb-0">{{ product.name }}</p>
-                                    <p class="text-md text-gray-800 mt-0">{{ product.price }}</p>
-                                </div>
-                            </div>
-                        </RouterLink>
-                    </div>
+                        </div>
+                    </RouterLink>
                 </div>
             </div>
         </div>
         <PaginationComponent v-if="!isLoading" />
     </div>
 </template>
+
+
