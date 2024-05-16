@@ -28,23 +28,23 @@ class ShippingController extends Controller
     public function store(ShippingRequest $request)
     {
         $this->authorize('create', ShippingDetail::class);
-
-        // Validació de dades
-        $validData = $request->validated();
         $userId = Auth::user()->id;
 
         // Crea un nou element amb les dades d'enviament
         $shipping = ShippingDetail::create([
             'user_id' => $userId,
-            'phone' => $validData['phone'],
-            'street' => $validData['street'],
-            'unit' => $validData['unit'],
-            'apartment_number' => $validData['apartment_number'],
-            'country' => $validData['country'],
-            'city' => $validData['city'],
-            'other_instructions' => $validData['other_instructions']
+            'phone' => $request->phone,
+            'street' => $request->street,
+            'unit' => $request->unit,
+            'apartment_number' => $request->apartment_number,
+            'country' => $request->country,
+            'city' => $request->city,
         ]);
-
+        if ($request->other_instructions) {
+            $shipping->other_instructions = $request->other_instructions;
+        }
+        $shipping->save();
+        $shipping->refresh();
         return response()->json([
             'message' => 'Shipping stored successfully',
             'shipping' => $shipping
@@ -71,13 +71,8 @@ class ShippingController extends Controller
         if (!$shipping) {
             return response()->json(['message' => 'Shipping not found'], 404);
         }
-
-        // Validació de dades
-        $validData = $request->validated();
-
         // Actualitza l'element
-        $shipping->update($validData);
-
+        $shipping->update($request->all());
         return response()->json([
             'message' => 'Shipping updated successfully',
             'shipping' => $shipping

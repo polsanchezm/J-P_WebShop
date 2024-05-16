@@ -14,9 +14,9 @@ class OrderController extends Controller
     {
         $this->authorize('viewAny', Order::class);
         $user = Auth::user();
-        
         // Agafa les comandes de l'usuari loguejat, o totes les existents si és el rol manager
-        $orders = $user->role === 'manager' ? Order::all() : Order::where('user_id', $user->id)->get();
+        $orders = $user->role === 'manager' ? Order::orderBy('created_at', 'desc')->get()
+            : Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         if (!$orders) {
             return response()->json(['message' => 'User orders not found'], 404);
         }

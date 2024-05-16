@@ -24,13 +24,8 @@ class ProductVariantController extends Controller
     public function store(ProductVariantRequest $request)
     {
         $this->authorize('create', Productvariant::class);
-        
-        // Validació de dades
-        $validData = $request->validated();
-
         // Crea una variant de producte
-        $productVariant = ProductVariant::create($validData);
-
+        $productVariant = ProductVariant::create($request->all());
         return response()->json([
             'message' => 'ProductVariant stored successfully',
             'productVariant' => $productVariant
@@ -59,13 +54,8 @@ class ProductVariantController extends Controller
         if (!$productVariant) {
             return response()->json(['message' => 'ProductVariant not found'], 404);
         }
-
-        // Validació de dades
-        $validData = $request->validated();
-
         // Actualitza la variant
-        $productVariant->update($validData);
-
+        $productVariant->update($request->all());
         return response()->json([
             'message' => 'ProductVariant updated successfully',
             'productVariant' => $productVariant

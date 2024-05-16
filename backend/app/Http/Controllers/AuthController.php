@@ -14,17 +14,14 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        // Validació de dades
-        $registerUserData = $request->validated();
-
         // Creació de l'usuari
         $user = User::create([
-            'name' => $registerUserData['name'],
-            'surnames' => $registerUserData['surnames'],
-            'birthdate' => $registerUserData['birthdate'],
-            'role' => 'user',
-            'email' => $registerUserData['email'],
-            'password' => Hash::make($registerUserData['password']),
+            'name' => $request->name,
+            'surnames' => $request->surnames,
+            'birthdate' => $request->birthdate,
+            'role' => 'client',
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
 
         // Logueja l'usuari
@@ -49,14 +46,11 @@ class AuthController extends Controller
     
     public function login(LoginRequest $request)
     {
-        // Validació de dades
-        $loginUserData = $request->validated();
 
         // Troba l'usuari mitjançant l'email
-        $user = User::where('email', $loginUserData['email'])->first();
-
-        // Comprova que les dades d'accés siguien vàlides
+        $user = User::where('email', $request->email)->first();
         if (!empty($user)) {
+            // Comprova que les dades d'accés siguien vàlides
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken($user->name . '-AuthToken')->plainTextToken;
 

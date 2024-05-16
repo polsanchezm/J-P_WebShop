@@ -1,15 +1,12 @@
 import Axios from 'axios';
 import { type User } from '@/models/user';
 
-export interface ErrorResponse {
-    message: string;
-    response: any;
-}
-
 export interface UserApiResponse {
     token: string;
     message: string;
     user: User;
+    status: number;
+    data: string;
 }
 
 const axios = Axios.create({

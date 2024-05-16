@@ -11,6 +11,6 @@ class WishlistPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === 'user';
+        return $user->role === 'client';
     }
 }

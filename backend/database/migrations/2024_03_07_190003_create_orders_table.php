@@ -13,6 +13,9 @@ return new class extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('stripe_session_id');
+            $table->integer('shipping_id');
+            $table->string('total_price');
             $table->timestamps();
         });
     }

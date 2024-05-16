@@ -13,10 +13,8 @@ class ManageImage
     {
         // Desa la imatge a l'arrel del disc 'images'
         $path = $imagePath->store('', 'images');
-
         return $path;
     }
-
 
     public static function deleteImage($imageName)
     {

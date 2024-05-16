@@ -21,10 +21,7 @@ class ProductFactory extends Factory
             'description' => fake()->realText(),
             'category_id' => fake()->randomElement([1, 2, 3, 4]),
             'image' => fake()->imageUrl(),
-            // 'size' => fake()->randomElement(['XS', 'S', 'M', 'L', 'XL']),
-            // 'color' => fake()->colorName(),
             'price' => fake()->randomFloat(2, 10, 1000),
-            // 'stock' => fake()->boolean(),
         ];
     }
 }

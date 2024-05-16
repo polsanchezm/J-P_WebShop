@@ -25,6 +25,8 @@ class UserManagerSeeder extends Seeder
             'password' => Hash::make('1qazZAQ!'),
             'birthdate' => $birthday,
             'role' => 'manager',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
     }
 }

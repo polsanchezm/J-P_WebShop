@@ -45,10 +45,9 @@ class UserController extends Controller
         // Validació de dades
         $request->validated();
 
-        $email = $request->input('email');
-        $password = $request->input('password');
-
         // Verifica si l'email y la contrasenya proporcionades són correctes
+        $email = $request->email;
+        $password = $request->password;
         if ($user->email === $email && Hash::check($password, $user->password)) {
             return response()->json(['message' => 'Credentials verified successfully'], 200);
         } else {
@@ -61,16 +60,12 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $this->authorize('update', $user);
-
-        // Validació de dades
-        $validData = $request->validated();
-
         // Actualitza els detalls de l'usuari loguejat
         $user->update([
-            'name' => $validData['name'],
-            'surnames' => $validData['surnames'],
-            'email' => $validData['email'],
-            'password' => Hash::make($validData['password']),
+            'name' => $request->name,
+            'surnames' => $request->surnames,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
 
         return response()->json([

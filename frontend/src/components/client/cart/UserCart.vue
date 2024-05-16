@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { useCartStore } from '@/stores/client/cart';
-import { computed, onBeforeMount } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
+import { useCartStore } from '@/stores/cart/cart';
 
 const cartStore = useCartStore();
+const isLoading = ref(true);
 
 onBeforeMount(() => {
-    cartStore.getCartFromCookie();
+    cartStore.getCartFromLocalStorage();
+    isLoading.value = false;
     console.log('cart', cartStore.cart);
 });
 
@@ -19,47 +21,107 @@ const cartItems = computed(() => {
     return items;
 });
 
-const totalPrice = computed(() => {
+const shippingCost = 3.99;
+const subtotalPrice = computed(() => {
     return cartStore.cart
         .reduce((total, item: any) => {
             const price = parseFloat(item.product.price);
             const quantity = parseInt(item.quantity);
-            if (!isNaN(price) && !isNaN(quantity)) {
-                return total + price * quantity;
-            } else {
-                return total;
-            }
+            return total + price * quantity;
         }, 0)
         .toFixed(2);
+});
+
+const totalPrice = computed(() => {
+    return (parseFloat(subtotalPrice.value) + shippingCost).toFixed(2);
+});
+
+const totalQuantity = computed(() => {
+    return cartStore.cart.reduce((sum, item) => sum + item.quantity, 0);
 });
 </script>
 
 <template>
-    <div v-if="cartStore.cart" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6 mt-24">
-        <p class="text-lg font-semibold mb-2 text-gray-700">Items</p>
-        <button v-if="cartStore.cart.length > 0" @click="cartStore.removeAllFromCart()" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Remove All</button>
-        <ul>
-            <li v-for="(item, index) in cartStore.cart" :key="index">
-                <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ item!.id }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Price:</span> {{ item!.product.price }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Image:</span> {{ item!.product.image }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Color:</span> {{ item!.productVariant.color }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Size:</span> {{ item!.productVariant.size }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ item!.productVariant.stock }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Quantity:</span> {{ item!.quantity }}</p>
-
-                <!-- <RouterLink
-                class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                :to="'/user/orders/detail/' + product.id">View details</RouterLink> -->
-                <button @click="cartStore.decrementQuantity(item, index)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">-</button>
-                <button @click="cartStore.incrementQuantity(item)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">+</button>
-                <button @click="cartStore.removeFromCart(index)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Remove</button>
-            </li>
-            <p class="text-gray-700"><span class="font-semibold">Total price:</span> {{ totalPrice }}</p>
-            <button v-if="cartStore.cart.length > 0" @click="cartStore.initiateStripePayment(cartItems)" class="inline-block mt-4 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none">Pay with Stripe</button>
-        </ul>
-        <p v-if="cartStore.cart.length === 0">No items</p>
+    <div class="min-h-screen bg-gray-50 pt-4 mt-24 overflow-auto">
+        <div class="bg-gray-400 dark:bg-gray-700 pt-[23px] p-5 w-full">
+            <h2 class="text-3xl font-bold text-white text-center">Your Cart</h2>
+        </div>
+        <div v-if="isLoading" class="flex justify-center items-center h-full w-full" role="status">
+            <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+            </svg>
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div class="flex flex-col lg:flex-row w-full mt-6 px-20">
+            <div class="flex-1 flex flex-col gap-4 p-4">
+                <div v-if="cartStore.cart.length > 0">
+                    <div v-for="(item, index) in cartStore.cart" :key="index" class="flex flex-col p-4 text-lg font-semibold shadow-md border rounded-xl">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between text-center md:text-left">
+                            <div class="flex flex-col items-center gap-6 md:flex-row md:items-center">
+                                <div class="w-20 h-20 md:w-28 md:h-28">
+                                    <img class="w-full h-full rounded-xl" :src="item.product.image" :alt="item.product.description" />
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <p class="text-lg text-gray-800 font-semibold">{{ item.product.name }}</p>
+                                    <p class="text-xs text-gray-600">
+                                        Color: <span class="font-normal">{{ item.productVariant.color }}</span>
+                                    </p>
+                                    <p class="text-xs text-gray-600">
+                                        Size: <span class="font-normal">{{ item.productVariant.size }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center gap-4 mt-4">
+                                <button @click="cartStore.decrementQuantity(index)" class="w-6 h-6 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14" />
+                                    </svg>
+                                </button>
+                                <input readonly class="w-8 h-8 text-center bg-gray-50 outline-none" :value="item.quantity" />
+                                <button @click="cartStore.incrementQuantity(index)" class="w-6 h-6 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 5v14M5 12h14" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="flex flex-col items-center md:flex-row md:justify-end gap-4 mt-4">
+                                <div class="text-gray-800 text-xl">{{ item.product.price }}€</div>
+                                <button @click="cartStore.removeFromCart(index)" class="p-2 rounded-full text-red-500 hover:text-red-700">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="text-center">
+                    <p class="text-lg text-gray-800 font-semibold">Your cart is empty</p>
+                    <p class="text-sm text-gray-600">Add some products to your cart</p>
+                    <RouterLink :to="{ name: 'products' }" class="text-blue-900 font-semibold">Shop now</RouterLink>
+                </div>
+            </div>
+            <div v-if="cartStore.cart.length > 0" class="w-full lg:w-1/2 xl:w-1/3 flex flex-col gap-4 p-4">
+                <p class="text-blue-900 text-xl font-extrabold text-center md:text-left">Purchase Resume</p>
+                <div class="flex flex-col gap-4 p-4 text-lg font-semibold shadow-md border rounded-xl">
+                    <div class="flex flex-col items-center md:flex-row md:justify-between">
+                        <p class="text-gray-600">Subtotal ({{ totalQuantity }} Items)</p>
+                        <p class="font-bold">{{ subtotalPrice }}</p>
+                    </div>
+                    <hr class="bg-gray-200" />
+                    <div class="flex flex-col items-center md:flex-row md:justify-between">
+                        <p class="text-gray-600">Shipping Cost</p>
+                        <p class="font-bold">{{ shippingCost }}€</p>
+                    </div>
+                    <hr class="bg-gray-200" />
+                    <div class="flex flex-col items-center md:flex-row md:justify-between">
+                        <p class="text-gray-600">Total</p>
+                        <p class="font-bold">{{ totalPrice }}</p>
+                    </div>
+                    <button @click="cartStore.initiatePayment(cartItems)" class="px-4 py-4 text-white bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-xl text-sm md:text-base text-center">SUBMIT ORDER</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
-
-<style scoped></style>

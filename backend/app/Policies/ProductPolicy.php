@@ -11,7 +11,7 @@ class ProductPolicy
      */
     public function viewAny(?User $user): bool
     {
-        return $user?->id;
+        return true;
     }
 
     /**
@@ -19,7 +19,7 @@ class ProductPolicy
      */
     public function view(?User $user): bool
     {
-        return $user?->id;
+        return true;
     }
 
     /**

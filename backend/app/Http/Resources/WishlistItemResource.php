@@ -18,10 +18,12 @@ class WishlistItemResource extends JsonResource
         return [
             'id' => $this->id,
             'wishlistId' => $this->wishlist_id,
+            'variantId' => $this->variant_id,
             'quantity' => $this->quantity,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'product' => new ProductResource(ProductVariant::find($this->variant_id)->product),
+            'productVariant' => new ProductVariantResource(ProductVariant::find($this->variant_id)),
         ];
     }
 }

@@ -13,7 +13,7 @@ class OrderPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === 'user' || 'manager';
+        return $user->role === 'client' || 'manager';
     }
 
     /**
@@ -29,7 +29,7 @@ class OrderPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'user';
+        return $user->role === 'client';
     }
 
     /**
@@ -41,8 +41,8 @@ class OrderPolicy
     }
 
     // Determina si es pot crear la comanda
-    public function createOrder(User $user, StripeSession $stripeSession): bool
+    public function createOrder(User $user): bool
     {
-        return $stripeSession->payment_status === 'paid' && $stripeSession->customer_email === $user->email;
+        return $user->role === 'client';
     }
 }

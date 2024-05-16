@@ -5,38 +5,48 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use App\Helpers\ManageImage;
+use App\Models\ProductVariant;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     // Mètode que retorna tots els productes disponibles
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-
-        $products = Product::all();
-        return response()->json(ProductResource::collection($products));
+        $page = intval($request->page);
+        $limit = intval($request->limit);
+        $products = Product::paginate($limit, ['*'], 'page', $page);
+        return response()->json([
+            'products' => ProductResource::collection($products),
+            'pagination' => [
+                'total' => $products->total(),
+                'perPage' => $products->perPage(),
+                'currentPage' => $products->currentPage(),
+                'lastPage' => $products->lastPage(),
+                'nextPageUrl' => $products->nextPageUrl(),
+                'prevPageUrl' => $products->previousPageUrl(),
+            ],
+        ]);
     }
 
 
     public function store(ProductRequest $request)
     {
         $this->authorize('create', Product::class);
-
-        // Validació de dades
-        $validData = $request->validated();
-        $imagePath = $validData['image'];
-
         // Fa ús del Helper ManageImage per desar la imatge a l'storage
+        $imagePath = $request->image;
         $image = ManageImage::storeImage($imagePath);
 
         // Crea el producte
         $product = Product::create([
-            'name' => $validData['name'],
-            'description' => $validData['description'],
-            'category_id' => $validData['category_id'],
-            'price' => floatval($validData['price']),
+            'name' => $request->name,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'price' => floatval($request->price),
             'image' => $image,
         ]);
 
@@ -68,10 +78,6 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
-
-        // Validació de dades
-        $validData = $request->validated();
-
         // Gestiona, si cal, el canvi d'imatge
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image');
@@ -81,11 +87,10 @@ class ProductController extends Controller
             }
             // Desa la imatge nova
             $imageName = ManageImage::storeImage($imagePath);
-            $validData['image'] = $imageName;
+            $product->image = $imageName;
         }
-
         // Actualitza les dades
-        $product->update($validData);
+        $product->update($request->except(['image']));
 
         return response()->json([
             'message' => 'Product updated successfully',
@@ -111,6 +116,26 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->json(['message' => 'Product deleted successfully'], 200);
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $searchTerm = $request->search;
+
+        $products = Product::where(function ($query) use ($searchTerm) {
+            $query->where('name', 'LIKE', "%{$searchTerm}%")
+                ->orWhereHas('productVariant', function ($q) use ($searchTerm) {
+                    $q->where('color', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('size', 'LIKE', "%{$searchTerm}%");
+                })
+                ->orWhereHas('category', function ($q) use ($searchTerm) {
+                    $q->where('type', 'LIKE', "%{$searchTerm}%");
+                });
+        })->get();
+
+        return response()->json([
+            'products' => ProductResource::collection($products),
+        ]);
     }
 
 }
