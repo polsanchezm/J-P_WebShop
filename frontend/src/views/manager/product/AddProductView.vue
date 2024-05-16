@@ -7,5 +7,3 @@ import AddProduct from '@/components/manager/product/ManagerAddProduct.vue';
         <AddProduct />
     </div>
 </template>
-
-<style scoped></style>

@@ -7,5 +7,3 @@ import EditProduct from '@/components/manager/product/ManagerEditProduct.vue';
         <EditProduct />
     </div>
 </template>
-
-<style scoped></style>

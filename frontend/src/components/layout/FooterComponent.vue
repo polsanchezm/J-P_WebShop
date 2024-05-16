@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
     <footer class="bg-gray-700 dark:bg-gray-900 p-4 sm:p-6">
         <div class="mx-auto max-w-screen-xl">
@@ -14,8 +12,19 @@
                             <li class="mb-4">
                                 <a href="https://flowbite.com" class="hover:text-neutral-400">Flowbite</a>
                             </li>
-                            <li>
+                            <li class="mb-4">
                                 <a href="https://tailwindcss.com/" class="hover:text-neutral-400">Tailwind CSS</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="text-neutral-100 dark:text-neutral-50">
+                            <h2 class="mb-6 text-sm font-semibold text-neutral-50 dark:text-neutral-100 uppercase">&nbsp;</h2>
+                            <li class="mb-4">
+                                <a href="https://chatgpt.com" class="hover:text-neutral-400">ChaptGPT</a>
+                            </li>
+                            <li class="mb-4">
+                                <a href="https://https://stackoverflow.com/" class="hover:text-neutral-400">StackOverflow</a>
                             </li>
                         </ul>
                     </div>
@@ -30,22 +39,11 @@
                             </li>
                         </ul>
                     </div>
-                    <div>
-                        <h2 class="mb-6 text-sm font-semibold text-neutral-50 dark:text-neutral-100 uppercase">Legal</h2>
-                        <ul class="text-neutral-100 dark:text-neutral-50">
-                            <li class="mb-4">
-                                <a href="#" class="hover:text-neutral-400">Privacy Policy</a>
-                            </li>
-                            <li>
-                                <a href="#" class="hover:text-neutral-400">Terms &amp; Conditions</a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
             <hr class="my-6 border-gray-300 sm:mx-auto dark:border-gray-400 lg:my-8" />
             <div class="sm:flex sm:items-center sm:justify-between">
-                <span class="text-sm text-neutral-50 sm:text-center dark:text-neutal-100">© 2024 <a href="https://flowbite.com" class="hover:underline">J &amp; P</a>. All Rights Reserved. </span>
+                <span class="text-sm text-neutral-50 sm:text-center dark:text-neutal-100">© 2024 <RouterLink class="hover:underline" :to="{ name: 'home' }">J &amp; P</RouterLink>. All Rights Reserved. </span>
             </div>
         </div>
     </footer>

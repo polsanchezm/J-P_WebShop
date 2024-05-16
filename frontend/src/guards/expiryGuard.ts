@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/auth/auth';
 let interval: any = null;
 
 // Configura el guard de l'expiració del token
-export const setupTokenExpiryGuard = async (to: any, from: any, next: any) => {
+export const setupTokenExpiryGuard = (to: any, from: any, next: any) => {
     const auth = useAuthStore();
 
     // Utilitzem el composable per verificar el token
@@ -16,15 +16,29 @@ export const setupTokenExpiryGuard = async (to: any, from: any, next: any) => {
         interval = null;
     }
 
-    // Estableix un nou interval per comprovar regularment si el token ha caducat
-    interval = setInterval(() => {
+    const checkToken = () => {
         if (verifyToken() === null) {
+            console.log('Token expired');
             clearInterval(interval);
+            interval = null;
             auth.isLoggedIn = false;
-            next({ name: 'login' });
+            if (to.name !== 'login' && to.name !== 'manager.login') {
+                next({ name: 'login' });
+            } else {
+                console.log('not login', to.name);
+                next();
+            }
+            console.log('token null');
+            return false;
         }
-    }, 10000);
+        console.log('token not null');
+        return true;
+    };
 
-    // Continua amb la navegació
-    next();
+    // Estableix un nou interval per comprovar regularment si el token ha caducat
+    interval = setInterval(checkToken, 10000);
+
+    if (!checkToken()) {
+        return;
+    }
 };

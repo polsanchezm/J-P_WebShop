@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/stores/auth/auth';
 
 // Guard per verificar si l'usuari està autenticat
-export const isAuthenticatedGuard = async (to: any, from: any, next: any) => {
+export const isAuthenticatedGuard = (to: any, from: any, next: any) => {
     const auth = useAuthStore();
     // Comprovem si la ruta no requereix autenticació, en aquest cas deixa passar
     if (!to.meta.requiresAuth) {

@@ -7,5 +7,3 @@ import Products from '@/components/manager/product/ManagerProducts.vue';
         <Products />
     </div>
 </template>
-
-<style scoped></style>

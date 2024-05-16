@@ -7,5 +7,3 @@ import ManagerLogin from '@/components/auth/ManagerLogin.vue';
         <ManagerLogin />
     </div>
 </template>
-
-<style scoped></style>

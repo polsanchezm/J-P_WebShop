@@ -8,34 +8,37 @@ import { ref } from 'vue';
 
 export const useProductStore = defineStore('product', () => {
     const products = ref<Product[]>([]);
+    const pagination = ref({
+        currentPage: 1,
+        lastPage: 1,
+        nextPageUrl: null,
+        prevPageUrl: null,
+        perPage: 15,
+        total: 0
+    });
+
     const productDetail = ref<Product | null>(null);
     const productVariants = ref<ProductVariant[]>([]);
     const productServ = productService();
 
-    const initialProducts = async ($limit: number) => {
+
+    const allProducts = async (limit: number, page: number) => {
         try {
-            // Desa la resposta de la crida a l'API per obtenir certa quantitat de productes
-            const response = await productServ.initialProducts($limit);
+            const response = await productServ.productsIndex(limit, page);
 
             if (response.status == 200) {
-                products.value = response.data;
-            }
-        } catch (error) {
-            const errorMessage = error as AxiosError;
-            console.error('Error en obtenir els productes', errorMessage);
-            if (errorMessage.response!.status == 404) {
-                router.push({ name: 'error404' });
-            }
-        }
-    };
+                products.value = response.data.products;
+                console.log(response.data.pagination);
 
-    const allProducts = async () => {
-        try {
-            // Desa la resposta de la crida a l'API per obtenir tots els productes
-            const response = await productServ.productsIndex();
-
-            if (response.status == 200) {
-                products.value = response.data;
+                pagination.value = {
+                    currentPage: response.data.pagination.currentPage,
+                    lastPage: response.data.pagination.lastPage,
+                    nextPageUrl: response.data.pagination.nextPageUrl,
+                    prevPageUrl: response.data.pagination.prevPageUrl,
+                    perPage: response.data.pagination.perPage,
+                    total: response.data.pagination.total
+                };
+                console.log(pagination.value);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -182,5 +185,21 @@ export const useProductStore = defineStore('product', () => {
         }
     };
 
-    return { allProducts, oneProduct, products, productDetail, productVariants, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant, initialProducts };
+    const searchProducts = async (params: any) => {
+        try {
+            const response = await productServ.searchProducts(params);
+
+            if (response.status == 200) {
+                products.value = response.data.products;
+            }
+        } catch (error) {
+            const errorMessage = error as AxiosError;
+            console.error('Error en eliminar la variant:', errorMessage);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
+        }
+    };
+
+    return { searchProducts, pagination, allProducts, oneProduct, products, productDetail, productVariants, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant };
 });

@@ -7,5 +7,3 @@ import UserWishlist from '@/components/client/wishlist/UserWishlist.vue';
         <UserWishlist />
     </div>
 </template>
-
-<style scoped></style>

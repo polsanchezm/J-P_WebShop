@@ -20,11 +20,9 @@
     "vee-validate": "^4.12.6",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vue3-carousel": "^0.3.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@headlessui/vue": "^1.7.22",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tsconfig/node20": "^20.1.4",

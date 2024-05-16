@@ -29,10 +29,10 @@ export const useShippingStore = defineStore('shipping', () => {
         }
     };
 
-    const editShipping = async (shipping: Shipping, id: number) => {
+    const editShipping = async (shipping: Shipping) => {
         try {
             // Desa la resposta que s'obté de la crida per editar un dades d'enviament
-            const response = await shippinServ.shippingEdit(shipping, id);
+            const response = await shippinServ.shippingEdit(shipping);
 
             if (response.status == 200) {
                 // Redirigeix a la ruta de les dades d'enviament de l'usuari loguejat

@@ -7,5 +7,3 @@ import Orders from '@/components/manager/order/ManagerOrders.vue';
         <Orders />
     </div>
 </template>
-
-<style scoped></style>

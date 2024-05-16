@@ -32,12 +32,12 @@ export function shippingService() {
         return response;
     };
 
-    const shippingEdit = async (shipping: Shipping, id: number) => {
+    const shippingEdit = async (shipping: Shipping) => {
         const userToken = verifyToken();
 
         // Crida a l'API per editar un dades d'enviament específic
         const response = await axios.post<Shipping>(
-            `/app/shipping/update/${id}`,
+            `/app/shipping/update/${shipping.id}`,
             {
                 phone: shipping.phone,
                 street: shipping.street,

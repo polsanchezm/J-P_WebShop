@@ -46,10 +46,12 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
     <section>
-        <div class="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-            <div class="w-full max-w-lg bg-gray-50 dark:bg-corduroy-900 rounded-xl shadow md:mt-0 sm:max-w-lg xl:p-0">
-                <div class="p-6 space-y-6 md:space-y-6 sm:p-8">
-                    <h1 class="text-xl font-bold leading-tight tracking-tight text-corduroy-900 dark:text-ecru-50 md:text-2xl">Create Product</h1>
+        <div class="flex flex-col items-center justify-center">
+            <div class="flex flex-col w-full min-h-screen bg-gray-50 pt-7 items-center mt-20 dark:bg-corduroy-900">
+                <div class="bg-gray-400 dark:bg-gray-700 pb-6 pt-6 w-full">
+                    <h2 class="text-3xl font-bold text-white text-center">Create Product</h2>
+                </div>
+                <div class="p-6 space-y-6 md:space-y-6 sm:p-8 mt-20">
                     <form class="max-w-md mx-auto" @submit.prevent="onSubmit" enctype="multipart/form-data">
                         <div class="relative z-0 w-full mb-5 group">
                             <Field name="name" v-slot="{ field, meta }">
@@ -96,5 +98,3 @@ const onSubmit = handleSubmit((values) => {
         </div>
     </section>
 </template>
-
-<style scoped></style>

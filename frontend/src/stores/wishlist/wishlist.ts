@@ -20,7 +20,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
-            console.error('Error en obtenir el wishlist items', errorMessage.message);
+            console.error('Error en obtenir el wishlist items', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
@@ -33,6 +33,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
             const response = await wishlistServ.addToWishlist(productVariant);
             if (response.status == 200) {
                 console.log(response.data);
+                wishlist.value.push(response.data);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -52,7 +53,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
             if (response.status === 200) {
                 // Actualitza la wishlist i la pàgina (reactivitat)
-                wishlist.value = wishlist.value.filter(item => item.variantId !== variantId);
+                wishlist.value = wishlist.value.filter((item) => item.variantId !== variantId);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -63,19 +64,21 @@ export const useWishlistStore = defineStore('wishlist', () => {
         }
     };
 
+
     const toggleItemInWishlist = async (productVariant: any, variantId: number) => {
         console.log('toggle variant', productVariant.id);
+        console.log('wishlist toggle 1', wishlist.value);
+        wishlist.value = wishlist.value.filter((item) => item.variantId === productVariant.id);
 
-        const existingItem = wishlist.value.find(item => item.variantId === variantId);
-        console.log('existing item', existingItem);
-        console.log('wishlist', wishlist.value);
+        const existingItem = wishlist.value.find((item) => item.variantId === productVariant.id);
+        console.log('exiting item', existingItem);
+        console.log('wishlist toggle 2', wishlist.value);
 
-
-        if (!existingItem) {
-            await addItemToWishlist(productVariant);
-            // wishlist.value = wishlist.value.filter((item) => item.variantId !== variantId);
-        } else {
+        if (existingItem) {
             await removeItemFromWishlist(existingItem, productVariant.variantId);
+        } else {
+            wishlist.value = wishlist.value.filter((item) => item.variantId === variantId);
+            await addItemToWishlist(productVariant);
         }
     };
 

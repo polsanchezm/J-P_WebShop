@@ -6,11 +6,9 @@ const orderStore = useOrderStore();
 const isLoading = ref(true);
 const route = useRoute();
 
-// Agafa la ID de la comanda de la URL
 const paramId = route.params.id;
 const orderId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 
-// Carrega els detalls de la comanda abans de renderitzar-les
 onBeforeMount(async () => {
     await orderStore.detailOrder(orderId);
     isLoading.value = false;
@@ -19,7 +17,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div class="flex flex-col w-full h-screen bg-gray-50 pt-4 items-center min-h-screen mt-[79px]">
+    <div class="flex flex-col w-full h-screen bg-gray-50 items-center pt-8 min-h-screen mt-16">
         <div class="bg-gray-400 dark:bg-gray-700 p-5 pt-10 w-full">
             <h2 class="text-3xl font-bold text-white text-center">Order Details</h2>
         </div>

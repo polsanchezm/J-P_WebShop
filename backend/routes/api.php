@@ -40,8 +40,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
 Route::prefix('app')->name('app.')->group(function () {
 
+    Route::get("search/{search}", [ProductController::class, "searchProducts"])->name("search");
     Route::prefix('products')->name('products.')->group(function () {
-        Route::get("{limit?}", [ProductController::class, "index"])->name("index");
+        Route::get("/{limit?}", [ProductController::class, "index"])->name("index");
         Route::get("detail/{id}", [ProductController::class, "show"])->name("detail");
 
         Route::prefix('variants')->name('variants.')->group(function () {

@@ -6,21 +6,21 @@ import type { ProductVariant } from '@/models/productVariant';
 export function productService() {
     const { verifyToken } = useVerifyToken();
 
-    const initialProducts = async ($limit: number) => {
-        // Petició a l'API per a obtenir una quantitat de productes determinada
-        const response = await axios.get<Product[]>(`/app/products/${$limit}`);
-        return response;
-    };
-
-    const productsIndex = async () => {
+    const productsIndex = async (limit: number, page: number) => {
         // Petició a l'API per a obtenir tots els productes
-        const response = await axios.get<Product[]>('/app/products/');
+        const response = await axios.get<Product[]>(`/app/products?limit=${limit}&page=${page}`);
         return response;
     };
 
     const productDetail = async (productId: number) => {
         // Crida a l'API per a obtenir el detall i les variants d'un producte
         const response = await axios.get<Product>(`/app/products/detail/${productId}`);
+        return response;
+    };
+
+    const searchProducts = async (params: any) => {
+        const { search } = params;
+        const response = await axios.get(`/app/search/${search}`);
         return response;
     };
 
@@ -142,5 +142,5 @@ export function productService() {
         return response;
     };
 
-    return { productsIndex, productDetail, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant, initialProducts };
+    return { productsIndex, productDetail, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant, searchProducts };
 }

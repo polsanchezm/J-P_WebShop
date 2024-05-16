@@ -44,14 +44,11 @@ export function wishlistService() {
         console.log('service item', wishlistItem);
 
         // Petició per eliminar un nou producte a la wishlist de l'usuari
-        const response = await axios.delete<ProductItem>(
-            `/app/wishlist/items/delete/${wishlistItem.id}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${userToken}`
-                }
+        const response = await axios.delete<ProductItem>(`/app/wishlist/items/delete/${wishlistItem.id}`, {
+            headers: {
+                Authorization: `Bearer ${userToken}`
             }
-        );
+        });
 
         return response;
     };

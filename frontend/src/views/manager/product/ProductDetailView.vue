@@ -7,5 +7,3 @@ import ProductDetail from '@/components/manager/product/ManagerProductDetail.vue
         <ProductDetail />
     </div>
 </template>
-
-<style scoped></style>
