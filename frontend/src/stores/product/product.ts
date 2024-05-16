@@ -1,4 +1,5 @@
 import type { Product } from '@/models/product';
+import type { Pagination, ProductsResponse } from '@/models/apiResponse';
 import type { ProductVariant } from '@/models/productVariant';
 import router from '@/router';
 import { productService } from '@/services/product/product';
@@ -8,7 +9,7 @@ import { ref } from 'vue';
 
 export const useProductStore = defineStore('product', () => {
     const products = ref<Product[]>([]);
-    const pagination = ref({
+    const pagination = ref<Pagination>({
         currentPage: 1,
         lastPage: 1,
         nextPageUrl: null,
@@ -21,24 +22,16 @@ export const useProductStore = defineStore('product', () => {
     const productVariants = ref<ProductVariant[]>([]);
     const productServ = productService();
 
-
     const allProducts = async (limit: number, page: number) => {
         try {
             const response = await productServ.productsIndex(limit, page);
 
             if (response.status == 200) {
-                products.value = response.data.products;
-                console.log(response.data.pagination);
-
-                pagination.value = {
-                    currentPage: response.data.pagination.currentPage,
-                    lastPage: response.data.pagination.lastPage,
-                    nextPageUrl: response.data.pagination.nextPageUrl,
-                    prevPageUrl: response.data.pagination.prevPageUrl,
-                    perPage: response.data.pagination.perPage,
-                    total: response.data.pagination.total
-                };
-                console.log(pagination.value);
+                const data: ProductsResponse = response.data;
+                products.value = data.products;
+                pagination.value = data.pagination;
+                console.log('pagination',data.pagination);
+                console.log('pagination2',pagination.value);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;

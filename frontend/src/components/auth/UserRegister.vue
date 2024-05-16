@@ -4,27 +4,6 @@ import * as yup from 'yup';
 import { useAuthStore } from '@/stores/auth/auth';
 const authStore = useAuthStore();
 
-yup.addMethod(yup.date, 'minAge', function (minAge, message) {
-    return this.test('minAge', message, function (value) {
-        const { path, createError } = this;
-
-        const today = new Date();
-        const birthDate = new Date(value!);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-
-        if (age < minAge) {
-            return createError({ path, message });
-        }
-
-        return true;
-    });
-});
-
 // Validacions del formulari
 const formSchema = yup.object({
     name: yup
@@ -39,7 +18,7 @@ const formSchema = yup.object({
         .min(1, 'Surnames must be at least 1 character long.')
         .max(100, 'Surnames must be maximum 100 characters long.')
         .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ'’]+$/, 'Surnames can only contain letters.'),
-    birthdate: yup.date().required('Birthdate is required.').typeError('Birthdate must be a valid date').minAge(14, 'You must be at least 14 years old.'),
+    birthdate: yup.date().required('Birthdate is required.').typeError('Birthdate must be a valid date'),
     email: yup.string().required('Email is required.').email('Invalid email format.'),
     currentPassword: yup.string().required('Password is required.').min(8, 'Password must be at least 8 characters long.'),
     currentPasswordConfirmation: yup

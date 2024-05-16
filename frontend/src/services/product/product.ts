@@ -1,5 +1,6 @@
 import { useVerifyToken } from '@/composables/verifyToken';
 import axios from '@/lib/axios';
+import type { ProductsResponse } from '@/models/apiResponse';
 import { type Product } from '@/models/product';
 import type { ProductVariant } from '@/models/productVariant';
 
@@ -8,7 +9,7 @@ export function productService() {
 
     const productsIndex = async (limit: number, page: number) => {
         // Petició a l'API per a obtenir tots els productes
-        const response = await axios.get<Product[]>(`/app/products?limit=${limit}&page=${page}`);
+        const response = await axios.get<ProductsResponse>(`/app/products?limit=${limit}&page=${page}`);
         return response;
     };
 
