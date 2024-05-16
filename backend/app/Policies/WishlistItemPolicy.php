@@ -12,7 +12,7 @@ class WishlistItemPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === 'user';
+        return $user->role === 'client';
     }
 
     /**
@@ -20,7 +20,7 @@ class WishlistItemPolicy
      */
     public function view(User $user): bool
     {
-        return $user->role === 'user';
+        return $user->role === 'client';
     }
 
     /**
@@ -28,7 +28,7 @@ class WishlistItemPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'user';
+        return $user->role === 'client';
     }
 
     /**
@@ -36,6 +36,6 @@ class WishlistItemPolicy
      */
     public function delete(User $user, WishlistItem $wishlistItem): bool
     {
-        return $user->id === $wishlistItem->wishlist->user_id;
+        return $user->role === 'client';
     }
 }

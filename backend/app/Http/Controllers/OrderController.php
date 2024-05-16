@@ -16,7 +16,8 @@ class OrderController extends Controller
     {
         $this->authorize('viewAny', Order::class);
         $user = Auth::user();
-        $orders = $user->role === 'manager' ? Order::all() : Order::where('user_id', $user->id)->get();
+        $orders = $user->role === 'manager' ? Order::orderBy('created_at', 'desc')->get()
+            : Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         if (!$orders) {
             return response()->json(['message' => 'User orders not found'], 404);
         }

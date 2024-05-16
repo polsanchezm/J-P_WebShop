@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StripeRequest;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 use Stripe\StripeClient;
 
 class StripeController extends Controller
@@ -75,51 +76,88 @@ class StripeController extends Controller
 
     public function initiatePayment(StripeRequest $request)
     {
-        $validData = $request->validated();
         $user = Auth::user();
-        $items = $validData['cartItems'];
+        $items = $request->cartItems;
         $lineItems = $this->prepareLineItems($items);
-        $successUrl = $validData['success_url'] . '?session_id={CHECKOUT_SESSION_ID}';
-        $cancelUrl = $validData['cancel_url'] . '?session_id={CHECKOUT_SESSION_ID}';
+        $successUrl = $request->success_url;
+        $cancelUrl = $request->cancel_url;
         $customFields = $this->prepareCustomFields($user->shippingDetails);
 
-        $response = $this->stripeClient->checkout->sessions->create([
+        $session = $this->stripeClient->checkout->sessions->create([
             'line_items' => $lineItems,
             'mode' => 'payment',
             'customer_email' => $user->email,
             'success_url' => $successUrl,
             'cancel_url' => $cancelUrl,
             'custom_fields' => $customFields,
+            'shipping_options' => [
+                [
+                    'shipping_rate_data' => [
+                        'display_name' => 'Ground shipping',
+                        'type' => 'fixed_amount',
+                        'fixed_amount' => [
+                            'amount' => 399,
+                            'currency' => 'eur',
+                        ],
+                    ]
+                ],
+            ],
         ]);
 
-        return response()->json(['url' => $response->url]);
+        // Set the cookie with the correct path and possibly domain
+        $encryptedSessionId = Crypt::encryptString($session->id);
+        $sessionIdCookie = cookie('session_id', $encryptedSessionId, 1, '/', null, false, true);
+        return response()->json(['url' => $session->url])->withCookie($sessionIdCookie);
     }
 
-    public function paymentStatus(string $sessionId)
+    public function paymentStatus(Request $request)
     {
+        $encryptedSessionId = $request->cookie('session_id');
+        if (empty($encryptedSessionId)) {
+            return response()->json(['error' => 'Session data is missing'], 400);
+        }
+
+        $sessionId = Crypt::decryptString($encryptedSessionId);
+
         $stripeSession = $this->stripeClient->checkout->sessions->retrieve(
             $sessionId,
             ['expand' => ['line_items.data.price.product']]
         );
 
-        if (Gate::allows('createOrder', [Order::class, $stripeSession])) {
-            $lineItems = $this->convertStripeLineItems($stripeSession->line_items->data);
-            $order = $this->createOrder($lineItems);
+        $lineItems = $this->convertStripeLineItems($stripeSession->line_items->data);
+        $totalPrice = $stripeSession->amount_total * 0.01;
+        $shippingId = $stripeSession->custom_fields[0]->dropdown->value;
+        $result = $this->createOrder($lineItems, $sessionId, $totalPrice, $shippingId);
 
-            return response()->json([
-                'message' => 'Order created successfully',
-                'order' => $order,
-                'paymentStatus' => $stripeSession->payment_status,
-                'shippingId' => $stripeSession->custom_fields[0]->dropdown->value,
-            ], 200);
-        }
+        return response()->json([
+            'message' => $result['message'],
+            'order' => $result['order'],
+            'paymentStatus' => $stripeSession->payment_status,
+        ], $result['status']);
+
     }
 
-    protected function createOrder($lineItems)
+    protected function createOrder($lineItems, $sessionId, $totalPrice, $shippingId)
     {
-        $this->authorize('create', OrderDetail::class);
+        if (!$sessionId) {
+            return [
+                'message' => 'Invalid Stripe session ID.',
+                'status' => 400,
+            ];
+        }
+
+        $existingOrder = Order::where('stripe_session_id', $sessionId)->first() ? true : false;
+        if ($existingOrder) {
+            return [
+                'message' => 'An order with this Stripe session ID already exists.',
+                'order' => $existingOrder,
+                'status' => 409,
+            ];
+        }
+
         $userId = Auth::user()->id;
-        $order = Order::create(['user_id' => $userId, 'order_date' => Carbon::now()]);
+        $order = Order::create(['user_id' => $userId, 'stripe_session_id' => $sessionId, 'shipping_id' => $shippingId, 'total_price' => $totalPrice]);
+        $this->authorize('createOrder', $order);
 
         foreach ($lineItems as $item) {
             OrderDetail::create([
@@ -129,6 +167,11 @@ class StripeController extends Controller
                 'purchase_price' => $item['price'],
             ]);
         }
-        return $order;
+
+        return [
+            'message' => 'Order created successfully.',
+            'order' => $order,
+            'status' => 200,
+        ];
     }
 }

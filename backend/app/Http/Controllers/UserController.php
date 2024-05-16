@@ -44,8 +44,8 @@ class UserController extends Controller
             return response()->json(['message' => 'User not logged in or not found'], 401);
         }
         $request->validated();
-        $email = $request->input('email');
-        $password = $request->input('password');
+        $email = $request->email;
+        $password = $request->password;
         // Verifica si el correo electrónico y la contraseña proporcionados son correctos
         if ($user->email === $email && Hash::check($password, $user->password)) {
             return response()->json(['message' => 'Credentials verified successfully'], 200);
@@ -62,12 +62,11 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $this->authorize('update', $user);
-        $validData = $request->validated();
         $user->update([
-            'name' => $validData['name'],
-            'surnames' => $validData['surnames'],
-            'email' => $validData['email'],
-            'password' => Hash::make($validData['password']),
+            'name' => $request->name,
+            'surnames' => $request->surnames,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
         return response()->json([
             'message' => 'User updated successfully',
