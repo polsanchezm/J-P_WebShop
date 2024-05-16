@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use App\Helpers\ManageImage;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -15,8 +17,8 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $this->authorize('viewAny', Product::class);
-        $page = $request->page;
-        $limit = $request->limit;
+        $page = intval($request->page);
+        $limit = intval($request->limit);
         $products = Product::paginate($limit, ['*'], 'page', $page);
         return response()->json([
             'products' => ProductResource::collection($products),
@@ -109,6 +111,26 @@ class ProductController extends Controller
         ManageImage::deleteImage($imageName);
         $product->delete();
         return response()->json(['message' => 'Product deleted successfully'], 200);
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $searchTerm = $request->search;
+
+        $products = Product::where(function ($query) use ($searchTerm) {
+            $query->where('name', 'LIKE', "%{$searchTerm}%")
+                ->orWhereHas('productVariant', function ($q) use ($searchTerm) {
+                    $q->where('color', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('size', 'LIKE', "%{$searchTerm}%");
+                })
+                ->orWhereHas('category', function ($q) use ($searchTerm) {
+                    $q->where('type', 'LIKE', "%{$searchTerm}%");
+                });
+        })->get();
+
+        return response()->json([
+            'products' => ProductResource::collection($products),
+        ]);
     }
 
 }

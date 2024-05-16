@@ -18,6 +18,12 @@ export function productService() {
         return response;
     };
 
+    const searchProducts = async (params: any) => {
+        const { search } = params;
+        const response = await axios.get(`/app/search/${search}`);
+        return response;
+    };
+
     const addProduct = async (productData: any) => {
         const userToken = verifyToken();
         const formData = new FormData();
@@ -136,5 +142,5 @@ export function productService() {
         return response;
     };
 
-    return { productsIndex, productDetail, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant };
+    return { productsIndex, productDetail, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant, searchProducts };
 }

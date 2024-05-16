@@ -181,5 +181,21 @@ export const useProductStore = defineStore('product', () => {
         }
     };
 
-    return { pagination, allProducts, oneProduct, products, productDetail, productVariants, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant };
+    const searchProducts = async (params: any) => {
+        try {
+            const response = await productServ.searchProducts(params);
+
+            if (response.status == 200) {
+                products.value = response.data.products;
+            }
+        } catch (error) {
+            const errorMessage = error as AxiosError;
+            console.error('Error en eliminar la variant:', errorMessage);
+            if (errorMessage.response!.status == 404) {
+                router.push({ name: 'error404' });
+            }
+        }
+    };
+
+    return { searchProducts, pagination, allProducts, oneProduct, products, productDetail, productVariants, addProduct, deleteProduct, updateProduct, addVariant, updateVariant, deleteVariant };
 });
