@@ -42,7 +42,7 @@ const totalQuantity = computed(() => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-50 pt-6 mt-[80px] lg:mt-16 overflow-auto">
+    <div class="min-h-screen bg-gray-50 pt-4 mt-24 overflow-auto">
         <div class="bg-gray-400 dark:bg-gray-700 pt-[23px] p-5 w-full">
             <h2 class="text-3xl font-bold text-white text-center">Your Cart</h2>
         </div>

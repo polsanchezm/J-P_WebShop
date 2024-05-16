@@ -7,7 +7,7 @@ import { useAuthStore } from '@/stores/auth/auth';
 import { useProductStore } from '@/stores/product/product';
 import { useWishlistStore } from '@/stores/wishlist/wishlist';
 
-const authServ = useAuthStore();
+const authStore = useAuthStore();
 const productStore = useProductStore();
 const cartStore = useCartStore();
 const wishlistStore = useWishlistStore();
@@ -22,7 +22,7 @@ const isLoading = ref(true);
 
 onBeforeMount(async () => {
     await productStore.oneProduct(productId);
-    if (authServ.user) {
+    if (authStore.user) {
         await wishlistStore.wishlistItems();
     }
     isLoading.value = false;
@@ -86,7 +86,7 @@ const uniqueSizes = computed(() => {
 </script>
 
 <template>
-    <div class="bg-gray-100 mt-20 overflow-auto pb-28 md:pb-0 md:mb-0">
+    <div class="bg-gray-50 mt-0 overflow-auto pb-28 md:pb-0 md:mb-0">
         <main class="pt-20 pb-0 mb-0 items-center">
             <div class="container mx-auto px-6 h-screen pb-28">
                 <div v-if="isLoading" class="flex justify-center items-center h-full" role="status">
@@ -136,7 +136,7 @@ const uniqueSizes = computed(() => {
                                 </div>
 
                                 <!-- Authentication and Role-Based Actions -->
-                                <div v-if="authServ.userRole === 'client'">
+                                <div v-if="authStore.userRole === 'client'">
                                     <div class="flex items-center mt-6">
                                         <button @click.prevent="addToCart" class="px-4 py-4 text-white bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-xl text-sm md:text-base text-center">Add to Cart</button>
                                         <button @click="toggleItemInWishlist" class="ml-3 px-4 py-4 hover:bg-gray-100 border rounded-xl p-2 focus:outline-none">
@@ -146,7 +146,7 @@ const uniqueSizes = computed(() => {
                                         </button>
                                     </div>
                                 </div>
-                                <div v-else-if="authServ.userRole !== 'manager'" class="flex items-center mt-6">
+                                <div v-else-if="authStore.userRole !== 'manager'" class="flex items-center mt-6">
                                     <RouterLink :to="{ name: 'login' }" class="text-neutral-100 bg-neutral-800 hover:bg-neutral-100 hover:text-neutral-800 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-100 dark:hover:text-neutral-800 transition-colors font-medium rounded-xl text-base px-6 py-3 lg:px-7 lg:py-3.5 mr-2 focus:outline-none">Login to Buy</RouterLink>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@ const uniqueSizes = computed(() => {
                 <p class="text-gray-700"><span class="font-semibold">Color:</span> {{ productVariant.color }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ productVariant!.stock }}</p>
                 <p class="text-gray-700"><span class="font-semibold">Product ID:</span> {{ productVariant!.productId }}</p>
-                <div v-if="authServ.userRole === 'client'">
+                <div v-if="authStore.userRole === 'client'">
                     <button @click="addToCart(productStore.productDetail!, productVariant!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Add to cart</button>
                     <button @click="wishlistStore.addItemToWishlist(productVariant)" class="inline-block mt-4 text-black bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

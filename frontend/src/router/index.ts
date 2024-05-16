@@ -106,6 +106,7 @@ const router = createRouter({
                 },
                 {
                     path: '/products',
+                    component: () => import('@/components/layout/ProductLayoutComponent.vue'),
                     children: [
                         {
                             path: '',
@@ -201,6 +202,5 @@ router.beforeEach(async (to, from, next) => {
     isAuthenticatedGuard(to, from, next);
     setupTokenExpiryGuard(to, from, next);
 });
-
 
 export default router;

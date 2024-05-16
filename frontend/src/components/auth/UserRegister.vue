@@ -2,7 +2,7 @@
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { useAuthStore } from '@/stores/auth/auth';
-const authServ = useAuthStore();
+const authStore = useAuthStore();
 
 yup.addMethod(yup.date, 'minAge', function (minAge, message) {
     return this.test('minAge', message, function (value) {
@@ -61,7 +61,7 @@ const onSubmit = handleSubmit((values) => {
         currentPassword: values.currentPassword,
         currentPasswordConfirmation: values.currentPasswordConfirmation
     };
-    authServ.registerUser(registerData);
+    authStore.registerUser(registerData);
 });
 </script>
 

@@ -3,15 +3,15 @@ import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { onBeforeMount, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth/auth';
-const authServ = useAuthStore();
+const authStore = useAuthStore();
 const isLoading = ref(true);
 
 onBeforeMount(async () => {
-    await authServ.detailUser();
+    await authStore.detailUser();
     isLoading.value = false;
-    if (typeof authServ.user!.birthdate === 'string') {
-        authServ.user!.birthdate = new Date(authServ.user!.birthdate);
-        authServ.user!.birthdate = authServ.user!.birthdate.toISOString().slice(0, 10);
+    if (typeof authStore.user!.birthdate === 'string') {
+        authStore.user!.birthdate = new Date(authStore.user!.birthdate);
+        authStore.user!.birthdate = authStore.user!.birthdate.toISOString().slice(0, 10);
     }
 });
 
@@ -51,14 +51,14 @@ const onSubmit = handleSubmit((values) => {
         newPassword: values.newPassword,
         newPasswordConfirmation: values.newPasswordConfirmation
     };
-    authServ.editUser(editData);
+    authStore.editUser(editData);
 });
 </script>
 
 <template>
     <section>
         <div class="flex flex-col items-center justify-center min-h-screen">
-            <div class="flex flex-col w-full h-dvh bg-gray-50 lg:pt-3 pt-6 items-center mt-20 dark:bg-corduroy-900">
+            <div class="flex flex-col w-full h-dvh bg-gray-50 pt-[27px] items-center mt-20 dark:bg-corduroy-900">
                 <div class="bg-gray-400 dark:bg-gray-700 p-5 -mt-1 w-full pt-8">
                     <h2 class="text-3xl font-bold text-white text-center">Edit Your Profile</h2>
                 </div>
@@ -69,11 +69,11 @@ const onSubmit = handleSubmit((values) => {
                     </svg>
                     <span class="sr-only">Loading...</span>
                 </div>
-                <div v-else-if="authServ.user">
+                <div v-else-if="authStore.user">
                     <div class="mt-20 p-6 space-y-6 md:space-y-6 sm:p-8">
                         <form class="max-w-md mx-auto" @submit.prevent="onSubmit">
                             <div class="relative z-0 w-full mb-5 group">
-                                <Field name="name" v-slot="{ field, meta }" v-model="authServ.user.name">
+                                <Field name="name" v-slot="{ field, meta }" v-model="authStore.user.name">
                                     <input type="text" id="floating_name" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
                                     <label for="floating_name" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>
                                     <ErrorMessage v-if="meta.touched && meta.dirty" name="name" class="text-red-500 text-xs mt-1" />
@@ -81,7 +81,7 @@ const onSubmit = handleSubmit((values) => {
                             </div>
 
                             <div class="relative z-0 w-full mb-5 group">
-                                <Field name="surnames" v-slot="{ field, meta }" v-model="authServ.user.surnames">
+                                <Field name="surnames" v-slot="{ field, meta }" v-model="authStore.user.surnames">
                                     <input type="text" id="floating_surnames" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
                                     <label for="floating_surnames" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Surnames</label>
                                     <ErrorMessage v-if="meta.touched && meta.dirty" name="surnames" class="text-red-500 text-xs mt-1" />
@@ -89,7 +89,7 @@ const onSubmit = handleSubmit((values) => {
                             </div>
 
                             <div class="relative z-0 w-full mb-5 group">
-                                <Field name="email" v-slot="{ field, meta }" v-model="authServ.user.email">
+                                <Field name="email" v-slot="{ field, meta }" v-model="authStore.user.email">
                                     <input type="text" id="floating_email" v-bind="field" class="block py-2.5 px-0 w-full text-base text-metal-600 border-metal-600 focus:border-metal-950 dark:text-ecru-50 dark:border-ecru-300 dark:focus:border-ecru-50 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 peer" placeholder=" " required />
                                     <label for="floating_email" class="peer-focus:font-medium absolute text-base text-metal-600 peer-focus:text-metal-600 dark:text-ecru-200 peer-focus:dark:text-ecru-50 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
                                     <ErrorMessage v-if="meta.touched && meta.dirty" name="email" class="text-red-500 text-xs mt-1" />

@@ -60,8 +60,8 @@ const onSubmit = handleSubmit((values) => {
 <template>
     <section>
         <div class="flex flex-col items-center justify-center">
-            <div class="flex flex-col w-full min-h-screen bg-gray-50 lg:pt-3 md:pt-6 pt-6 items-center mt-20 dark:bg-corduroy-900">
-                <div class="bg-gray-400 dark:bg-gray-700 p-5 mt-0 w-full">
+            <div class="flex flex-col w-full min-h-screen bg-gray-50 pt-8 items-center mt-20 dark:bg-corduroy-900">
+                <div class="bg-gray-400 dark:bg-gray-700 p-6 -mt-1 w-full">
                     <h2 class="text-3xl font-bold text-white text-center">Edit Product</h2>
                 </div>
                 <div v-if="isLoading" class="flex justify-center items-center h-screen w-full" role="status">

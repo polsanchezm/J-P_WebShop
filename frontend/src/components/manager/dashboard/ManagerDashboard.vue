@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="flex flex-col w-full min-h-screen bg-gray-50 pt-8 lg:pt-6 items-center mt-16">
+        <div class="flex flex-col w-full min-h-screen bg-gray-50 pt-6 items-center mt-20">
             <div class="w-full bg-gray-400 dark:bg-gray-700 p-5 pt-8">
                 <h2 class="text-3xl font-bold text-white text-center">Management options</h2>
             </div>

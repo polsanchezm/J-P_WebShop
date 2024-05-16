@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
     <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="absolute z-40 top-[115px] inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
         <span class="sr-only">Open sidebar</span>
@@ -8,7 +6,7 @@
         </svg>
     </button>
 
-    <aside id="default-sidebar" class="relative z-40 w-64 h-dvh transition-transform -translate-x-full sm:translate-x-0 pt-[100px] sm:pt-[90px] md:pt-[90px] lg:pt-[90px]" aria-label="Sidenav">
+    <aside id="default-sidebar" class="relative z-40 w-64 h-dvh transition-transform -translate-x-full sm:translate-x-0 pt-[110px] sm:pt-[110px] md:pt-[110px] lg:pt-[110px]" aria-label="Sidenav">
         <div class="py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <ul class="space-y-2">
                 <li>

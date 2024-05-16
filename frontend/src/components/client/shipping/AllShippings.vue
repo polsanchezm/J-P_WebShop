@@ -16,7 +16,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div class="flex flex-col min-h-screen w-full bg-gray-50 pt-12 items-center lg:mt-10 mt-14">
+    <div class="flex flex-col min-h-screen w-full bg-gray-50 pt-[23px] items-center mt-20">
         <div class="w-full">
             <div class="bg-gray-400 dark:bg-gray-700 p-5 pt-8 w-full">
                 <h2 class="text-3xl font-bold text-white text-center">Your Shipping Lines</h2>

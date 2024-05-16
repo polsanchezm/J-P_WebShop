@@ -2,7 +2,7 @@
 import { useForm, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { useAuthStore } from '@/stores/auth/auth';
-const authServ = useAuthStore();
+const authStore = useAuthStore();
 
 const formSchema = yup.object({
     email: yup.string().required('Email is required').email('Incorrect email'),
@@ -19,7 +19,7 @@ const onSubmit = handleSubmit((values) => {
         currentPassword: values.currentPassword
     };
 
-    authServ.loginUser(loginData);
+    authStore.loginUser(loginData);
 });
 </script>
 

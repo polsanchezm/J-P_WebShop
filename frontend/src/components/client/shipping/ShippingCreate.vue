@@ -69,8 +69,8 @@ const onSubmit = handleSubmit((values) => {
 <template>
     <section>
         <div class="flex flex-col items-center justify-center min-h-screen">
-            <div class="flex flex-col w-full h-dvh bg-gray-50 items-center pt-3 lg:pt-0 mt-24 dark:bg-corduroy-900">
-                <div class="bg-gray-400 dark:bg-gray-700 p-5 -mt-1 w-full">
+            <div class="flex flex-col w-full h-dvh bg-gray-50 items-center pt-14 mt-14 dark:bg-corduroy-900">
+                <div class="bg-gray-400 dark:bg-gray-700 p-6 -mt-1 w-full">
                     <h2 class="text-3xl font-bold text-white text-center">Create Shipping Line</h2>
                 </div>
                 <form class="min-w-[300px] md:min-w-[500px] mx-auto mt-16" @submit.prevent="onSubmit">

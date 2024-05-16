@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import UserOrderDetail from '@/components/client/order/UserOrderDetail.vue';
+import ManagerOrderDetail from '@/components/manager/order/ManagerOrderDetail.vue';
 </script>
 
 <template>
     <div>
-        <UserOrderDetail />
+        <ManagerOrderDetail />
     </div>
 </template>

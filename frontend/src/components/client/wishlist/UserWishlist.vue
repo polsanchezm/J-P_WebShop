@@ -31,7 +31,7 @@ const addToCart = (productDetail: ProductItem) => {
 </script>
 
 <template>
-    <div class="h-screen bg-gray-50 pt-2 lg:pt-3 md:mt-20 md:pt-6 mt-24 overflow-auto">
+    <div class="h-screen bg-gray-50 pt-4 mt-24 overflow-auto">
         <div class="bg-gray-400 dark:bg-gray-700 pt-[23px] p-5 w-full">
             <h2 class="text-3xl font-bold text-white text-center">Your Wishlist</h2>
         </div>
