@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Mètode que retorna les wishlist d'un usuari
     public function index()
     {
         $this->authorize('viewAny', Wishlist::class);

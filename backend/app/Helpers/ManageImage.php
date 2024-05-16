@@ -11,22 +11,14 @@ class ManageImage
 
     public static function storeImage($imagePath)
     {
+        // Desa la imatge a l'arrel del disc 'images'
         $path = $imagePath->store('', 'images');
         return $path;
     }
 
-    public static function getImage($imageName)
-    {
-        if (!Storage::disk('images')->exists($imageName)) {
-            return response()->json(['message' => 'Image not found'], 404);
-        }
-        $image = Storage::disk('images')->get($imageName);
-        $type = Storage::disk('images')->mimeType($imageName);
-        return response($image, 200)->header('Content-Type', $type);
-    }
-
     public static function deleteImage($imageName)
     {
+        // Elimina una imatge del disc 'images'
         Storage::disk('images')->delete($imageName);
     }
 }

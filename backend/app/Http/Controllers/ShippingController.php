@@ -11,13 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ShippingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $this->authorize('viewAny', ShippingDetail::class);
         $user = Auth::user();
+
+        // Cerca les dades d'enviament de l'usuari loguejat, o bé totes si és rol manager
         $shipping = $user->role === 'manager' ? ShippingDetail::all() : ShippingDetail::where('user_id', $user->id)->get();
         if (!$shipping) {
             return response()->json(['message' => 'User shippings not found'], 404);
@@ -26,13 +25,12 @@ class ShippingController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(ShippingRequest $request)
     {
         $this->authorize('create', ShippingDetail::class);
         $userId = Auth::user()->id;
+
+        // Crea un nou element amb les dades d'enviament
         $shipping = ShippingDetail::create([
             'user_id' => $userId,
             'phone' => $request->phone,
@@ -54,9 +52,7 @@ class ShippingController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
+    // Retorna el detall d'un dades d'enviament específic
     public function show(string $id)
     {
         $shipping = ShippingDetail::find($id);
@@ -68,9 +64,6 @@ class ShippingController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(ShippingRequest $request, string $id)
     {
         $shipping = ShippingDetail::find($id);
@@ -78,6 +71,7 @@ class ShippingController extends Controller
         if (!$shipping) {
             return response()->json(['message' => 'Shipping not found'], 404);
         }
+        // Actualitza l'element
         $shipping->update($request->all());
         return response()->json([
             'message' => 'Shipping updated successfully',
@@ -86,9 +80,7 @@ class ShippingController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Elimina un dades d'enviament específic
     public function destroy(string $id)
     {
         $shipping = ShippingDetail::find($id);

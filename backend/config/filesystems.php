@@ -56,6 +56,7 @@ return [
             'throw' => false,
         ],
 
+        // Declarar nou disc per a desar les imatges
         'images' => [
             'driver' => 'local',
             'root' => storage_path('app/public/images'),

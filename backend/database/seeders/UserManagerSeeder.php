@@ -15,6 +15,7 @@ class UserManagerSeeder extends Seeder
      */
     public function run(): void
     {
+        // Crea l'usuari amb el rol de Manager
         $date = Carbon::createFromFormat('d/m/Y H:i:s', '03/01/2003 13:43:33');
         $birthday = $date->subDays(1)->format('Y-m-d');
         DB::table('users')->insert([

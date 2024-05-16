@@ -9,13 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Mètode que retorna un llista de comandes
     public function index()
     {
         $this->authorize('viewAny', Order::class);
         $user = Auth::user();
+        // Agafa les comandes de l'usuari loguejat, o totes les existents si és el rol manager
         $orders = $user->role === 'manager' ? Order::orderBy('created_at', 'desc')->get()
             : Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         if (!$orders) {
@@ -24,9 +23,8 @@ class OrderController extends Controller
         return response()->json(OrderResource::collection($orders));
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+    // Mètode que retorna una comanda específica
     public function show(string $id)
     {
         $order = Order::find($id);
@@ -37,9 +35,8 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
+    // Elimina una comanda específica
     public function destroy(string $id)
     {
         $order = Order::find($id);
