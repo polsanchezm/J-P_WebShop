@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const registerUser = async (user: Register) => {
         try {
-            // Crida a l'API per a registrar l'usuari
+            // Obté la resposta de la crida a l'API per a registrar l'usuari
             const registerResponse = await authServ.userRegister(user);
 
             if (registerResponse.status == 201 && registerResponse.data.token) {
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const loginUser = async (user: LoginData) => {
         try {
-            // Crida a l'API per a fer login
+            // Obté la resposta de la crida a l'API per a fer login
             const loginResponse = await authServ.userLogin(user);
 
             if (loginResponse.status == 200 && loginResponse.data.token) {
@@ -67,6 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const logoutUser = async () => {
         try {
+            // Obté resposta de la crida a l'API per fer logout
             const logoutResponse = await authServ.userLogout();
 
             if (logoutResponse.status == 200) {
@@ -75,7 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
                 // Canvia el valor de la variable a null
                 userRole.value = null;
 
-                // Elimina el roken i el rol d'usuari del LocalStorage
+                // Elimina el token i el rol d'usuari del LocalStorage
                 localStorage.removeItem('token');
                 localStorage.removeItem('userRole');
 
@@ -92,6 +93,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const detailUser = async () => {
         try {
+            // Obté resposta de la crida a l'API pels detalls de l'usuari
             const detailResponse = await authServ.userDetail();
 
             if (detailResponse.status == 200) {
@@ -106,11 +108,14 @@ export const useAuthStore = defineStore('auth', () => {
 
     const editUser = async (user: VerifyUser) => {
         try {
+            // Obté resposta de la crida a l'API per verificar les credencials de l'usuari
             const credentialResponse = await authServ.userCredentrials(user);
 
             if (credentialResponse.status == 200) {
+                // Obté resposta de la crida a l'API per editar les dades de l'usuari
                 const editResponse = await authServ.userEdit(user);
                 if (editResponse.status == 200) {
+
                     // Porta a la ruta de detall d'usuari
                     router.push({ name: 'user.detail' });
                 }
@@ -124,6 +129,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const deleteUser = async () => {
         try {
+            // Obté resposta de la crida a l'API per eliminar l'usuari
             const response = await authServ.userDelete();
 
             if (response.status == 200) {
@@ -132,7 +138,7 @@ export const useAuthStore = defineStore('auth', () => {
                 // Canvia el valor de la variable a null
                 userRole.value = null;
 
-                // Elimina el roken i el rol d'usuari del LocalStorage
+                // Elimina el token i el rol d'usuari del LocalStorage
                 localStorage.removeItem('token');
                 localStorage.removeItem('userRole');
 

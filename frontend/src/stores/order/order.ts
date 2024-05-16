@@ -13,6 +13,7 @@ export const useOrderStore = defineStore('order', () => {
 
     const userOrders = async () => {
         try {
+            // Desa la resposta de la crida a l'API per obtenir les comandes de l'usuari
             const response = await orderServ.ordersIndex();
 
             if (response.status == 200) {
@@ -29,6 +30,7 @@ export const useOrderStore = defineStore('order', () => {
 
     const detailOrder = async (orderId: number) => {
         try {
+            // Desa la resposta de la crida a l'API per obtenir el detall d'una comanda
             const response = await orderServ.orderDetail(orderId);
 
             if (response.status == 200) {
@@ -45,6 +47,7 @@ export const useOrderStore = defineStore('order', () => {
 
     const deleteOrder = async (orderId: number, redirect: boolean = false) => {
         try {
+            // Desa la resposta de la crida a l'API per eliminar una comanda
             const response = await orderServ.orderDelete(orderId);
 
             console.log(response);

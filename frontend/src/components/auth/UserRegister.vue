@@ -25,6 +25,7 @@ yup.addMethod(yup.date, 'minAge', function (minAge, message) {
     });
 });
 
+// Validacions del formulari
 const formSchema = yup.object({
     name: yup
         .string()
@@ -61,6 +62,7 @@ const onSubmit = handleSubmit((values) => {
         currentPassword: values.currentPassword,
         currentPasswordConfirmation: values.currentPasswordConfirmation
     };
+    // Truca al mètode registerUser de l'store
     authStore.registerUser(registerData);
 });
 </script>

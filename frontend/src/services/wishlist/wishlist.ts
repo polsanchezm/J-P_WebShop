@@ -9,7 +9,7 @@ export function wishlistService() {
     const wishlistItems = async () => {
         const userToken = verifyToken();
 
-        // Petició per a obtenir els ítems que pertanyen a la wishlist
+        // Petició per a obtenir els productes que pertanyen a la wishlist de l'usuari
         const response = await axios.get<ProductItem[]>('/app/wishlist/items', {
             headers: {
                 Authorization: `Bearer ${userToken}`
@@ -22,7 +22,7 @@ export function wishlistService() {
     const addToWishlist = async (productVariant: ProductVariant) => {
         const userToken = verifyToken();
 
-        // Petició per afegir/crear un nou ítem a la wishlist
+        // Petició per afegir/crear un nou producte a la wishlist de l'usuari
         const response = await axios.post<ProductItem>(
             '/app/wishlist/items/create',
             {
@@ -43,7 +43,7 @@ export function wishlistService() {
 
         console.log('service item', wishlistItem);
 
-        // Petició per afegir/crear un nou ítem a la wishlist
+        // Petició per eliminar un nou producte a la wishlist de l'usuari
         const response = await axios.delete<ProductItem>(`/app/wishlist/items/delete/${wishlistItem.id}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`

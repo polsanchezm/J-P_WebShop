@@ -6,6 +6,7 @@ const { formatDate } = useFormatDate();
 const orderStore = useOrderStore();
 const isLoading = ref(true);
 
+// Carrega les comandes de l'usuari abans de renderitzar-les
 onBeforeMount(async () => {
     await orderStore.userOrders();
     isLoading.value = false;

@@ -3,6 +3,8 @@ import { useCartStore } from '@/stores/cart/cart';
 import { onBeforeMount, ref } from 'vue';
 const cartStore = useCartStore();
 const isLoading = ref(true);
+
+// Carrega la informació del pagament
 onBeforeMount(async () => {
     try {
         await cartStore.paymentInfo();

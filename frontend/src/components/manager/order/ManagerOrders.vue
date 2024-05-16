@@ -6,6 +6,7 @@ const { formatDate } = useFormatDate();
 const orderStore = useOrderStore();
 const isLoading = ref(true);
 
+// Carrera totes les comandes per gestionar-les
 onBeforeMount(async () => {
     await orderStore.userOrders();
     isLoading.value = false;

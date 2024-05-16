@@ -12,7 +12,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     const wishlistItems = async () => {
         try {
-            // Petició per a obtenir els ítems que pertanyen a la wishlist
+            // Recull la resposta de la crida per a obtenir els ítems/productes de la wishlist
             const response = await wishlistServ.wishlistItems();
 
             if (response.status == 200) {
@@ -29,9 +29,8 @@ export const useWishlistStore = defineStore('wishlist', () => {
 
     const addItemToWishlist = async (productVariant: ProductVariant) => {
         try {
-            // Petició per afegir/crear un nou ítem a la wishlist
+            // Recull la resposta de la petició per afegir un nou ítem/producte a la wishlist
             const response = await wishlistServ.addToWishlist(productVariant);
-
             if (response.status == 200) {
                 console.log(response.data);
                 wishlist.value.push(response.data);
@@ -49,9 +48,11 @@ export const useWishlistStore = defineStore('wishlist', () => {
         console.log('store item', wishlistItem);
 
         try {
+            // Resposta de la petició a l'API per eliminar un producte de la wishlist
             const response = await wishlistServ.removeFromWishlist(wishlistItem);
 
             if (response.status === 200) {
+                // Actualitza la wishlist i la pàgina (reactivitat)
                 wishlist.value = wishlist.value.filter((item) => item.variantId !== variantId);
             }
         } catch (error) {
@@ -62,6 +63,7 @@ export const useWishlistStore = defineStore('wishlist', () => {
             }
         }
     };
+
 
     const toggleItemInWishlist = async (productVariant: any, variantId: number) => {
         console.log('toggle variant', productVariant.id);

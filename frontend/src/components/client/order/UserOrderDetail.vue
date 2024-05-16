@@ -6,9 +6,11 @@ const orderStore = useOrderStore();
 const isLoading = ref(true);
 const route = useRoute();
 
+// Agafa la ID de la comanda de la URL
 const paramId = route.params.id;
 const orderId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 
+// Carrega els detalls de la comanda abans de renderitzar-les
 onBeforeMount(async () => {
     await orderStore.detailOrder(orderId);
     isLoading.value = false;

@@ -34,7 +34,7 @@ class WishlistItemPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, WishlistItem $wishlistItem): bool
+    public function delete(User $user): bool
     {
         return $user->role === 'client';
     }

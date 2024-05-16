@@ -68,7 +68,7 @@ export function productService() {
         formData.append('image', productData.image);
         formData.append('price', productData.price);
 
-        // Crida a l'API per modificar els detalls d'un producte
+        // Crida a l'API per modificar els detalls d'un producte específic
         const response = await axios.post<Product>(`/app/products/update/${productData.productId}`, formData, {
             headers: {
                 Authorization: `Bearer ${userToken}`,

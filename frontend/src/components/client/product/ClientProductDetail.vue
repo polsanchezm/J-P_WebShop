@@ -13,13 +13,17 @@ const cartStore = useCartStore();
 const wishlistStore = useWishlistStore();
 
 const route = useRoute();
+
+// Agafa la ID del producte de la URL 
 const paramId = route.params.id;
 const productId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
+
 const selectedColor = ref('');
 const selectedSize = ref('');
 const fillColor = ref('none');
 const isLoading = ref(true);
 
+// Carrega el detall d'un producte i els items de la wishlist abans de renderitzar-los
 onBeforeMount(async () => {
     await productStore.oneProduct(productId);
     if (authStore.user) {
@@ -30,16 +34,18 @@ onBeforeMount(async () => {
     console.log('product', productStore.productDetail);
 });
 
+// Retorna True o False si la mida està disponible per a un color
 const isSizeAvailableForColor = (size: string, color: string) => {
     return productStore.productVariants.some((variant) => variant.size === size && variant.color === color && variant.stock! > 0);
 };
 
 watch(selectedColor, (newColor) => {
     if (!isSizeAvailableForColor(selectedSize.value, newColor)) {
-        selectedSize.value = '';
+        selectedSize.value = ''; // Reseteja la selecció de tamany si no està disponible
     }
 });
 
+// Afegeix al carret de compra
 const addToCart = () => {
     if (!selectedColor.value || !selectedSize.value) {
         console.error('Color or size is not selected');
@@ -60,6 +66,7 @@ const addToCart = () => {
     cartStore.addToCart(productItem, selectedVariant!.id);
 };
 
+// Afegeix o treu un producte de la wishlist
 const toggleItemInWishlist = () => {
     if (!selectedColor.value || !selectedSize.value) {
         console.error('Color or size is not selected');

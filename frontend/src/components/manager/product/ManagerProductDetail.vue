@@ -8,6 +8,8 @@ import { useProductStore } from '@/stores/product/product';
 const productStore = useProductStore();
 
 const route = useRoute();
+
+// Captura la ID del producte de la URL
 const paramId = route.params.id;
 const productId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 const isLoading = ref(true);
@@ -15,6 +17,7 @@ const selectedColor = ref('');
 const selectedSize = ref('');
 
 onBeforeMount(async () => {
+    // Carrega el detall i les variants (si en té) d'un producte específic
     await productStore.oneProduct(productId);
     isLoading.value = false;
     console.log('product', productStore.productDetail);
@@ -22,6 +25,7 @@ onBeforeMount(async () => {
     console.log('productId', productStore.productDetail!.id);
 });
 
+// Validacions de formulari
 const formSchema = yup.object({
     color: yup
         .string()
@@ -52,6 +56,7 @@ const handleCreate = handleSubmit((values) => {
         productVariant: 0
     };
     console.log('component', productData);
+    // Afegir/crear variant d'un producte trucant el mètode addVariant de l'store
     productStore.addVariant(productData);
 });
 
@@ -66,18 +71,20 @@ const handleUpdate = handleSubmit((values) => {
         productVariant: 0
     };
     console.log('component', productData);
-
+    // Truca el mètode updateVariant de l'store per actualizar una variant de producte
     productStore.updateVariant(productData);
 });
 
 let addVariantAreVisible = ref(false);
 let editVariantAreVisible = ref<number | null>(null);
 
+// Mostra o oculta el formulari per afegir una variant
 const toggleAddVariant = () => {
     addVariantAreVisible.value = !addVariantAreVisible.value;
 };
 
 const editVariantId = ref(null);
+// Mostra o oculta el formulari per editar una variant
 const toggleEditVariant = (index: any, variantId: any) => {
     console.log(variantId);
     editVariantId.value = variantId;

@@ -88,8 +88,8 @@ class WishlistItemController extends Controller
     // Elimina un wishlist item específic
     public function destroy(string $id)
     {
+        $this->authorize('delete', WishlistItem::class);
         $wishlistItem = WishlistItem::find($id);
-        $this->authorize('delete', $wishlistItem);
         if (!$wishlistItem) {
             return response()->json(['message' => 'Wishlist item not found'], 404);
         }

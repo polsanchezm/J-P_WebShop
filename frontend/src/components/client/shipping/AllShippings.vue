@@ -6,6 +6,7 @@ const authStore = useAuthStore();
 const shippingStore = useShippingStore();
 const isLoading = ref(true);
 
+// Carrega el detall de l'usuari i les seves dades d'enviament
 onBeforeMount(async () => {
     await authStore.detailUser();
     console.log('user', authStore.user);

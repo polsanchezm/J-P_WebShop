@@ -6,6 +6,7 @@ import PaginationComponent from '@/components/layout/PaginationComponent.vue';
 const productStore = useProductStore();
 const isLoading = ref(true);
 
+// Carrega tots els productes abans de renderitzar-los
 async function loadProducts(page: number) {
     await productStore.allProducts(15, page);
     isLoading.value = false;

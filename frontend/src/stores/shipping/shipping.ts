@@ -13,6 +13,7 @@ export const useShippingStore = defineStore('shipping', () => {
         console.log('store', shipping);
 
         try {
+            // Resposta obtinguda de la petició per crear un nou dades d'enviament
             const response = await shippinServ.shippingCreate(shipping);
 
             if (response.status == 200) {
@@ -30,6 +31,7 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const editShipping = async (shipping: Shipping) => {
         try {
+            // Desa la resposta que s'obté de la crida per editar un dades d'enviament
             const response = await shippinServ.shippingEdit(shipping);
 
             if (response.status == 200) {
@@ -47,6 +49,7 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const userShippings = async () => {
         try {
+            // Obté la resposta de la petició per obtenir les dades d'enviament de l'usuari
             const response = await shippinServ.shippingIndex();
 
             if (response.status == 200) {
@@ -63,7 +66,7 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const detailShipping = async (id: number) => {
         try {
-            // Petició a l'API per obtenir el detall d'un dades d'enviament
+            // Desa la resposta de la petició a l'API per obtenir el detall d'un dades d'enviament
             const response = await shippinServ.shippingDetail(id);
 
             if (response.status == 200) {
@@ -80,10 +83,11 @@ export const useShippingStore = defineStore('shipping', () => {
 
     const deleteShipping = async (id: number) => {
         try {
+            // Resposta obtinguda de de la crida a l'API per eliminar un dades d'enviament
             const response = await shippinServ.shippingDelete(id);
 
             if (response.status == 200) {
-                // Actualitza el llistat de dades d'enviament de l'usuari
+                // Actualitza el llistat i la pàgina de dades d'enviament de l'usuari
                 shipping.value = shipping.value.filter((ship) => ship.id !== id);
             }
         } catch (error) {

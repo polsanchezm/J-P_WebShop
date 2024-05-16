@@ -6,6 +6,7 @@ const { formatDate } = useFormatDate();
 const authStore = useAuthStore();
 const isLoading = ref(true);
 
+// Carrega els detalls de l'usuari loguejat per renderitzar-los
 onBeforeMount(async () => {
     await authStore.detailUser();
     isLoading.value = false;

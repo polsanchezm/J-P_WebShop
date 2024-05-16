@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth/auth';
 const authStore = useAuthStore();
 const isLoading = ref(true);
 
+// Carrega els detalls de l'usuari per a poder editar-les
 onBeforeMount(async () => {
     await authStore.detailUser();
     isLoading.value = false;
@@ -15,6 +16,7 @@ onBeforeMount(async () => {
     }
 });
 
+// Validacions del formulari
 const formSchema = yup.object({
     name: yup
         .string()
@@ -51,11 +53,13 @@ const onSubmit = handleSubmit((values) => {
         newPassword: values.newPassword,
         newPasswordConfirmation: values.newPasswordConfirmation
     };
+    // Crida el mètode editUser de l'store
     authStore.editUser(editData);
 });
 </script>
 
 <template>
+
     <section>
         <div class="flex flex-col items-center justify-center min-h-screen">
             <div class="flex flex-col w-full h-dvh bg-gray-50 pt-[27px] items-center mt-20 dark:bg-corduroy-900">
