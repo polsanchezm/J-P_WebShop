@@ -63,8 +63,8 @@ const addToCart = () => {
     cartStore.addToCart(productItem, selectedVariant!.id);
 };
 
-// Afegeix o treu un producte de la wishlist
-const toggleItemInWishlist = () => {
+// Afegeix un producte de la wishlist
+const addItemToWishlist = () => {
     if (!selectedColor.value || !selectedSize.value) {
         console.error('Color or size is not selected');
         return;
@@ -72,7 +72,7 @@ const toggleItemInWishlist = () => {
 
     const selectedVariant = productStore.productDetail?.productVariants.find((variant) => variant.color === selectedColor.value && variant.size === selectedSize.value);
 
-    wishlistStore.toggleItemInWishlist(selectedVariant!, selectedVariant!.id);
+    wishlistStore.addItemToWishlist(selectedVariant!);
     fillColor.value = fillColor.value === 'none' ? 'currentColor' : 'none';
 };
 
@@ -141,7 +141,7 @@ const uniqueSizes = computed(() => {
                                 <div v-if="authStore.userRole === 'client'">
                                     <div class="flex items-center mt-6">
                                         <button @click.prevent="addToCart" class="px-4 py-4 text-white bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-xl text-sm md:text-base text-center">Add to Cart</button>
-                                        <button @click="toggleItemInWishlist" class="ml-3 px-4 py-4 hover:bg-gray-100 border rounded-xl p-2 focus:outline-none">
+                                        <button @click="addItemToWishlist" class="ml-3 px-4 py-4 hover:bg-gray-100 border rounded-xl p-2 focus:outline-none">
                                             <svg class="w-6 h-6 text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" :fill="fillColor">
                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
                                             </svg>
@@ -159,31 +159,3 @@ const uniqueSizes = computed(() => {
         </main>
     </div>
 </template>
-
-<!-- <template>
-    <div v-if="productStore.productDetail" class="max-w-md mx-auto bg-white shadow-md rounded px-4 py-6 mt-32">
-        <img v-if="productStore.productDetail!.image" :src="productStore.productDetail!.image" />
-        <p class="text-gray-700"><span class="font-semibold">ID:</span> {{ productStore.productDetail!.id }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Name:</span> {{ productStore.productDetail!.name }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Description:</span> {{ productStore.productDetail!.description }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Price:</span> {{ productStore.productDetail!.price }}</p>
-        <p class="text-gray-700"><span class="font-semibold">Category ID:</span> {{ productStore.productDetail!.categoryId }}</p>
-        <ul v-if="productStore.productVariants">
-            <li v-for="(productVariant, index) in productStore.productVariants" :key="index">
-                <p class="text-gray-700"><span class="font-semibold">Variant ID:</span> {{ productVariant!.id }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Size:</span> {{ productVariant!.size }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Color:</span> {{ productVariant.color }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Stock:</span> {{ productVariant!.stock }}</p>
-                <p class="text-gray-700"><span class="font-semibold">Product ID:</span> {{ productVariant!.productId }}</p>
-                <div v-if="authStore.userRole === 'client'">
-                    <button @click="addToCart(productStore.productDetail!, productVariant!.id)" class="inline-block mt-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">Add to cart</button>
-                    <button @click="wishlistStore.addItemToWishlist(productVariant)" class="inline-block mt-4 text-black bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-xl text-sm px-4 py-2 lg:py-2.5 mr-2 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                        </svg>
-                    </button>
-                </div>
-            </li>
-        </ul>
-    </div>
-</template> -->
