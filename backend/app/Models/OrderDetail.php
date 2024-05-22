@@ -15,7 +15,7 @@ class OrderDetail extends Model
         "quantity",
         "purchase_price",
     ];
-    
+
     public function order()
     {
         return $this->belongsTo(Order::class);

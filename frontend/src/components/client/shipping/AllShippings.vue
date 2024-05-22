@@ -9,10 +9,8 @@ const isLoading = ref(true);
 // Carrega el detall de l'usuari i les seves dades d'enviament
 onBeforeMount(async () => {
     await authStore.detailUser();
-    console.log('user', authStore.user);
     await shippingStore.userShippings();
     isLoading.value = false;
-    console.log('shipping', shippingStore.shipping);
 });
 </script>
 

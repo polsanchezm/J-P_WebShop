@@ -35,7 +35,7 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    
+
     // Elimina una comanda específica
     public function destroy(string $id)
     {

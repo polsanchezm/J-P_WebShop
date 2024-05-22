@@ -14,7 +14,6 @@ onBeforeMount(async () => {
         isLoading.value = false;
     }
 
-    console.log('payment', cartStore.payment);
     if (cartStore.payment!.paymentStatus === 'paid') {
         cartStore.removeAllFromCart();
     }

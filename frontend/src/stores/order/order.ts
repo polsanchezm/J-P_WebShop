@@ -50,8 +50,6 @@ export const useOrderStore = defineStore('order', () => {
             // Desa la resposta de la crida a l'API per eliminar una comanda
             const response = await orderServ.orderDelete(orderId);
 
-            console.log(response);
-
             if (response.status === 200) {
                 if (redirect) {
                     // Portar a la pàgina de comandes

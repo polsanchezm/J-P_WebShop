@@ -16,6 +16,13 @@ class ManageImage
         return $path;
     }
 
+    public static function getImage($imageName)
+    {
+        // Generar la URL de la ruta que devuelve la imagen
+        $url = route('app.images', ['filename' => $imageName]);
+        return $url;
+    }
+
     public static function deleteImage($imageName)
     {
         // Elimina una imatge del disc 'images'

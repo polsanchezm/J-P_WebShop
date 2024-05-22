@@ -108,8 +108,6 @@ export function productService() {
     const updateVariant = async (productVariant: ProductVariant) => {
         const userToken = verifyToken();
 
-        console.log('service', productVariant);
-
         // Crida a l'API per modificar una variant d'un producte
         const response = await axios.post<ProductVariant>(
             `/app/products/variants/update/${productVariant.id}`,

@@ -20,9 +20,6 @@ onBeforeMount(async () => {
     // Carrega el detall i les variants (si en té) d'un producte específic
     await productStore.oneProduct(productId);
     isLoading.value = false;
-    console.log('product', productStore.productDetail);
-    console.log('product variants', productStore.productVariants);
-    console.log('productId', productStore.productDetail!.id);
 });
 
 // Validacions de formulari
@@ -55,7 +52,6 @@ const handleCreate = handleSubmit((values) => {
         quantity: 0,
         productVariant: 0
     };
-    console.log('component', productData);
     // Afegir/crear variant d'un producte trucant el mètode addVariant de l'store
     productStore.addVariant(productData);
 });
@@ -70,7 +66,6 @@ const handleUpdate = handleSubmit((values) => {
         quantity: 0,
         productVariant: 0
     };
-    console.log('component', productData);
     // Truca el mètode updateVariant de l'store per actualizar una variant de producte
     productStore.updateVariant(productData);
 });
@@ -86,7 +81,6 @@ const toggleAddVariant = () => {
 const editVariantId = ref(null);
 // Mostra o oculta el formulari per editar una variant
 const toggleEditVariant = (index: any, variantId: any) => {
-    console.log(variantId);
     editVariantId.value = variantId;
     if (editVariantAreVisible.value === index) {
         editVariantAreVisible.value = null;

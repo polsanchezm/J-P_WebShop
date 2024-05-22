@@ -12,7 +12,6 @@ const orderId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId
 onBeforeMount(async () => {
     await orderStore.detailOrder(orderId);
     isLoading.value = false;
-    console.log('orderDetail', orderStore.oneOrder);
 });
 </script>
 

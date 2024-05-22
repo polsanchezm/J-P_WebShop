@@ -41,8 +41,6 @@ export function wishlistService() {
     const removeFromWishlist = async (wishlistItem: any) => {
         const userToken = verifyToken();
 
-        console.log('service item', wishlistItem);
-
         // Petició per eliminar un nou producte a la wishlist de l'usuari
         const response = await axios.delete<ProductItem>(`/app/wishlist/items/delete/${wishlistItem.id}`, {
             headers: {

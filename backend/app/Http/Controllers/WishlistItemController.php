@@ -54,7 +54,7 @@ class WishlistItemController extends Controller
 
         // Crea un nou wishlist item
         $wishlistItem = WishlistItem::create([
-            'wishlist_id' => $wishlist->id, 
+            'wishlist_id' => $wishlist->id,
             'variant_id' => $productVariant->id
         ]);
 
@@ -64,7 +64,7 @@ class WishlistItemController extends Controller
         ], 200);
     }
 
-    
+
     // Retorna el detall d'un wishlist item
     public function show(string $id)
     {
@@ -84,7 +84,7 @@ class WishlistItemController extends Controller
         return response()->json(new WishlistItemResource($wishlistItem));
     }
 
-    
+
     // Elimina un wishlist item específic
     public function destroy(string $id)
     {

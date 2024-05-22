@@ -10,7 +10,6 @@ const isLoading = ref(true);
 async function loadProducts(page: number) {
     await productStore.allProducts(15, page);
     isLoading.value = false;
-    console.log('tots els productes:', productStore.products);
 }
 
 onBeforeMount(() => loadProducts(1));

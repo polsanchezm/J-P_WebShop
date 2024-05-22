@@ -10,8 +10,6 @@ const userProfile = computed(() => {
     const regex = /^\/user\/?.*/;
     return regex.test(router.path);
 });
-console.log('is home layout', isHome.value);
-console.log(userProfile.value);
 </script>
 
 <template>

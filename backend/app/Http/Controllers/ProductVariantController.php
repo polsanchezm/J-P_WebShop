@@ -20,7 +20,7 @@ class ProductVariantController extends Controller
         return response()->json(ProductVariantResource::collection($productVariant->load('product')));
     }
 
-    
+
     public function store(ProductVariantRequest $request)
     {
         $this->authorize('create', Productvariant::class);
@@ -44,7 +44,7 @@ class ProductVariantController extends Controller
         return response()->json(new ProductVariantResource($productVariant));
     }
 
-    
+
     public function update(ProductVariantRequest $request, string $id)
     {
         $this->authorize('update', Productvariant::class);
@@ -62,7 +62,7 @@ class ProductVariantController extends Controller
         ], 200);
     }
 
-    
+
     // Elimina una variant de producte específica
     public function destroy(string $id)
     {

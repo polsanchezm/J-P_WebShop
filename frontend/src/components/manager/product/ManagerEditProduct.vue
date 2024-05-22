@@ -18,7 +18,6 @@ const isLoading = ref(true);
 onBeforeMount(async () => {
     await productStore.oneProduct(productId);
     isLoading.value = false;
-    console.log('product', productStore.productDetail);
 });
 
 const imageFile = ref<File | null>(null);
@@ -29,8 +28,6 @@ const handleFileChange = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
     if (files && files[0]) {
         imageFile.value = files[0];
-        console.log(imageFile);
-
         imageUrl.value = URL.createObjectURL(files[0]);
     }
 };
@@ -57,12 +54,11 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit((values) => {
-    const productData = { 
-        ...values, 
-        image: imageFile.value, 
-        productId: productStore.productDetail!.id 
+    const productData = {
+        ...values,
+        image: imageFile.value,
+        productId: productStore.productDetail!.id
     };
-    console.log(productData);
     // Truca el mètode updateProduct de l'store de producte
     productStore.updateProduct(productData);
 });

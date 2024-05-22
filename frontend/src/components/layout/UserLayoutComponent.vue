@@ -11,8 +11,6 @@ const userProfile = computed(() => {
     const regex = /^\/user\/?.*/;
     return regex.test(router.path);
 });
-console.log(authStore.userRole === 'manager');
-console.log(authStore.userRole);
 </script>
 
 <template>

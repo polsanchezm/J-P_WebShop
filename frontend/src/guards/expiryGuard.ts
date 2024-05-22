@@ -25,13 +25,10 @@ export const setupTokenExpiryGuard = (to: any, from: any, next: any) => {
             if (to.name !== 'login' && to.name !== 'manager.login') {
                 next({ name: 'login' });
             } else {
-                console.log('not login', to.name);
                 next();
             }
-            console.log('token null');
             return false;
         }
-        console.log('token not null');
         return true;
     };
 

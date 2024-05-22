@@ -21,7 +21,7 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    
+
     // Retorna els detalls d'un usuari específic
     public function show()
     {

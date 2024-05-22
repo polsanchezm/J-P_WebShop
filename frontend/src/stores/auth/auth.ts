@@ -15,7 +15,6 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
     const userRole = ref<string | null>(localStorage.getItem('userRole'));
     const isLoggedIn = ref(!!localStorage.getItem('token'));
-    console.log('logged', isLoggedIn);
 
     const registerUser = async (user: Register) => {
         try {
@@ -57,7 +56,6 @@ export const useAuthStore = defineStore('auth', () => {
                 // Porta al Home o Manager Dashboard segons el rol
                 router.push({ name: loginResponse.data.user.role === 'user' ? 'home' : 'manager.dashboard' });
             }
-            console.log('login', isLoggedIn.value);
         } catch (error) {
             const errorMessage = error as AxiosError;
             // Mostrar errors en cas que no pugui retornar les dades
@@ -83,7 +81,6 @@ export const useAuthStore = defineStore('auth', () => {
                 // Porta al Home
                 router.push({ name: 'home' });
             }
-            console.log('logout', isLoggedIn.value);
         } catch (error) {
             const errorMessage = error as AxiosError;
             // mostrem els error en cas que no pugui retornar les dades
@@ -115,7 +112,6 @@ export const useAuthStore = defineStore('auth', () => {
                 // Obté resposta de la crida a l'API per editar les dades de l'usuari
                 const editResponse = await authServ.userEdit(user);
                 if (editResponse.status == 200) {
-
                     // Porta a la ruta de detall d'usuari
                     router.push({ name: 'user.detail' });
                 }
@@ -145,7 +141,6 @@ export const useAuthStore = defineStore('auth', () => {
                 // Porta al Home
                 router.push({ name: 'home' });
             }
-            console.log('logout', isLoggedIn.value);
         } catch (error) {
             const errorMessage = error as AxiosError;
             // Mostrar errors en cas que no pugui retornar les dades

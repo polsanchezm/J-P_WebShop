@@ -30,8 +30,6 @@ export const useProductStore = defineStore('product', () => {
                 const data: ProductsResponse = response.data;
                 products.value = data.products;
                 pagination.value = data.pagination;
-                console.log('pagination',data.pagination);
-                console.log('pagination2',pagination.value);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
@@ -124,8 +122,6 @@ export const useProductStore = defineStore('product', () => {
             const response = await productServ.addVariant(productVariant);
 
             if (response.status == 200) {
-                console.log('response variant', response.data.productVariant);
-
                 // Afegeix la nova variant a l'array de variants de producte
                 productVariants.value.push(response.data.productVariant);
 
@@ -142,15 +138,9 @@ export const useProductStore = defineStore('product', () => {
     };
 
     const updateVariant = async (productVariant: ProductVariant) => {
-        console.log('store', productVariant);
-
         try {
             // Resposta obtinguda de la crida a l'APi per actualitzar una variant
             const response = await productServ.updateVariant(productVariant);
-
-            if (response.status == 200) {
-                console.log('response', response);
-            }
         } catch (error) {
             const errorMessage = error as AxiosError;
             console.error('Error al editar la variant:', errorMessage.response);

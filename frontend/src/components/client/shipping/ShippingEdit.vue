@@ -17,12 +17,9 @@ const isLoading = ref(true);
 // Carrega els detalls de l'usuari, els detalls d'un shipping específic y els shippings de l'usuari
 onBeforeMount(async () => {
     await authStore.detailUser();
-    console.log('user', authStore.user);
     await shippingStore.detailShipping(shippingId);
     await shippingStore.userShippings();
     isLoading.value = false;
-
-    console.log('shipping', shippingStore.oneShipping);
 });
 
 // Validacions del formulari
@@ -84,7 +81,6 @@ const onSubmit = handleSubmit((values) => {
         unit: values.unit,
         otherInstructions: values.otherInstructions
     };
-    console.log(editData);
 
     shippingStore.editShipping(editData);
 });

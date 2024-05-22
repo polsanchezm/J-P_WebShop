@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\ManageImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +19,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'image' => asset('storage/images/' . $this->image), // Ruta sencera de la imatge
+            'image' => ManageImage::getImage($this->image),
             'price' => $this->price,
             'categoryId' => $this->category_id,
             'createdAt' => $this->created_at,

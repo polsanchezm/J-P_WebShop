@@ -14,7 +14,7 @@ const wishlistStore = useWishlistStore();
 
 const route = useRoute();
 
-// Agafa la ID del producte de la URL 
+// Agafa la ID del producte de la URL
 const paramId = route.params.id;
 const productId = Array.isArray(paramId) ? parseInt(paramId[0]) : parseInt(paramId);
 
@@ -30,8 +30,6 @@ onBeforeMount(async () => {
         await wishlistStore.wishlistItems();
     }
     isLoading.value = false;
-    console.log('wishlist', wishlistStore.wishlist);
-    console.log('product', productStore.productDetail);
 });
 
 // Retorna True o False si la mida està disponible per a un color
@@ -53,7 +51,6 @@ const addToCart = () => {
     }
 
     const selectedVariant = productStore.productDetail?.productVariants.find((variant) => variant.color === selectedColor.value && variant.size === selectedSize.value);
-    console.log('selected Variant', selectedVariant);
 
     const productItem: ProductItem = {
         id: productStore.productDetail!.id,
@@ -74,8 +71,6 @@ const toggleItemInWishlist = () => {
     }
 
     const selectedVariant = productStore.productDetail?.productVariants.find((variant) => variant.color === selectedColor.value && variant.size === selectedSize.value);
-    console.log('selected Variant', selectedVariant);
-    console.log('selected Variant', selectedVariant!.id);
 
     wishlistStore.toggleItemInWishlist(selectedVariant!, selectedVariant!.id);
     fillColor.value = fillColor.value === 'none' ? 'currentColor' : 'none';

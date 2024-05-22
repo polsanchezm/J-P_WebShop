@@ -14,7 +14,6 @@ export const useCartStore = defineStore('cart', () => {
         try {
             // Obté la resposta de la petició a l'API per a iniciar el pagament
             const response = await cartServ.initiatePayment(cartItems);
-            console.log(response);
 
             if (response.status === 200) {
                 window.location.href = response.data.url; // URL per completar el pagament en Stripe

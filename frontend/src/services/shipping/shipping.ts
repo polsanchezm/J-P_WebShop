@@ -6,8 +6,6 @@ export function shippingService() {
     const { verifyToken } = useVerifyToken();
 
     const shippingCreate = async (shipping: Shipping) => {
-        console.log('service', shipping);
-
         const userToken = verifyToken();
 
         // Petició a l'API per crear un dades d'enviament nou de l'usuari loguejat

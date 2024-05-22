@@ -10,8 +10,6 @@ export const useShippingStore = defineStore('shipping', () => {
     const shippinServ = shippingService();
 
     const createShipping = async (shipping: Shipping) => {
-        console.log('store', shipping);
-
         try {
             // Resposta obtinguda de la petició per crear un nou dades d'enviament
             const response = await shippinServ.shippingCreate(shipping);

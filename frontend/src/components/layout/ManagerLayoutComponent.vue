@@ -12,9 +12,6 @@ const managerProfile = computed(() => {
 const managerLogin = computed(() => {
     return router.path === '/management/login';
 });
-
-console.log('is home layout', isHome.value);
-console.log(managerProfile.value);
 </script>
 
 <template>

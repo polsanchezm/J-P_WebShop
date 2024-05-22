@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Category;
 use App\Models\Product;
 use App\Helpers\ManageImage;
-use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -108,7 +106,7 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
         $imageName = $product->image;
-        
+
         // Elimina la imatge de l'storage
         ManageImage::deleteImage($imageName);
 

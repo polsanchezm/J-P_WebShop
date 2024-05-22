@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Order;
 use App\Models\User;
-use Stripe\Checkout\Session as StripeSession;
 
 class OrderPolicy
 {

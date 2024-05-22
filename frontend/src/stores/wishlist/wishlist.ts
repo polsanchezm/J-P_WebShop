@@ -32,7 +32,6 @@ export const useWishlistStore = defineStore('wishlist', () => {
             // Recull la resposta de la petició per afegir un nou ítem/producte a la wishlist
             const response = await wishlistServ.addToWishlist(productVariant);
             if (response.status == 200) {
-                console.log(response.data);
                 wishlist.value.push(response.data);
             }
         } catch (error) {
@@ -45,8 +44,6 @@ export const useWishlistStore = defineStore('wishlist', () => {
     };
 
     const removeItemFromWishlist = async (wishlistItem: any, variantId: number) => {
-        console.log('store item', wishlistItem);
-
         try {
             // Resposta de la petició a l'API per eliminar un producte de la wishlist
             const response = await wishlistServ.removeFromWishlist(wishlistItem);
@@ -64,15 +61,10 @@ export const useWishlistStore = defineStore('wishlist', () => {
         }
     };
 
-
     const toggleItemInWishlist = async (productVariant: any, variantId: number) => {
-        console.log('toggle variant', productVariant.id);
-        console.log('wishlist toggle 1', wishlist.value);
         wishlist.value = wishlist.value.filter((item) => item.variantId === productVariant.id);
 
         const existingItem = wishlist.value.find((item) => item.variantId === productVariant.id);
-        console.log('exiting item', existingItem);
-        console.log('wishlist toggle 2', wishlist.value);
 
         if (existingItem) {
             await removeItemFromWishlist(existingItem, productVariant.variantId);

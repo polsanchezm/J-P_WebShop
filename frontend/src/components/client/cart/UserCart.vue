@@ -9,7 +9,6 @@ const isLoading = ref(true);
 onBeforeMount(() => {
     cartStore.getCartFromLocalStorage();
     isLoading.value = false;
-    console.log('cart', cartStore.cart);
 });
 
 // Forma array dels productes del carret de compra

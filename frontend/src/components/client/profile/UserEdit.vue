@@ -59,7 +59,6 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-
     <section>
         <div class="flex flex-col items-center justify-center min-h-screen">
             <div class="flex flex-col w-full h-dvh bg-gray-50 pt-[27px] items-center mt-20 dark:bg-corduroy-900">

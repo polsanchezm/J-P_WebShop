@@ -7,8 +7,6 @@ const productStore = useProductStore();
 const searchTerm = ref('');
 
 const handleSearch = async () => {
-    console.log('search', searchTerm.value);
-
     await productStore.searchProducts({ search: searchTerm.value });
 };
 </script>

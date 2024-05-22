@@ -12,13 +12,11 @@ const isLoading = ref(true);
 onBeforeMount(async () => {
     await wishlistStore.wishlistItems();
     isLoading.value = false;
-    console.log('wishlist', wishlistStore.wishlist);
 });
 
 // Afegeix al carret de compra
 const addToCart = (productDetail: ProductItem) => {
     const selectedVariant = productDetail.product.productVariants.find((variant) => variant.id === productDetail.variantId);
-    console.log(selectedVariant);
 
     const productItem: ProductItem = {
         id: productDetail.id,

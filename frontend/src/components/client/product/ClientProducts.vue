@@ -8,7 +8,6 @@ const productStore = useProductStore();
 onBeforeMount(async () => {
     await productStore.allProducts(15, 1);
     isLoading.value = false;
-    console.log('tots els productes:', productStore.products);
 });
 </script>
 
@@ -41,5 +40,3 @@ onBeforeMount(async () => {
         <PaginationComponent v-if="!isLoading" />
     </div>
 </template>
-
-

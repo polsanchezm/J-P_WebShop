@@ -10,7 +10,6 @@ const isLoading = ref(true);
 onBeforeMount(async () => {
     await orderStore.userOrders();
     isLoading.value = false;
-    console.log('orders', orderStore.orders);
 });
 </script>
 

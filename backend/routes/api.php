@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\ProductController;
@@ -41,6 +42,8 @@ Route::prefix('auth')->name('auth.')->group(function () {
 Route::prefix('app')->name('app.')->group(function () {
 
     Route::get("search/{search}", [ProductController::class, "searchProducts"])->name("search");
+    Route::get('/images/{filename}', [ImageController::class, 'getImage'])->name('images');
+
     Route::prefix('products')->name('products.')->group(function () {
         Route::get("/{limit?}", [ProductController::class, "index"])->name("index");
         Route::get("detail/{id}", [ProductController::class, "show"])->name("detail");
