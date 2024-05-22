@@ -21,7 +21,7 @@ onBeforeMount(async () => {
                 </svg>
                 <span class="sr-only">Loading...</span>
             </div>
-            <div v-if="!isLoading" class="flex flex-wrap justify-center gap-6 max-w-7xl w-full">
+            <div v-if="!isLoading && productStore.products.length != 0" class="flex flex-wrap justify-center gap-6 max-w-7xl w-full">
                 <div v-for="(product, index) in productStore.products" :key="index" class="bg-white shadow-md rounded-xl p-2 cursor-pointer flex-grow flex-shrink-0 basis-[calc(33%-1rem)] m-3">
                     <RouterLink :to="{ name: 'products.detail', params: { id: product.id } }">
                         <div class="overflow-x-hidden rounded-xl relative">
@@ -34,6 +34,11 @@ onBeforeMount(async () => {
                             </div>
                         </div>
                     </RouterLink>
+                </div>
+            </div>
+            <div v-else-if="!isLoading && productStore.products.length === 0" class="flex flex-wrap justify-center max-w-7xl w-full">
+                <div class="h-10 -mt-56 w-full flex justify-center">
+                    <div>No products available</div>
                 </div>
             </div>
         </div>

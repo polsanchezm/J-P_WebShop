@@ -62,15 +62,14 @@ export const useCartStore = defineStore('cart', () => {
             toast({
                 title: 'Product added to the cart!',
                 description: "The product was added to the cart succesfully.",
-            })
-
+            });
         } else {
             // Si es troba, incrementa la seva quantitat
             identifiedItem.quantity++;
             toast({
                 title: 'Product added to the cart!',
                 description: `The product was added ${identifiedItem.quantity} times to the cart succesfully.`,
-            })
+            });
         }
 
         saveCartToLocalStorage(currentCart);
