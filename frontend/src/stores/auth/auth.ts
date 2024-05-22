@@ -1,3 +1,4 @@
+import { useToast } from '@/components/ui/toast';
 import { useVerifyToken } from '@/composables/verifyToken';
 import type { LoginData } from '@/models/login';
 import type { Register } from '@/models/register';
@@ -8,6 +9,7 @@ import { authService } from '@/services/auth/auth';
 import type { AxiosError } from 'axios';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+const { toast } = useToast();
 
 export const useAuthStore = defineStore('auth', () => {
     const authServ = authService();
@@ -34,6 +36,12 @@ export const useAuthStore = defineStore('auth', () => {
             const errorMessage = error as AxiosError;
             // Mostrar errors en cas que no es pugui retornar les dades
             console.error('Error al fer register:', errorMessage);
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while registering user',
+                    description: "There was an error while registering the user. Please try again.",
+                });
+            }
         }
     };
 
@@ -60,6 +68,24 @@ export const useAuthStore = defineStore('auth', () => {
             const errorMessage = error as AxiosError;
             // Mostrar errors en cas que no pugui retornar les dades
             console.error('Error al fer login:', errorMessage);
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while logging in user',
+                    description: "There was an error while logging in the user. Please try again.",
+                });
+            }
+            if (errorMessage.response!.status == 401) {
+                toast({
+                    title: 'Invalid credentials',
+                    description: "Invalid password. Please try again.",
+                });
+            }
+            if (errorMessage.response!.status == 404) {
+                toast({
+                    title: 'Invalid credentials',
+                    description: "Invalid email or password. Please try again.",
+                });
+            }
         }
     };
 
@@ -75,8 +101,9 @@ export const useAuthStore = defineStore('auth', () => {
                 userRole.value = null;
 
                 // Elimina el token i el rol d'usuari del LocalStorage
-                localStorage.removeItem('token');
+                localStorage.removeItem('cart');
                 localStorage.removeItem('userRole');
+                localStorage.removeItem('token');
 
                 // Porta al Home
                 router.push({ name: 'home' });
@@ -135,6 +162,7 @@ export const useAuthStore = defineStore('auth', () => {
                 userRole.value = null;
 
                 // Elimina el token i el rol d'usuari del LocalStorage
+                localStorage.removeItem('cart');
                 localStorage.removeItem('token');
                 localStorage.removeItem('userRole');
 

@@ -5,6 +5,11 @@ import { cartService } from '@/services/cart/cart';
 import router from '@/router';
 import type { AxiosError } from 'axios';
 import type { Payment } from '@/models/payment';
+import { useToast } from '@/components/ui/toast/use-toast'
+
+const { toast } = useToast()
+
+
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<ProductItem[]>([]);
     const payment = ref<Payment | null>(null);
@@ -54,9 +59,17 @@ export const useCartStore = defineStore('cart', () => {
         if (!identifiedItem) {
             // Si no es troba, l'afegeix
             currentCart.push(productItem);
+            toast({
+                title: 'Product added to the cart!',
+                description: "The product was added to the cart succesfully.",
+            });
         } else {
             // Si es troba, incrementa la seva quantitat
             identifiedItem.quantity++;
+            toast({
+                title: 'Product added to the cart!',
+                description: `The product was added ${identifiedItem.quantity} times to the cart succesfully.`,
+            });
         }
 
         saveCartToLocalStorage(currentCart);
