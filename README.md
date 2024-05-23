@@ -1,4 +1,4 @@
-# P&J's Shop
+# J&P's Shop
 
 ## Instalación
 
