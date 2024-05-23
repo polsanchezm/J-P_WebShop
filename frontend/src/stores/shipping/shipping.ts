@@ -1,9 +1,12 @@
+import { useToast } from '@/components/ui/toast';
 import type { Shipping } from '@/models/shipping';
 import router from '@/router';
 import { shippingService } from '@/services/shipping/shipping';
 import type { AxiosError } from 'axios';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+const { toast } = useToast();
+
 export const useShippingStore = defineStore('shipping', () => {
     const shipping = ref<Shipping[]>([]);
     const oneShipping = ref<Shipping | null>(null);
@@ -24,6 +27,12 @@ export const useShippingStore = defineStore('shipping', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while creating shipping',
+                    description: "There was an error while creating the shipping. Please try again.",
+                });
+            }
         }
     };
 
@@ -42,6 +51,12 @@ export const useShippingStore = defineStore('shipping', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while editing shipping',
+                    description: "There was an error while editing the shipping. Please try again.",
+                });
+            }
         }
     };
 
@@ -58,6 +73,12 @@ export const useShippingStore = defineStore('shipping', () => {
             console.error('Error en obtenir el detail:', errorMessage.message);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining shippings',
+                    description: "There was an error while obtaining the shippings. Please try again.",
+                });
             }
         }
     };
@@ -76,6 +97,12 @@ export const useShippingStore = defineStore('shipping', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining shipping details',
+                    description: "There was an error while obtaining the shipping details. Please try again.",
+                });
+            }
         }
     };
 
@@ -93,6 +120,12 @@ export const useShippingStore = defineStore('shipping', () => {
             console.error('Error en obtenir el detail:', errorMessage.message);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while deleting shippings',
+                    description: "There was an error while deleting the shippings. Please try again.",
+                });
             }
         }
     };

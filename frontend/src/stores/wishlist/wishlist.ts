@@ -26,6 +26,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining wishlist items',
+                    description: "There was an error while obtaining the wishlist items. Please try again.",
+                });
+            }
         }
     };
 
@@ -69,6 +75,12 @@ export const useWishlistStore = defineStore('wishlist', () => {
             console.error('Error al eliminar el wishlist item:', errorMessage);
             if (errorMessage.response!.status === 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while deleting wishlist item',
+                    description: "There was an error while deleting the wishlist item. Please try again.",
+                });
             }
         }
     };

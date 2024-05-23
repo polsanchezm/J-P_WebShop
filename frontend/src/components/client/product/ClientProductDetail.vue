@@ -6,6 +6,8 @@ import { useCartStore } from '@/stores/cart/cart';
 import { useAuthStore } from '@/stores/auth/auth';
 import { useProductStore } from '@/stores/product/product';
 import { useWishlistStore } from '@/stores/wishlist/wishlist';
+import { useToast } from '@/components/ui/toast';
+const { toast } = useToast();
 
 const authStore = useAuthStore();
 const productStore = useProductStore();
@@ -47,6 +49,10 @@ watch(selectedColor, (newColor) => {
 const addToCart = () => {
     if (!selectedColor.value || !selectedSize.value) {
         console.error('Color or size is not selected');
+        toast({
+            title: 'Error while adding to cart',
+            description: 'Color or size is not selected. Please select a color and size.'
+        });
         return;
     }
 

@@ -112,6 +112,12 @@ export const useAuthStore = defineStore('auth', () => {
             const errorMessage = error as AxiosError;
             // mostrem els error en cas que no pugui retornar les dades
             console.error('Error al fer logout:', errorMessage.message);
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while logging out user',
+                    description: "There was an error while logging out the user. Please try again.",
+                });
+            }
         }
     };
 
@@ -127,6 +133,12 @@ export const useAuthStore = defineStore('auth', () => {
             const errorMessage = error as AxiosError;
             // Mostrar errors en cas que no pugui retornar les dades
             console.error('Error en obtenir el detail:', errorMessage.message);
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining user details',
+                    description: "There was an error while obtaining the user details. Please try again.",
+                });
+            }
         }
     };
 
@@ -147,6 +159,12 @@ export const useAuthStore = defineStore('auth', () => {
             const errorMessage = error as AxiosError;
             // Mostrar errors en cas que no pugui retornar les dades
             console.error('Error al fer edit:', errorMessage);
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while editting user',
+                    description: "There was an error while editting the user. Please try again.",
+                });
+            }
         }
     };
 
@@ -173,6 +191,12 @@ export const useAuthStore = defineStore('auth', () => {
             const errorMessage = error as AxiosError;
             // Mostrar errors en cas que no pugui retornar les dades
             console.error('Error al fer edit:', errorMessage);
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while deleting user',
+                    description: "There was an error while deleting the user. Please try again.",
+                });
+            }
         }
     };
 
