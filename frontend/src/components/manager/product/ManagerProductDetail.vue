@@ -27,7 +27,7 @@ const formSchema = yup.object({
     color: yup
         .string()
         .required('Variant color is required.')
-        .matches(/^[a-zA-Z àèìòùñçáéíóúÀÈÌÒÙÑÇÁÉÍÓÚ]+$/, 'Color can only contain letters.'),
+        .matches(/^#[0-9A-Fa-f]{6}$/, 'Color must be in hexadecimal format, e.g., #000000.'),
     stock: yup
         .string()
         .required('Variant stock is required.')
