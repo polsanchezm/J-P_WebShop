@@ -29,6 +29,12 @@ export const useCartStore = defineStore('cart', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while initiating payment',
+                    description: "You must add a shipping address first.",
+                });
+            }
         }
     };
 
@@ -45,6 +51,12 @@ export const useCartStore = defineStore('cart', () => {
             console.error('Error al fer el pagament', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while verifying payment',
+                    description: "There was an error while verifying the payment. Please try again.",
+                });
             }
         }
     };

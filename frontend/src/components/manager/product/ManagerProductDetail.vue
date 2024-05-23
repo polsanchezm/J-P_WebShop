@@ -224,7 +224,7 @@ const uniqueSizes = computed(() => {
                                     <button @click="toggleEditVariant(index, productVariant.id)" class="text-center text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-xl text-sm px-8 py-4 focus:outline-none">
                                         {{ editVariantAreVisible === index ? 'Cancel' : 'Edit' }}
                                     </button>
-                                    <button @click="productStore.deleteVariant(productVariant.id)" class="text-center text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-xl text-sm px-8 py-4 focus:outline-none">Delete</button>
+                                    <button @click="productStore.deleteVariant(productVariant)" class="text-center text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-xl text-sm px-8 py-4 focus:outline-none">Delete</button>
                                 </div>
 
                                 <div v-if="editVariantAreVisible === index" class="mt-8 px-4 py-6">

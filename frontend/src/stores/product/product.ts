@@ -6,6 +6,8 @@ import { productService } from '@/services/product/product';
 import type { AxiosError } from 'axios';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useToast } from '@/components/ui/toast';
+const { toast } = useToast();
 
 export const useProductStore = defineStore('product', () => {
     const products = ref<Product[]>([]);
@@ -37,6 +39,12 @@ export const useProductStore = defineStore('product', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining products',
+                    description: "There was an error while obtaining the products. Please try again.",
+                });
+            }
         }
     };
 
@@ -58,6 +66,12 @@ export const useProductStore = defineStore('product', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining product detail',
+                    description: "There was an error while obtaining the product detail. Please try again.",
+                });
+            }
         }
     };
 
@@ -77,6 +91,12 @@ export const useProductStore = defineStore('product', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while creating the product',
+                    description: "There was an error while creating the product. Please try again.",
+                });
+            }
         }
     };
 
@@ -94,6 +114,12 @@ export const useProductStore = defineStore('product', () => {
             console.error('Error en eliminar el producte:', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while deleting the product',
+                    description: "There was an error while deleting the product. Please try again.",
+                });
             }
         }
     };
@@ -113,6 +139,12 @@ export const useProductStore = defineStore('product', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while updating the product',
+                    description: "There was an error while updating the product. Please try again.",
+                });
+            }
         }
     };
 
@@ -124,15 +156,18 @@ export const useProductStore = defineStore('product', () => {
             if (response.status == 200) {
                 // Afegeix la nova variant a l'array de variants de producte
                 productVariants.value.push(response.data.productVariant);
-
-                // Porta a la pàgina del detall del producte
-                router.push({ name: 'manager.products.detail', params: { id: productVariant.productId } });
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
             console.error('Error al crear la variant', errorMessage.response);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while creating the product variant',
+                    description: "There was an error while creating the product variant. Please try again.",
+                });
             }
         }
     };
@@ -147,23 +182,34 @@ export const useProductStore = defineStore('product', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while updating the product variant',
+                    description: "There was an error while updating the product variant. Please try again.",
+                });
+            }
         }
     };
 
-    const deleteVariant = async (id: number) => {
+    const deleteVariant = async (productVariant: ProductVariant) => {
         try {
             // Resposta obtinguda de la crida per eliminar una variant de producte
-            const response = await productServ.deleteVariant(id);
+            const response = await productServ.deleteVariant(productVariant.id);
 
             if (response.status == 200) {
-                // Redirigeix a la pàgina de tots els productes
-                router.push({ name: 'manager.products.all' });
+                productVariants.value = productVariants.value.filter(variant => variant.id !== productVariant.id);
             }
         } catch (error) {
             const errorMessage = error as AxiosError;
             console.error('Error en eliminar la variant:', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while deleting the product variant',
+                    description: "There was an error while deleting the product variant. Please try again.",
+                });
             }
         }
     };
@@ -180,6 +226,12 @@ export const useProductStore = defineStore('product', () => {
             console.error('Error en eliminar la variant:', errorMessage);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while searching the products',
+                    description: "There was an error while searching the products. Please try again.",
+                });
             }
         }
     };

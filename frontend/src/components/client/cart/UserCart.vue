@@ -109,11 +109,11 @@ const totalQuantity = computed(() => {
                 </div>
             </div>
             <div v-if="cartStore.cart.length > 0" class="w-full lg:w-1/2 xl:w-1/3 flex flex-col gap-4 p-4">
-                <p class="text-blue-900 text-xl font-extrabold text-center md:text-left">Purchase Resume</p>
+                <p class="text-gray-900 text-xl font-extrabold text-center md:text-left">Purchase Resume</p>
                 <div class="flex flex-col gap-4 p-4 text-lg font-semibold shadow-md border rounded-xl">
                     <div class="flex flex-col items-center md:flex-row md:justify-between">
                         <p class="text-gray-600">Subtotal ({{ totalQuantity }} Items)</p>
-                        <p class="font-bold">{{ subtotalPrice }}</p>
+                        <p class="font-bold">{{ subtotalPrice }}€</p>
                     </div>
                     <hr class="bg-gray-200" />
                     <div class="flex flex-col items-center md:flex-row md:justify-between">
@@ -123,7 +123,7 @@ const totalQuantity = computed(() => {
                     <hr class="bg-gray-200" />
                     <div class="flex flex-col items-center md:flex-row md:justify-between">
                         <p class="text-gray-600">Total</p>
-                        <p class="font-bold">{{ totalPrice }}</p>
+                        <p class="font-bold">{{ totalPrice }}€</p>
                     </div>
                     <button @click="cartStore.initiatePayment(cartItems)" class="px-4 py-4 text-white bg-gray-700 hover:bg-gray-900 focus:outline-none font-medium rounded-xl text-sm md:text-base text-center">SUBMIT ORDER</button>
                 </div>

@@ -1,3 +1,4 @@
+import { useToast } from '@/components/ui/toast';
 import type { Order } from '@/models/order';
 import type { OrderDetail } from '@/models/orderDetail';
 import router from '@/router';
@@ -5,6 +6,7 @@ import { orderService } from '@/services/order/order';
 import type { AxiosError } from 'axios';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+const { toast } = useToast();
 
 export const useOrderStore = defineStore('order', () => {
     const orders = ref<Order[]>([]);
@@ -25,6 +27,12 @@ export const useOrderStore = defineStore('order', () => {
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
             }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining orders',
+                    description: "There was an error while obtaining the orders. Please try again.",
+                });
+            }
         }
     };
 
@@ -41,6 +49,12 @@ export const useOrderStore = defineStore('order', () => {
             console.error("Error en obtenir l'order detail", errorMessage.message);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while obtaining order detail',
+                    description: "There was an error while obtaining the order detail. Please try again.",
+                });
             }
         }
     };
@@ -64,6 +78,12 @@ export const useOrderStore = defineStore('order', () => {
             console.error("Error en eliminar l'order", errorMessage.message);
             if (errorMessage.response!.status == 404) {
                 router.push({ name: 'error404' });
+            }
+            if (errorMessage.response!.status == 500) {
+                toast({
+                    title: 'Error while deleting order',
+                    description: "There was an error while deleting the order. Please try again.",
+                });
             }
         }
     };
