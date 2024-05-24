@@ -33,4 +33,21 @@ cd frontend
 npm run dev
 ```
 
+## Running with Docker
+
+### Configure enviroment variables
+```bash
+cp .env.example .env
+```
+
+### Create the images
+```bash
+docker compose build
+```
+
+### Create the containers
+```bash
+docker compose up -d
+```
+
 
