@@ -1,13 +1,13 @@
 # J&P's Shop
 
-## Instalación
+## Dev Installation
 
 ### Backend
 
 ```bash
 cd backend
 composer install
-cp .env.example .env    # Configurar entorno
+cp .env.example .env    # Setup enviroment
 ```
 
 ### Frontend
@@ -17,7 +17,7 @@ cd frontend
 npm install
 ```
 
-## Ejecución
+## Dev Running
 
 ### Backend
 
@@ -33,11 +33,4 @@ cd frontend
 npm run dev
 ```
 
-
-## Estilo
-
-- Se usará camelCase
-- Tabulación:
-  - Laravel: 4 espacios
-  - Vue: 4 espacios
 
