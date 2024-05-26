@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: kube0.lacetania.cat/grup3/jpfrontend:latest
+          image: IMAGE_NAME:latest
           ports:
             - containerPort: 80
               name: vue-port
@@ -79,8 +79,8 @@ metadata:
   namespace: grup3
 data:
   init.sql: |
-    CREATE USER 'jotaipe'@'%' IDENTIFIED BY '1qazZAQ!';
-    GRANT ALL PRIVILEGES ON *.* TO 'jotaipe'@'%';
+    CREATE USER 'USERNAME'@'%' IDENTIFIED BY 'PASSWORD';
+    GRANT ALL PRIVILEGES ON *.* TO 'USERNAME'@'%';
     FLUSH PRIVILEGES;
 
 ---
@@ -107,9 +107,9 @@ spec:
           image: mariadb:latest
           env:
             - name: DB_DATABASE
-              value: webshop
+              value: DB_NAME
             - name: MYSQL_ROOT_PASSWORD
-              value: jb007lpm
+              value: ROOT_PASSWD
           resources:
             requests:
               memory: 250Mi
@@ -179,7 +179,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: kube0.lacetania.cat/grup3/jpbackend:latest
+          image: IMAGE_NAME:latest
           ports:
             - containerPort: 80
               name: laravel-port
